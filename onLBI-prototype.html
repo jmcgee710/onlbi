@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>On LBI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ── Tokens ───────────────────────────────────────────────── */
+  :root {
+    --sand:       #F2EADB;
+    --sand-warm:  #EDE3CF;
+    --shell:      #FBF7EF;
+    --paper:      #FFFFFF;
+    --foam:       #E8EFEA;
+    --seafoam:    #B8CDC8;
+    --teal:       #6B9694;
+    --teal-deep:  #486C6B;
+    --navy:       #1B3654;
+    --navy-deep:  #102742;
+    --ink:        #0F1F2E;
+    --ink-soft:   #2A3F54;
+    --slate:      #5F7388;
+    --slate-soft: #8A9AAB;
+    --line:       #E3DCC9;
+    --line-soft:  #EDE7D6;
+    --coral:      #C45A3E;
+    --coral-soft: #E8D2C5;
+    --sun:        #D4A24E;
+    --moss:       #6B8E5C;
+    --shadow-card: 0 1px 0 rgba(15,31,46,0.04), 0 2px 8px rgba(15,31,46,0.05);
+    --shadow-lift: 0 1px 0 rgba(15,31,46,0.04), 0 8px 24px rgba(15,31,46,0.10);
+    --r-sm: 10px; --r-md: 16px; --r-lg: 22px;
+  }
+
+  /* ── Reset ───────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'Manrope', -apple-system, sans-serif;
+    background: var(--sand);
+    margin: 0; color: var(--ink);
+    font-size: 14px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  input, button, select { font-family: inherit; }
+  input[type=text], input[type=search] { outline: none; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── App shell ───────────────────────────────────────────── */
+  .app {
+    max-width: 430px; margin: 0 auto;
+    min-height: 100dvh; background: var(--shell);
+    position: relative;
+  }
+
+  /* ── Pages ───────────────────────────────────────────────── */
+  .page { display: none; padding-bottom: 80px; }
+  .page.active { display: block; }
+
+  /* ── Bottom nav (mobile) ─────────────────────────────────── */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 430px;
+    background: var(--paper); border-top: 1px solid var(--line-soft);
+    display: flex; z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .nav-btn {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; padding: 8px 4px 6px;
+    border: none; background: none; cursor: pointer;
+    color: var(--slate-soft); font-size: 10px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600; letter-spacing: 0.02em; gap: 3px;
+    transition: color 150ms ease;
+  }
+  .nav-btn.active { color: var(--teal-deep); }
+  .nav-btn svg { width: 22px; height: 22px; }
+
+  /* ── Cards ───────────────────────────────────────────────── */
+  .card {
+    background: var(--paper);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+
+  /* ── Section titles ──────────────────────────────────────── */
+  .section-title {
+    font-size: 10px; font-weight: 700;
+    color: var(--slate); letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0 16px; margin: 24px 0 10px;
+    font-family: 'Manrope', sans-serif;
+  }
+
+  /* ── Badges ──────────────────────────────────────────────── */
+  .badge {
+    display: inline-flex; align-items: center;
+    padding: 2px 8px; border-radius: 20px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    font-family: 'Manrope', sans-serif;
+  }
+  .badge-green  { background: var(--foam);       color: var(--teal-deep); }
+  .badge-amber  { background: #f5ead6;            color: #8a5c10; }
+  .badge-red    { background: var(--coral-soft);  color: var(--coral); }
+  .badge-blue   { background: #ddeaf5;            color: var(--navy); }
+  .badge-purple { background: #ede8f5;            color: #5b3fa0; }
+
+  /* ── Pill filters ────────────────────────────────────────── */
+  .pill-filter {
+    display: inline-flex; align-items: center;
+    padding: 7px 15px; border-radius: 20px;
+    font-size: 12px; font-weight: 600;
+    font-family: 'Manrope', sans-serif;
+    border: 1.5px solid var(--line);
+    background: var(--paper); cursor: pointer;
+    white-space: nowrap; color: var(--slate);
+    transition: all 150ms ease;
+  }
+  .pill-filter.active {
+    background: var(--navy); color: var(--shell);
+    border-color: var(--navy);
+  }
+
+  /* ── Scroll row ──────────────────────────────────────────── */
+  .scroll-x {
+    display: flex; gap: 8px; overflow-x: auto;
+    padding: 0 16px; scrollbar-width: none;
+  }
+  .scroll-x::-webkit-scrollbar { display: none; }
+
+  /* ── Hero banner ─────────────────────────────────────────── */
+  .hero-banner {
+    background: var(--navy);
+    padding: 28px 20px 32px;
+    color: var(--shell);
+    position: relative; overflow: hidden;
+  }
+  .hero-banner::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, rgba(107,150,148,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-banner::after {
+    content: '';
+    position: absolute; bottom: -40px; left: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(242,234,219,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── Condition chips ─────────────────────────────────────── */
+  .condition-chip {
+    background: rgba(251,247,239,0.1);
+    border: 1px solid rgba(251,247,239,0.2);
+    border-radius: var(--r-sm);
+    padding: 10px 14px; text-align: center;
+  }
+
+  /* ── Alert bar ───────────────────────────────────────────── */
+  .alert-bar {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; font-size: 13px;
+    border-radius: var(--r-sm);
+    border-left: 3px solid;
+    margin: 0 16px 10px;
+  }
+  .alert-bar.info    { background: #e8eef5; border-color: var(--navy); color: var(--navy); }
+  .alert-bar.warning { background: #f5ebd9; border-color: var(--sun);  color: #7a4e10; }
+  .alert-bar.danger  { background: var(--coral-soft); border-color: var(--coral); color: #7a2810; }
+
+  /* ── Tag ─────────────────────────────────────────────────── */
+  .tag {
+    display: inline-block; padding: 2px 8px;
+    border-radius: 6px; font-size: 11px; font-weight: 600;
+    background: var(--foam); color: var(--teal-deep);
+  }
+
+  /* ── Divider ─────────────────────────────────────────────── */
+  .divider { height: 1px; background: var(--line-soft); margin: 0 16px; }
+
+  /* ── Live dot ────────────────────────────────────────────── */
+  @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--moss); display: inline-block;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  /* ── Sidebar brand (desktop only) ────────────────────────── */
+  .sidebar-brand { display: none; }
+
+  /* ── Desktop layout ──────────────────────────────────────── */
+  @media (min-width: 768px) {
+    body { overflow: hidden; background: var(--sand-warm); }
+    .app {
+      max-width: none; display: flex; flex-direction: row;
+      height: 100dvh; overflow: hidden;
+    }
+    .sidebar-brand {
+      display: block;
+      padding: 28px 20px 22px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .sidebar-brand .brand-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px; font-weight: 600;
+      color: var(--navy); line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .sidebar-brand .brand-logo em {
+      font-style: italic; color: var(--teal-deep);
+    }
+    .sidebar-brand .brand-tag {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--slate-soft);
+      margin-top: 4px;
+    }
+    .sidebar-live {
+      margin-top: auto; padding: 16px 20px;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; color: var(--slate-soft);
+      font-weight: 600; letter-spacing: 0.06em;
+      border-top: 1px solid var(--line-soft);
+    }
+    .nav-group-label {
+      display: block;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--slate-soft); padding: 16px 20px 6px;
+    }
+    .bottom-nav {
+      position: relative; left: auto; bottom: auto;
+      transform: none; width: 240px; max-width: 240px;
+      min-width: 240px; flex-direction: column;
+      align-items: stretch; border-top: none;
+      border-right: 1px solid var(--line);
+      height: 100dvh; padding-bottom: 0;
+      justify-content: flex-start; gap: 1px;
+      overflow-y: auto; background: var(--paper);
+    }
+    .nav-btn {
+      flex-direction: row; justify-content: flex-start;
+      padding: 11px 12px; gap: 10px;
+      border-radius: var(--r-sm);
+      margin: 0 8px; width: calc(100% - 16px);
+      font-size: 13px; border-top: none;
+      color: var(--ink-soft);
+    }
+    .nav-btn:hover { background: var(--sand-warm); color: var(--navy); }
+    .nav-btn.active {
+      background: var(--paper);
+      color: var(--navy); font-weight: 700;
+      box-shadow: var(--shadow-card);
+    }
+    .nav-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .page {
+      flex: 1; height: 100dvh; overflow-y: auto;
+      padding-bottom: 0; max-width: none;
+    }
+    #tide-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; padding: 0 20px;
+    }
+    #tide-grid > div { margin: 0 !important; }
+    #biz-list {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 10px;
+    }
+    .section-title { padding-left: 20px; }
+    .hero-banner { padding: 36px 28px 40px; }
+    .alert-bar { margin: 0 20px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ════════════════════════════════ TODAY PAGE ═══════════════════════════ -->
+  <div class="page active" id="page-today">
+
+    <!-- Hero -->
+    <div class="hero-banner">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--seafoam);margin-bottom:10px">Monday, May 18 · LBI, NJ</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:400;line-height:1;color:var(--shell)">A great day<br><em style="font-style:italic;color:var(--seafoam)">on</em> the sand.</div>
+        </div>
+        <div style="text-align:right;padding-top:4px">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;line-height:1;color:var(--shell)">72°</div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--seafoam);margin-top:4px">Sunny · feels 76°</div>
+        </div>
+      </div>
+      <!-- Stat row -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(184,205,200,0.3);padding-top:14px;gap:0">
+        <div style="text-align:center;padding:0 4px;border-right:1px solid rgba(184,205,200,0.25)">
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--seafoam)">Water</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--shell);margin-top:2px">68°</div>
+        </div>
+        <div style="text-align:center;padding:0 4px;border-right:1px solid rgba(184,205,200,0.25)">
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--seafoam)">Surf</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--shell);margin-top:2px">2–3ft</div>
+        </div>
+        <div style="text-align:center;padding:0 4px;border-right:1px solid rgba(184,205,200,0.25)">
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--seafoam)">Wind</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--shell);margin-top:2px">SW 12</div>
+        </div>
+        <div style="text-align:center;padding:0 4px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--seafoam)">High Tide</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--shell);margin-top:2px">10:45a</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rip Current Alert -->
+    <div class="alert-bar warning" style="margin-top:12px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div>
+        <div style="font-weight:700;font-size:12px;letter-spacing:0.02em">Moderate Rip Current Risk</div>
+        <div style="font-size:11px;margin-top:1px;opacity:0.8">Swim near lifeguards. Avoid swimming alone.</div>
+      </div>
+    </div>
+
+    <!-- Quick Nav Grid -->
+    <div class="section-title">Explore LBI</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px">
+      <button onclick="goTo('beaches')" style="background:var(--paper);border:none;border-radius:var(--r-sm);padding:14px 8px;cursor:pointer;box-shadow:var(--shadow-card);display:flex;flex-direction:column;align-items:center;gap:6px;transition:box-shadow 150ms ease">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round"><path d="M3 18c3-6 6-9 9-9s6 3 9 9"/><path d="M12 9V5"/><path d="M8 5h8"/></svg>
+        <span style="font-size:10px;font-weight:700;color:var(--ink-soft);letter-spacing:0.04em">Beaches</span>
+      </button>
+      <button onclick="goTo('eat')" style="background:var(--paper);border:none;border-radius:var(--r-sm);padding:14px 8px;cursor:pointer;box-shadow:var(--shadow-card);display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round"><path d="M6 3v8a2 2 0 002 2v8"/><path d="M6 3v6M10 3v6M8 9v4"/><path d="M16 3c-2 0-3 2-3 6s1 5 3 5v7"/></svg>
+        <span style="font-size:10px;font-weight:700;color:var(--ink-soft);letter-spacing:0.04em">Eat & Drink</span>
+      </button>
+      <button onclick="goTo('access')" style="background:var(--paper);border:none;border-radius:var(--r-sm);padding:14px 8px;cursor:pointer;box-shadow:var(--shadow-card);display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="6" r="1.5"/><path d="M11 9v4h4l2 5M11 13c-3 0-5 2-5 5s2 4 5 4 5-1 5-4"/></svg>
+        <span style="font-size:10px;font-weight:700;color:var(--ink-soft);letter-spacing:0.04em">Access</span>
+      </button>
+      <button onclick="goTo('around')" style="background:var(--paper);border:none;border-radius:var(--r-sm);padding:14px 8px;cursor:pointer;box-shadow:var(--shadow-card);display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7"/><circle cx="6" cy="19" r="2"/><circle cx="20" cy="19" r="2"/></svg>
+        <span style="font-size:10px;font-weight:700;color:var(--ink-soft);letter-spacing:0.04em">Getting Around</span>
+      </button>
+      <button style="background:var(--paper);border:none;border-radius:var(--r-sm);padding:14px 8px;cursor:pointer;box-shadow:var(--shadow-card);display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M10 16V8h3a2.5 2.5 0 010 5h-3" stroke-linejoin="round"/></svg>
+        <span style="font-size:10px;font-weight:700;color:var(--ink-soft);letter-spacing:0.04em">Parking</span>
+      </button>
+      <button style="background:var(--paper);border:none;border-radius:var(--r-sm);padding:14px 8px;cursor:pointer;box-shadow:var(--shadow-card);display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+        <span style="font-size:10px;font-weight:700;color:var(--ink-soft);letter-spacing:0.04em">Events</span>
+      </button>
+      <button onclick="goTo('eat')" style="background:var(--paper);border:none;border-radius:var(--r-sm);padding:14px 8px;cursor:pointer;box-shadow:var(--shadow-card);display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.8" stroke-linecap="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
+        <span style="font-size:10px;font-weight:700;color:var(--ink-soft);letter-spacing:0.04em">Happy Hour</span>
+      </button>
+      <button style="background:var(--paper);border:none;border-radius:var(--r-sm);padding:14px 8px;cursor:pointer;box-shadow:var(--shadow-card);display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0112 0v5l1 2H5l1-2z"/><path d="M10 19a2 2 0 004 0"/></svg>
+        <span style="font-size:10px;font-weight:700;color:var(--coral);letter-spacing:0.04em">Alerts</span>
+      </button>
+    </div>
+
+    <!-- Tide Charts -->
+    <div class="section-title">Tides Today</div>
+    <div id="tide-grid">
+
+    <!-- Ocean Tide -->
+    <div style="margin:0 16px 10px" class="card">
+      <div style="padding:16px 16px 14px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <div style="width:32px;height:32px;background:var(--navy);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--seafoam)" stroke-width="2.2" stroke-linecap="round"><path d="M2 12c1.5-3 3.5-4.5 6-4.5s4.5 1.5 6 4.5 3.5 4.5 6 4.5"/><path d="M2 17c1.5-3 3.5-4.5 6-4.5s4.5 1.5 6 4.5 3.5 4.5 6 4.5"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--navy);font-family:'Manrope',sans-serif">Ocean Tide</div>
+            <div style="font-size:10px;color:var(--slate-soft);margin-top:1px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase">Atlantic surf side</div>
+          </div>
+        </div>
+        <svg viewBox="0 0 340 80" style="width:100%;overflow:visible">
+          <defs>
+            <linearGradient id="oceanGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#486C6B" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#486C6B" stop-opacity="0.02"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,68 C30,68 40,12 85,12 C130,12 140,68 170,68 C200,68 210,12 255,12 C300,12 310,68 340,68 L340,80 L0,80 Z" fill="url(#oceanGrad)"/>
+          <path d="M0,68 C30,68 40,12 85,12 C130,12 140,68 170,68 C200,68 210,12 255,12 C300,12 310,68 340,68" fill="none" stroke="#6B9694" stroke-width="2"/>
+          <line x1="142" y1="4" x2="142" y2="76" stroke="#C45A3E" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <circle cx="142" cy="64" r="4" fill="#C45A3E"/>
+          <text x="146" y="14" font-size="8" fill="#C45A3E" font-weight="700" font-family="Manrope,sans-serif">NOW</text>
+          <text x="2" y="78" font-size="8" fill="#8A9AAB" font-family="Manrope,sans-serif">4:22a Low</text>
+          <text x="62" y="10" font-size="8" fill="#486C6B" font-weight="600" font-family="Manrope,sans-serif">10:45a High</text>
+          <text x="148" y="78" font-size="8" fill="#8A9AAB" font-family="Manrope,sans-serif">5:01p Low</text>
+          <text x="224" y="10" font-size="8" fill="#486C6B" font-weight="600" font-family="Manrope,sans-serif">11:18p High</text>
+        </svg>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:10px;border-top:1px solid var(--line-soft);padding-top:10px">
+          <div style="text-align:center">
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--slate-soft)">Low</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--navy);margin-top:2px">4:22 AM</div>
+            <div style="font-size:10px;color:var(--slate);font-weight:600">0.3 ft</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-deep)">High</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--teal-deep);margin-top:2px">10:45 AM</div>
+            <div style="font-size:10px;color:var(--teal-deep);font-weight:600">4.8 ft</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--slate-soft)">Low</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--navy);margin-top:2px">5:01 PM</div>
+            <div style="font-size:10px;color:var(--slate);font-weight:600">0.5 ft</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-deep)">High</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--teal-deep);margin-top:2px">11:18 PM</div>
+            <div style="font-size:10px;color:var(--teal-deep);font-weight:600">4.6 ft</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bay Tide -->
+    <div style="margin:0 16px" class="card">
+      <div style="padding:16px 16px 14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:32px;height:32px;background:var(--foam);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy)">Barnegat Bay Tide</div>
+              <div style="font-size:10px;color:var(--slate-soft);margin-top:1px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase">Bay side · lags ocean ~65 min</div>
+            </div>
+          </div>
+          <div style="background:#f5ead6;border-radius:20px;padding:4px 10px;display:flex;align-items:center;gap:5px">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--sun)"></div>
+            <span style="font-size:10px;font-weight:700;color:#7a4e10;letter-spacing:0.06em">WATCH</span>
+          </div>
+        </div>
+        <svg viewBox="0 0 340 80" style="width:100%;overflow:visible">
+          <defs>
+            <linearGradient id="bayGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#6B9694" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#6B9694" stop-opacity="0.02"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,68 C35,68 50,18 95,18 C140,18 150,68 180,68 C210,68 220,18 265,18 C310,18 320,68 340,68 L340,80 L0,80 Z" fill="url(#bayGrad)"/>
+          <path d="M0,68 C35,68 50,18 95,18 C140,18 150,68 180,68 C210,68 220,18 265,18 C310,18 320,68 340,68" fill="none" stroke="#6B9694" stroke-width="2"/>
+          <line x1="142" y1="4" x2="142" y2="76" stroke="#C45A3E" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <circle cx="142" cy="55" r="4" fill="#C45A3E"/>
+          <text x="146" y="14" font-size="8" fill="#C45A3E" font-weight="700" font-family="Manrope,sans-serif">NOW</text>
+          <line x1="0" y1="35" x2="340" y2="35" stroke="#D4A24E" stroke-width="1" stroke-dasharray="3,3"/>
+          <text x="282" y="32" font-size="7" fill="#D4A24E" font-weight="600" font-family="Manrope,sans-serif">flood level</text>
+          <text x="2" y="78" font-size="8" fill="#8A9AAB" font-family="Manrope,sans-serif">5:15a Low</text>
+          <text x="70" y="16" font-size="8" fill="#486C6B" font-weight="600" font-family="Manrope,sans-serif">11:52a High</text>
+          <text x="155" y="78" font-size="8" fill="#8A9AAB" font-family="Manrope,sans-serif">5:48p Low</text>
+          <text x="234" y="16" font-size="8" fill="#486C6B" font-weight="600" font-family="Manrope,sans-serif">12:01a High</text>
+        </svg>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:10px;border-top:1px solid var(--line-soft);padding-top:10px">
+          <div style="text-align:center">
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--slate-soft)">Low</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--navy);margin-top:2px">5:15 AM</div>
+            <div style="font-size:10px;color:var(--slate);font-weight:600">0.2 ft</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-deep)">High</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--teal-deep);margin-top:2px">11:52 AM</div>
+            <div style="font-size:10px;color:var(--teal-deep);font-weight:600">3.1 ft</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--slate-soft)">Low</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--navy);margin-top:2px">5:48 PM</div>
+            <div style="font-size:10px;color:var(--slate);font-weight:600">0.3 ft</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-deep)">High</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--teal-deep);margin-top:2px">12:01 AM</div>
+            <div style="font-size:10px;color:var(--teal-deep);font-weight:600">2.9 ft</div>
+          </div>
+        </div>
+        <!-- Road flooding advisory -->
+        <div style="margin-top:12px;background:var(--sand);border-radius:var(--r-sm);padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sun)" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:#7a4e10">Bay Ave flooding possible 11 AM – 1 PM</div>
+            <div style="font-size:10px;color:#8a5c10;margin-top:2px;line-height:1.4">Low-lying intersections in Beach Haven &amp; Harvey Cedars may see water near high tide.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /tide-grid -->
+
+    <!-- Happening Today -->
+    <div class="section-title">Happening Today</div>
+    <div class="scroll-x" style="padding-bottom:4px;gap:10px">
+      <div class="card" style="min-width:200px;padding:0;overflow:hidden">
+        <div style="background:var(--navy);padding:12px 14px;display:flex;align-items:center;gap:8px">
+          <div style="text-align:center;min-width:42px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:var(--shell);line-height:1">8</div>
+            <div style="font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--seafoam)">PM</div>
+          </div>
+          <div style="width:1px;height:36px;background:rgba(184,205,200,0.3)"></div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--shell)">Live Music at Daddy O</div>
+            <div style="font-size:10px;color:var(--seafoam);margin-top:2px">Beach Haven</div>
+          </div>
+        </div>
+        <div style="padding:10px 14px">
+          <span class="badge badge-blue">Music</span>
+        </div>
+      </div>
+      <div class="card" style="min-width:200px;padding:0;overflow:hidden">
+        <div style="background:var(--foam);padding:12px 14px;display:flex;align-items:center;gap:8px">
+          <div style="text-align:center;min-width:42px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:var(--teal-deep);line-height:1">9</div>
+            <div style="font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal)">AM</div>
+          </div>
+          <div style="width:1px;height:36px;background:var(--seafoam);opacity:0.4"></div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--navy)">Kayak Tour – Barnegat Bay</div>
+            <div style="font-size:10px;color:var(--slate);margin-top:2px">Surf City</div>
+          </div>
+        </div>
+        <div style="padding:10px 14px">
+          <span class="badge badge-green">Activity</span>
+        </div>
+      </div>
+      <div class="card" style="min-width:200px;padding:0;overflow:hidden">
+        <div style="background:var(--sand);padding:12px 14px;display:flex;align-items:center;gap:8px">
+          <div style="text-align:center;min-width:42px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:var(--navy);line-height:1">6</div>
+            <div style="font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--slate)">AM</div>
+          </div>
+          <div style="width:1px;height:36px;background:var(--line);"></div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--navy)">Viking Village Fish Market</div>
+            <div style="font-size:10px;color:var(--slate);margin-top:2px">Barnegat Light · until 2 PM</div>
+          </div>
+        </div>
+        <div style="padding:10px 14px">
+          <span class="badge badge-amber">Market</span>
+        </div>
+      </div>
+      <div class="card" style="min-width:200px;padding:0;overflow:hidden">
+        <div style="background:var(--foam);padding:12px 14px;display:flex;align-items:center;gap:8px">
+          <div style="text-align:center;min-width:42px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--teal-deep);line-height:1">6:30</div>
+            <div style="font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal)">PM</div>
+          </div>
+          <div style="width:1px;height:36px;background:var(--seafoam);opacity:0.4"></div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--navy)">Sunset Yoga on the Beach</div>
+            <div style="font-size:10px;color:var(--slate);margin-top:2px">Harvey Cedars</div>
+          </div>
+        </div>
+        <div style="padding:10px 14px">
+          <span class="badge badge-purple">Wellness</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Happy Hour Banner -->
+    <div style="margin:16px 16px 0;background:var(--navy);border-radius:var(--r-md);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="goTo('eat')">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="background:var(--coral);border-radius:6px;padding:3px 9px">
+          <span style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:white">Happy Hour</span>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:var(--shell)">Go now if you're going</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--seafoam)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </div>
+
+  <div class="page" id="page-beaches">
+    <div style="background:white;padding:16px;border-bottom:1px solid #f1f5f9;position:sticky;top:0;z-index:10">
+      <div style="font-size:20px;font-weight:800;color:#0d1b2a;margin-bottom:12px">Beaches 🏖️</div>
+      <div class="scroll-x">
+        <button class="pill-filter active" onclick="filterBeaches(this,'all')">All</button>
+        <button class="pill-filter" onclick="filterBeaches(this,'lifeguard')">🏊 Guarded</button>
+        <button class="pill-filter" onclick="filterBeaches(this,'mobi')">♿ Mobi-mat</button>
+        <button class="pill-filter" onclick="filterBeaches(this,'badge')">No Badge Day</button>
+      </div>
+    </div>
+
+    <!-- Badge Season Banner -->
+    <div style="background:#0077b6;color:white;padding:10px 16px;font-size:13px;display:flex;align-items:center;gap:8px">
+      <span>🏷️</span>
+      <div><strong>Pre-season pricing ends soon!</strong> Most towns: $40 seasonal before cutoff, $50 after.</div>
+    </div>
+
+    <div style="padding:12px 16px;display:flex;flex-direction:column;gap:10px" id="beach-list">
+
+      <!-- Barnegat Light -->
+      <div class="card beach-card" data-tags="lifeguard tram" style="overflow:visible">
+        <div style="background:linear-gradient(135deg,#0077b6,#00b4d8);height:6px;border-radius:16px 16px 0 0"></div>
+        <div style="padding:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div style="font-size:15px;font-weight:700;color:#1e293b">Barnegat Light 🏛️</div>
+              <div style="font-size:12px;color:#64748b">Northern tip of LBI</div>
+            </div>
+            <div class="badge badge-amber">Guards Jun 15</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+            <span class="tag">🏄 3–4ft surf</span>
+            <span class="tag">🚃 Beach Tram</span>
+            <span class="tag">♿ Beach Wheels</span>
+            <span class="tag">🐕 No dogs Apr–Sep</span>
+          </div>
+          <div style="border-top:1px solid #f1f5f9;margin-top:12px;padding-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div>
+              <div style="font-size:10px;color:#94a3b8;text-transform:uppercase;font-weight:600">2026 Badge Prices</div>
+              <div style="font-size:13px;font-weight:700;color:#0077b6;margin-top:4px">$40 pre-season</div>
+              <div style="font-size:11px;color:#64748b">thru June 5 · $50 after · $10/day</div>
+            </div>
+            <div>
+              <div style="font-size:10px;color:#94a3b8;text-transform:uppercase;font-weight:600">Lifeguards</div>
+              <div style="font-size:13px;font-weight:700;color:#334155;margin-top:4px">10am–5pm</div>
+              <div style="font-size:11px;color:#64748b">Mid-June – Labor Day</div>
+            </div>
+          </div>
+          <div style="background:#f8fafc;border-radius:8px;padding:8px 10px;margin-top:10px;font-size:12px;color:#475569">
+            💡 Bay Beach at 25th St. & Bayview is guarded and great for young kids.
+          </div>
+        </div>
+      </div>
+
+      <!-- Harvey Cedars -->
+      <div class="card beach-card" data-tags="lifeguard" style="overflow:visible">
+        <div style="background:linear-gradient(135deg,#2a9d8f,#52b788);height:6px;border-radius:16px 16px 0 0"></div>
+        <div style="padding:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div style="font-size:15px;font-weight:700;color:#1e293b">Harvey Cedars 🎥</div>
+              <div style="font-size:12px;color:#64748b">Mid-island · Live webcam</div>
+            </div>
+            <div class="badge badge-amber">Guards Jun 15</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+            <span class="tag">🌊 1–2ft surf</span>
+            <span class="tag">♿ Beach Wheels + UTV</span>
+            <span class="tag">♿ Ramp: E. 80th St</span>
+          </div>
+          <div style="border-top:1px solid #f1f5f9;margin-top:12px;padding-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div>
+              <div style="font-size:10px;color:#94a3b8;text-transform:uppercase;font-weight:600">2026 Badge Prices</div>
+              <div style="font-size:13px;font-weight:700;color:#0077b6;margin-top:4px">$40 pre-season</div>
+              <div style="font-size:11px;color:#64748b">thru June 15 · $50 after · $7/day</div>
+            </div>
+            <div>
+              <div style="font-size:10px;color:#94a3b8;text-transform:uppercase;font-weight:600">Purchase</div>
+              <div style="font-size:13px;font-weight:700;color:#334155;margin-top:4px">My Beach Mobile</div>
+              <div style="font-size:11px;color:#64748b">App or cash/check at booth</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Surf City -->
+      <div class="card beach-card" data-tags="lifeguard mobi" style="overflow:visible">
+        <div style="background:linear-gradient(135deg,#e76f51,#f4a261);height:6px;border-radius:16px 16px 0 0"></div>
+        <div style="padding:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div style="font-size:15px;font-weight:700;color:#1e293b">Surf City 🏄</div>
+              <div style="font-size:12px;color:#64748b">Best town to retire in NJ 🏆</div>
+            </div>
+            <div class="badge badge-green">Open</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+            <span class="tag">🏄 2–3ft surf</span>
+            <span class="tag">⚠️ Rip risk possible</span>
+          </div>
+          <div style="border-top:1px solid #f1f5f9;margin-top:12px;padding-top:12px">
+            <div style="font-size:10px;color:#94a3b8;text-transform:uppercase;font-weight:600">2026 Badge Prices</div>
+            <div style="font-size:12px;color:#d97706;margin-top:4px;display:flex;align-items:center;gap:6px">
+              <span>⚠️</span> Prices not yet confirmed for 2026 — pre-season purchase available at <strong>boroughofsurfcity.company.site</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ship Bottom -->
+      <div class="card beach-card" data-tags="lifeguard mobi" style="overflow:visible">
+        <div style="background:linear-gradient(135deg,#7c3aed,#a78bfa);height:6px;border-radius:16px 16px 0 0"></div>
+        <div style="padding:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div style="font-size:15px;font-weight:700;color:#1e293b">Ship Bottom ♿</div>
+              <div style="font-size:12px;color:#64748b">Central hub · Route 72 causeway</div>
+            </div>
+            <div class="badge badge-green">Open</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+            <span class="tag">🏖️ 1–2ft surf</span>
+            <span class="tag">♿ Ramps: 8 streets</span>
+            <span class="tag">🚕 Free Beach Taxi</span>
+          </div>
+          <div style="border-top:1px solid #f1f5f9;margin-top:12px;padding-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div>
+              <div style="font-size:10px;color:#94a3b8;text-transform:uppercase;font-weight:600">Beach Taxi</div>
+              <div style="font-size:12px;font-weight:600;color:#334155;margin-top:4px">Free · Father's Day–Labor Day</div>
+              <div style="font-size:11px;color:#64748b">3rd–31st Streets</div>
+            </div>
+            <div>
+              <div style="font-size:10px;color:#94a3b8;text-transform:uppercase;font-weight:600">Beach Wheels</div>
+              <div style="font-size:12px;font-weight:600;color:#334155;margin-top:4px">Free · Reservation req.</div>
+              <div style="font-size:11px;color:#64748b">(609) 494-9481</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Long Beach Township -->
+      <div class="card beach-card" data-tags="lifeguard mobi" style="overflow:visible">
+        <div style="background:linear-gradient(135deg,#0d9488,#14b8a6);height:6px;border-radius:16px 16px 0 0"></div>
+        <div style="padding:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div style="font-size:15px;font-weight:700;color:#1e293b">Long Beach Township 🌊</div>
+              <div style="font-size:12px;color:#64748b">Loveladies · Brant Beach · Holgate</div>
+            </div>
+            <div class="badge badge-green">Open</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+            <span class="tag">♿ Beach Gators (6 vehicles)</span>
+            <span class="tag">♿ Largest wheelchair program in NJ</span>
+          </div>
+          <div style="background:#f0fdf4;border-radius:8px;padding:8px 10px;margin-top:10px;font-size:12px;color:#166534">
+            ♿ LBT Beach Wheels — one of the largest beach wheelchair programs in the country since 1992.
+          </div>
+        </div>
+      </div>
+
+      <!-- Beach Haven -->
+      <div class="card beach-card" data-tags="lifeguard mobi badge" style="overflow:visible">
+        <div style="background:linear-gradient(135deg,#f59e0b,#fbbf24);height:6px;border-radius:16px 16px 0 0"></div>
+        <div style="padding:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div style="font-size:15px;font-weight:700;color:#1e293b">Beach Haven 🎡</div>
+              <div style="font-size:12px;color:#64748b">Southern end · Most restaurants</div>
+            </div>
+            <div class="badge badge-green">Open</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+            <span class="tag">🌊 2–3ft surf</span>
+            <span class="tag">🚕 Free Beach Taxi</span>
+            <span class="tag">♿ 9 mobi-mat streets</span>
+            <span class="tag">🐕 Dog beach at Taylor Bay</span>
+          </div>
+          <div style="border-top:1px solid #f1f5f9;margin-top:12px;padding-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div>
+              <div style="font-size:10px;color:#94a3b8;text-transform:uppercase;font-weight:600">2026 Badge Prices</div>
+              <div style="font-size:13px;font-weight:700;color:#0077b6;margin-top:4px">$40 pre-season</div>
+              <div style="font-size:11px;color:#64748b">thru May 31 · $50 after · $10/day</div>
+            </div>
+            <div>
+              <div style="font-size:10px;color:#94a3b8;text-transform:uppercase;font-weight:600">Free Day</div>
+              <div style="font-size:13px;font-weight:700;color:#16a34a;margin-top:4px">Every Wednesday</div>
+              <div style="font-size:11px;color:#64748b">No badge required</div>
+            </div>
+          </div>
+          <div style="background:#f0fdf4;border-radius:8px;padding:8px 10px;margin-top:10px;font-size:12px;color:#166534">
+            ✅ Senior lifetime badge $10 · Veteran badge: FREE · Active military weekly: FREE
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════ EAT & DRINK ══════════════════════════ -->
+  <div class="page" id="page-eat">
+    <div style="background:white;padding:16px;border-bottom:1px solid #f1f5f9;position:sticky;top:0;z-index:10">
+      <div style="font-size:20px;font-weight:800;color:#0d1b2a;margin-bottom:10px">Explore LBI 🧭</div>
+      <div style="position:relative;margin-bottom:10px">
+        <input type="search" id="biz-search" placeholder="Search businesses..." oninput="renderBiz()"
+          style="width:100%;padding:10px 14px 10px 38px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:14px;background:#f8fafc;box-sizing:border-box">
+        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:16px">🔍</span>
+      </div>
+      <!-- Category tabs -->
+      <div class="scroll-x" id="cat-tabs" style="margin-bottom:8px">
+        <button class="pill-filter active" onclick="setCat('all',this)">All</button>
+        <button class="pill-filter" onclick="setCat('Dining',this)" style="--pill-color:#e76f51">🍽️ Dining</button>
+        <button class="pill-filter" onclick="setCat('Shopping',this)" style="--pill-color:#2a9d8f">🛍️ Shopping</button>
+        <button class="pill-filter" onclick="setCat('Water Sports &amp; Rentals',this)" style="--pill-color:#0077b6">🚤 Water Sports</button>
+        <button class="pill-filter" onclick="setCat('Nightlife',this)" style="--pill-color:#7c3aed">🎸 Nightlife</button>
+        <button class="pill-filter" onclick="setCat('Entertainment',this)" style="--pill-color:#6b21a8">🎡 Entertainment</button>
+        <button class="pill-filter" onclick="setCat('Lodging',this)" style="--pill-color:#f4a261">🏨 Lodging</button>
+        <button class="pill-filter" onclick="setCat('Services',this)" style="--pill-color:#457b9d">🔧 Services</button>
+      </div>
+      <!-- Town filter -->
+      <select id="town-filter" onchange="renderBiz()"
+        style="width:100%;padding:8px 12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:13px;background:#f8fafc;color:#334155">
+        <option value="">All Towns</option>
+        <option>Barnegat Light</option>
+        <option>Harvey Cedars</option>
+        <option>Surf City</option>
+        <option>Ship Bottom</option>
+        <option>Long Beach Township</option>
+        <option>Brant Beach</option>
+        <option>Beach Haven Terrace</option>
+        <option>Beach Haven Gardens</option>
+        <option>Beach Haven Park</option>
+        <option>Beach Haven</option>
+        <option>Holgate</option>
+        <option>Manahawkin</option>
+      </select>
+    </div>
+    <div id="biz-count" style="padding:8px 16px;font-size:12px;color:#64748b"></div>
+    <div id="biz-list" style="padding:0 16px 16px;display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+
+    <!-- ════════════════════════════════ ACCESSIBILITY ══════════════════════ -->
+  <div class="page" id="page-access">
+    <div style="background:white;padding:16px;border-bottom:1px solid #f1f5f9">
+      <div style="font-size:20px;font-weight:800;color:#0d1b2a">Accessibility ♿</div>
+      <div style="font-size:13px;color:#64748b;margin-top:4px">Beach access programs across all LBI towns</div>
+    </div>
+
+    <!-- Service summary -->
+    <div class="section-title">Available Services</div>
+    <div class="scroll-x" style="padding-bottom:4px">
+      <div class="card" style="min-width:150px;padding:14px;text-align:center">
+        <div style="font-size:28px">🦽</div>
+        <div style="font-size:12px;font-weight:700;color:#1e293b;margin-top:6px">Beach Wheelchairs</div>
+        <div style="font-size:11px;color:#64748b;margin-top:2px">All 6 towns</div>
+      </div>
+      <div class="card" style="min-width:150px;padding:14px;text-align:center">
+        <div style="font-size:28px">🚕</div>
+        <div style="font-size:12px;font-weight:700;color:#1e293b;margin-top:6px">Beach Taxis</div>
+        <div style="font-size:11px;color:#64748b;margin-top:2px">Beach Haven + Ship Bottom</div>
+      </div>
+      <div class="card" style="min-width:150px;padding:14px;text-align:center">
+        <div style="font-size:28px">🚃</div>
+        <div style="font-size:12px;font-weight:700;color:#1e293b;margin-top:6px">Beach Tram</div>
+        <div style="font-size:11px;color:#64748b;margin-top:2px">Barnegat Light</div>
+      </div>
+      <div class="card" style="min-width:150px;padding:14px;text-align:center">
+        <div style="font-size:28px">🚜</div>
+        <div style="font-size:12px;font-weight:700;color:#1e293b;margin-top:6px">Beach Gators</div>
+        <div style="font-size:11px;color:#64748b;margin-top:2px">Long Beach Township</div>
+      </div>
+    </div>
+
+    <div style="padding:12px 16px;display:flex;flex-direction:column;gap:10px">
+
+      <!-- Beach Haven -->
+      <div class="card" style="overflow:hidden">
+        <div style="background:#7c3aed;color:white;padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:14px;font-weight:700">Beach Haven</div>
+          <div style="font-size:11px;opacity:0.85">Most comprehensive</div>
+        </div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🪑</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">Beach Wheelchairs</div>
+              <div style="font-size:12px;color:#475569">Free. Always one at Centre St. Beach Patrol (first-come). Delivery available via badge office.</div>
+              <div style="font-size:12px;color:#0077b6;margin-top:2px">📞 (609) 492-9193</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🚕</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">Free Beach Taxi</div>
+              <div style="font-size:12px;color:#475569">Pickup at your address. Drops off at 13th St, Taylor, Centre, Berkeley, Holyoke, Kentford, or Nelson Ave.</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🛤️</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">Mobi-Mats at 9 Entrances</div>
+              <div style="font-size:12px;color:#475569">Nelson, Merrivale, Leeward, Dolphin, Chatsworth, Belvoir, 7th, 10th, 12th St.</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🅿️</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">HC Parking</div>
+              <div style="font-size:12px;color:#475569">Taylor Ave, Centre St, Engleside Ave, Amber St, Pearl St. All Beach Haven parking is FREE.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ship Bottom -->
+      <div class="card" style="overflow:hidden">
+        <div style="background:#0077b6;color:white;padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:14px;font-weight:700">Ship Bottom</div>
+          <div style="font-size:11px;opacity:0.85">8 accessible ramps</div>
+        </div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🛤️</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">Beach Ramps</div>
+              <div style="font-size:12px;color:#475569">4th, 8th, 9th, 14th, 15th, 20th, 21st, and 25th Streets</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🚕</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">Free Beach Taxi</div>
+              <div style="font-size:12px;color:#475569">Father's Day through Labor Day. 3rd–31st Streets.</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🪑</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">Beach Wheels</div>
+              <div style="font-size:12px;color:#475569">Free, reservation required. Must be staying in Ship Bottom.</div>
+              <div style="font-size:12px;color:#0077b6;margin-top:2px">📞 (609) 494-9481</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barnegat Light -->
+      <div class="card" style="overflow:hidden">
+        <div style="background:#2a9d8f;color:white;padding:10px 14px">
+          <div style="font-size:14px;font-weight:700">Barnegat Light</div>
+        </div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🚃</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">Free Beach Tram</div>
+              <div style="font-size:12px;color:#475569">4th–9th St. ocean beaches → lifeguarded area at 9th–10th St. Runs 10am–5pm (not 1–2pm). Valid badge required for 12+.</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🪑</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">Beach Wheels</div>
+              <div style="font-size:12px;color:#475569">Free, funded by donations. Delivery & pickup included. Reservation required.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Harvey Cedars -->
+      <div class="card" style="overflow:hidden">
+        <div style="background:#0d9488;color:white;padding:10px 14px">
+          <div style="font-size:14px;font-weight:700">Harvey Cedars</div>
+        </div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🛤️</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">Accessible Ramps</div>
+              <div style="font-size:12px;color:#475569">East 80th Street and East Mercer Avenue</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🚜</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">Beach Wheels + UTV Transport</div>
+              <div style="font-size:12px;color:#475569">6 adult chairs + 1 child chair. UTV for those who can't use a wheelchair. Free, by reservation. Must stay in Harvey Cedars.</div>
+              <div style="font-size:12px;color:#0077b6;margin-top:2px">📞 (609) 361-9733 (10am–3pm, in-season)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LBT -->
+      <div class="card" style="overflow:hidden">
+        <div style="background:#0d9488;color:white;padding:10px 14px">
+          <div style="font-size:14px;font-weight:700">Long Beach Township</div>
+        </div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🚜</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">Beach Gators (6 vehicles)</div>
+              <div style="font-size:12px;color:#475569">John Deere Gators transport physically challenged visitors from the street over the dunes to the beach. Free.</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span style="font-size:20px">🪑</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1e293b">Beach Wheels — One of the Largest in the US</div>
+              <div style="font-size:12px;color:#475569">Program running since 1992. See lbtbp.com/beachwheels for reservations.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════ GETTING AROUND ═══════════════════════ -->
+  <div class="page" id="page-around">
+    <div style="background:white;padding:16px;border-bottom:1px solid #f1f5f9">
+      <div style="font-size:20px;font-weight:800;color:#0d1b2a">Getting Around 🚌</div>
+      <div style="font-size:13px;color:#64748b;margin-top:4px">Shuttle, parking & causeway</div>
+    </div>
+
+    <!-- Causeway status -->
+    <div class="section-title">Causeway — Route 72</div>
+    <div style="margin:0 16px" class="card">
+      <div style="padding:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1e293b">Manahawkin Bay Bridges</div>
+            <div style="font-size:12px;color:#64748b">Only road on/off Long Beach Island</div>
+          </div>
+          <div class="badge badge-green">🟢 Clear</div>
+        </div>
+        <div style="background:#f8fafc;border-radius:10px;padding:10px;margin-top:12px;font-size:12px;color:#475569">
+          ⚠️ <strong>Peak hours:</strong> Fri 2–8pm inbound, Sun 2–7pm outbound (Memorial Day–Labor Day). Build in extra time.
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <span class="tag">🌊 Bridge project underway</span>
+          <span class="tag">📷 Live traffic cams available</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- LBI Shuttle -->
+    <div class="section-title">LBI Shuttle 🚃</div>
+    <div style="margin:0 16px" class="card">
+      <div style="padding:14px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="width:40px;height:40px;background:linear-gradient(135deg,#0077b6,#00b4d8);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">🚌</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1e293b">LBI Shuttle</div>
+            <div style="font-size:12px;color:#64748b">Runs all 18 miles of the island</div>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#475569;line-height:1.5">
+          Trolley-style service with stops throughout the island — from Barnegat Light to Beach Haven. Wave it down at designated stops.
+        </div>
+        <div style="background:#fffbeb;border:1px solid #fef3c7;border-radius:10px;padding:10px;margin-top:12px;font-size:12px;color:#92400e">
+          ⚠️ <strong>2026 schedule not yet confirmed.</strong> Verify fares and hours at <strong>longbeachtownship.com/lbi-shuttle</strong> before the season starts.
+        </div>
+      </div>
+    </div>
+
+    <!-- Parking by Town -->
+    <div class="section-title">Parking by Town</div>
+    <div style="margin:0 16px;display:flex;flex-direction:column;gap:8px">
+
+      <div class="card" style="padding:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:14px;font-weight:700;color:#1e293b">Beach Haven</div>
+          <div class="badge badge-green">FREE</div>
+        </div>
+        <div style="font-size:12px;color:#475569">All public parking in Beach Haven is free. HC parking on Taylor, Centre, Engleside, Amber, Pearl. Ocean-side lots on most streets.</div>
+      </div>
+
+      <div class="card" style="padding:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:14px;font-weight:700;color:#1e293b">Barnegat Light</div>
+          <div class="badge badge-blue">Street + State Park</div>
+        </div>
+        <div style="font-size:12px;color:#475569">Street parking throughout. Barnegat Lighthouse State Park lot — largest in borough. State park fee may apply.</div>
+      </div>
+
+      <div class="card" style="padding:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:14px;font-weight:700;color:#1e293b">Harvey Cedars, Surf City, Ship Bottom, LBT</div>
+          <div class="badge badge-amber">Street Parking</div>
+        </div>
+        <div style="font-size:12px;color:#475569;display:flex;align-items:center;gap:6px">
+          <span>⚠️</span> Detailed parking info needs field research for these towns. Check each town's website.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Biking -->
+    <div class="section-title">Biking 🚲</div>
+    <div style="margin:0 16px" class="card">
+      <div style="padding:14px">
+        <div style="font-size:13px;color:#475569;line-height:1.5">Beach Haven has painted <strong>green bike lanes</strong> throughout town to alert drivers. Island-wide bike path map coming soon.</div>
+      </div>
+    </div>
+
+    <div style="height:16px"></div>
+  </div>
+
+  <!-- ════════════════════════════════ BOTTOM NAV ══════════════════════════ -->
+  <div class="bottom-nav">
+    <div class="sidebar-brand">
+      <div class="brand-logo"><em>On</em> LBI</div>
+      <div class="brand-tag">Long Beach Island, NJ</div>
+    </div>
+    <span class="nav-group-label">The Island</span>
+    <button class="nav-btn active" onclick="goTo('today')" id="nav-today">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Today
+    </button>
+    <button class="nav-btn" onclick="goTo('beaches')" id="nav-beaches">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18c3-6 6-9 9-9s6 3 9 9"/><path d="M12 9V5"/><path d="M8 5h8"/></svg>
+      Beaches
+    </button>
+    <button class="nav-btn" onclick="goTo('eat')" id="nav-eat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Explore
+    </button>
+    <span class="nav-group-label">Practical</span>
+    <button class="nav-btn" onclick="goTo('access')" id="nav-access">
+      <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="4" r="2"/><path d="M19 13v-2c0-1.1-.9-2-2-2h-6l-2-4H6v2h2.5l2 4h-4L3 19l1.7 1 1.8-3h9.2c.9 0 1.7-.6 2-1.4L19 13z"/></svg>
+      Access
+    </button>
+    <button class="nav-btn" onclick="goTo('around')" id="nav-around">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7"/><circle cx="6" cy="19" r="2"/><circle cx="20" cy="19" r="2"/></svg>
+      Getting Around
+    </button>
+    <div class="sidebar-live">
+      <span class="live-dot"></span> Live · just now
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const pages = { today: 'today', beaches: 'beaches', eat: 'eat', access: 'access', around: 'around' };
+
+  function goTo(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    const navBtn = document.getElementById('nav-' + name);
+    if (navBtn) navBtn.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+
+  // ── Business Directory ─────────────────────────────────────────────────────
+  const catColors = {
+    'Dining':                ['#C45A3E','#d4734f'],
+    'Shopping':              ['#486C6B','#6B9694'],
+    'Water Sports & Rentals':['#1B3654','#2a4f7a'],
+    'Nightlife':             ['#102742','#1B3654'],
+    'Entertainment':         ['#6B8E5C','#8aad74'],
+    'Lodging':               ['#D4A24E','#e0b870'],
+    'Services':              ['#5F7388','#8A9AAB'],
+  };
+
+  const businesses = [
+    {id:101,name:"Kubel's",cat:'Dining',sub:'Seafood',town:'Barnegat Light',phone:'(609) 494-8844',web:'https://www.kubels.com',icon:'🦀',note:'Cash only, BYOB, legendary crab cakes. An LBI tradition since 1927.'},
+    {id:102,name:'Black Whale Bar & Fish House',cat:'Dining',sub:'Bar & Grill',town:'Beach Haven',phone:'(609) 492-0369',web:'https://www.blackwhalebar.com',icon:'🐋',note:'Best fish tacos on the island. Nautical-themed locals favorite.'},
+    {id:103,name:'Daddy O Restaurant & Hotel',cat:'Dining',sub:'Upscale',town:'Brant Beach',phone:'(609) 494-1300',web:'https://www.daddyohotel.com',icon:'🍽️',note:'Farm-to-table dining, amazing cocktails. Reservations highly recommended.'},
+    {id:104,name:'The Chicken or the Egg (CHEGG)',cat:'Dining',sub:'Breakfast',town:'Beach Haven',phone:'(609) 492-3695',web:'https://www.cheggrestaurant.com',icon:'🍳',note:'Best breakfast spot on the island. Get there early — waits are long in summer.'},
+    {id:105,name:"Buckalew's Restaurant & Bar",cat:'Dining',sub:'Sports Bar',town:'Beach Haven',phone:'(609) 492-1065',web:'https://www.buckalews.com',icon:'🍺',note:'Great deck, lively atmosphere. Popular happy hour spot.'},
+    {id:106,name:'Harvey Cedars Shellfish Co.',cat:'Dining',sub:'Raw Bar',town:'Harvey Cedars',phone:'(609) 494-7112',web:'https://www.harveycedarsshellfish.com',icon:'🦪',note:'Raw bar perfection. Picnic tables, no-frills, opens at 4 PM.'},
+    {id:107,name:"Stefano's",cat:'Dining',sub:'Italian',town:'Beach Haven',phone:'(609) 492-1220',icon:'🍝',note:'BYOB Italian, reservations strongly advised. Consistently rated top on the island.'},
+    {id:108,name:"Scojo's",cat:'Dining',sub:'Casual',town:'Surf City',phone:'(609) 494-8121',icon:'🌯',note:'Great wraps and sandwiches. Casual lunch spot.'},
+    {id:109,name:"Roberto's Dolce Vita",cat:'Dining',sub:'Seafood / Italian',town:'Beach Haven Terrace',phone:'(609) 492-1001',icon:'🍤',note:'Italian seafood in a relaxed setting.'},
+    {id:110,name:'Viking Fresh Off the Hook',cat:'Dining',sub:'Seafood',town:'Barnegat Light',phone:'(609) 361-8900',icon:'🐟',note:'Fresh seafood right at Viking Village docks.'},
+    {id:111,name:"Tucker's Tavern",cat:'Dining',sub:'Seafood / Bar',town:'Beach Haven',phone:'(609) 492-2300',icon:'🍻',note:'Local tavern with solid seafood and a friendly vibe.'},
+    {id:112,name:'Jersey Girl Grill',cat:'Dining',sub:'Casual',town:'Long Beach Township',phone:'(609) 492-1313',icon:'🍔',note:'Casual American grill in the mid-island area.'},
+    {id:113,name:'Dune 18',cat:'Dining',sub:'Seafood / Restaurant',town:'Ship Bottom',phone:'(609) 494-3354',icon:'🌊',note:'Upscale-casual dining in Ship Bottom.'},
+    {id:114,name:"Panzone's Pizza",cat:'Dining',sub:'Pizza',town:'Ship Bottom',phone:'(609) 492-5103',icon:'🍕',note:'Classic Jersey Shore pizza.'},
+    {id:115,name:'Burger 25',cat:'Dining',sub:'Burgers',town:'Ship Bottom',phone:'(609) 879-2525',icon:'🍔',note:'Build-your-own burgers and hand-spun shakes.'},
+    {id:120,name:"Murphy's Fresh Markets",cat:'Dining',sub:'Market / Deli',town:'Beach Haven',phone:'(609) 492-5100',icon:'🏪',note:'Local fresh market. Island staple for grab-and-go and fresh seafood.'},
+    {id:121,name:'Inlet Deli',cat:'Dining',sub:'Deli / Market',town:'Ship Bottom',phone:'(609) 494-3049',icon:'🥪',note:'Great sandwiches and deli staples.'},
+    {id:122,name:"Fratello's Market & Eatery",cat:'Dining',sub:'Deli / Market',town:'Ship Bottom',phone:'(609) 661-7291',icon:'🥙',note:'Italian market feel with fresh prepared foods.'},
+    {id:123,name:'Neptune Market',cat:'Dining',sub:'Deli / Market',town:'Harvey Cedars',phone:'(267) 625-1966',icon:'🏬',note:'Mid-island market and deli with lunch counter.'},
+    {id:124,name:'Spice It Up',cat:'Dining',sub:'Deli / Market',town:'Beach Haven',phone:'(609) 207-9906',icon:'🌶️',note:'Gourmet deli with creative lunch options.'},
+    {id:125,name:'Acme Markets LBI',cat:'Dining',sub:'Grocery',town:'Beach Haven Park',phone:'(609) 492-0510',web:'https://www.acmemarkets.com',icon:'🛒',note:'Full-service grocery store. Largest grocery on the island.',img:'https://welcometolbi.com/wp-content/uploads/2016/03/Business-Directory-Listings-1.png'},
+    {id:130,name:'How You Brewin Coffee House',cat:'Dining',sub:'Coffee',town:'Surf City',phone:'(609) 494-2003',icon:'☕',note:'Cozy local coffee shop. Also has a location in Barnegat Light.',img:'https://welcometolbi.com/wp-content/uploads/2016/10/LBICC-Business-Listing-2.png'},
+    {id:131,name:'How You Brewin Coffee Bar',cat:'Dining',sub:'Coffee',town:'Barnegat Light',phone:'(609) 494-2003',icon:'☕',note:'North-end coffee bar at the top of the island.'},
+    {id:132,name:'Beach Haven Coffee Roasters',cat:'Dining',sub:'Coffee',town:'Beach Haven',phone:'(609) 492-4500',icon:'☕',note:'Craft roasted coffee and light breakfast. Local favorite.'},
+    {id:133,name:"Poppy's Ice Cream Parlour",cat:'Dining',sub:'Ice Cream',town:'Barnegat Light',phone:'(609) 361-2663',icon:'🍦',note:'Classic ice cream parlour on the north end.'},
+    {id:134,name:'Ship Bottom Ice Cream Co.',cat:'Dining',sub:'Ice Cream',town:'Ship Bottom',phone:'(609) 342-0892',web:'https://shipbottomicecream.com',icon:'🍨',note:'Homemade ice cream, Italian ice, milkshakes, and cakes.'},
+    {id:135,name:'Skipper Dipper',cat:'Dining',sub:'Ice Cream',town:'Surf City',phone:'(609) 494-3733',web:'https://www.skipperdipper.com',icon:'🍦',note:'LBI institution since 1978. Famous for creative ice cream flavors.'},
+    {id:136,name:'Country Kettle Fudge',cat:'Dining',sub:'Candy / Fudge',town:'Beach Haven',phone:'(609) 492-2800',icon:'🍬',note:'Hand-crafted fudge and candy. A must-stop in Bay Village.',img:'https://welcometolbi.com/wp-content/uploads/2019/01/Business-Directory-Listings-19.png'},
+    {id:137,name:"Raimondo's",cat:'Dining',sub:'Italian',town:'Ship Bottom',phone:'(609) 494-5391',web:'https://www.raimondoslbi.com',icon:'🍝',note:'Classic red-sauce Italian. BYOB. Seasonal.'},
+    {id:138,name:'Azzurri Italian Cucina',cat:'Dining',sub:'Italian',town:'Harvey Cedars',phone:'(609) 479-1014',web:'https://azzurrilbi.com',icon:'🍽️',note:'Contemporary BYOB Italian — handmade pastas, wood-fired pizza. Great for date nights.'},
+    {id:139,name:'Isola Italian Trattoria',cat:'Dining',sub:'Italian',town:'Beach Haven',phone:'(609) 496-5321',web:'https://isolalbi.com',icon:'🫕',note:'Authentic Northern Italian BYOB. Verify status before visiting — reported closed as of 2026.'},
+    {id:140,name:'Daymark Bar & Restaurant',cat:'Dining',sub:'Bar / American',town:'Barnegat Light',phone:'(609) 494-2100',icon:'⚓',note:'Chic American fare in a casual coastal environment with full bar.'},
+    {id:141,name:"Black-Eyed Susans",cat:'Dining',sub:'Upscale / BYOB',town:'Harvey Cedars',phone:'(609) 494-4990',web:'http://www.blackeyedsusanslbi.com',icon:'🌻',note:'Seasonal, chef-driven BYOB. Highly rated by locals.',img:"https://welcometolbi.com/wp-content/uploads/2024/12/5.png"},
+    {id:142,name:"Baker's Porthole Cafe",cat:'Dining',sub:'Casual / American',town:'Ship Bottom',phone:'(609) 494-4242',icon:'⚓',note:'Relaxed cafe with solid American eats in Ship Bottom.'},
+    {id:143,name:'The Arlington',cat:'Dining',sub:'Bar & Grill',town:'Ship Bottom',phone:'(609) 494-8848',web:'http://www.arlingtonlbi.com',icon:'🍻',note:'Local bar and grill staple in Ship Bottom.'},
+    {id:144,name:"Uncle Will's Pancake House",cat:'Dining',sub:'Breakfast',town:'Beach Haven',phone:'(609) 492-2514',web:'https://www.unclewills.com',icon:'🥞',note:'Beloved breakfast destination. Pancakes, omelets, and French toast.'},
+    {id:145,name:'The Gables Historic Inn & Restaurant',cat:'Dining',sub:'Upscale / Fine Dining',town:'Beach Haven',phone:'(609) 492-3553',web:'https://www.gableslbi.com',icon:'🕯️',note:'Victorian inn with acclaimed dining. 3-course prix-fixe. Old-world LBI charm.'},
+    {id:146,name:"Bird & Betty's",cat:'Dining',sub:'Seafood / Pizza / Bar',town:'Beach Haven',phone:'(609) 492-3000',web:'https://www.birdandbettys.com',icon:'🐦',note:'Waterfront spot on the bay with wood-fired pizza, fresh seafood, and live music.',img:"https://welcometolbi.com/wp-content/uploads/2024/03/LBICC-Business-Listing-41.png"},
+    {id:147,name:"Bageleddi's",cat:'Dining',sub:'Bagels / Breakfast',town:'Ship Bottom',phone:'(609) 494-4761',web:'https://www.bageleddis.com',icon:'🥯',note:'Family-owned 50+ years. Softest bagels on the island. Open 7 AM–12:30 PM.'},
+    {id:148,name:'The Bagel Shack',cat:'Dining',sub:'Bagels / Breakfast',town:'Beach Haven',phone:'(609) 492-5552',web:'https://thebagelshacklbi.com',icon:'🥯',note:'Open year-round. Famous pork roll, egg & cheese on a bagel. Unmissable hot-pink building.'},
+    {id:149,name:'Bagels & Beyond',cat:'Dining',sub:'Bagels / Breakfast',town:'Surf City',web:'https://bagelsandbeyond.net',icon:'🥯',note:'Six LBI-area locations. Fresh bagels and breakfast sandwiches. Local and tourist favorite.'},
+    {id:150,name:"Wally's",cat:'Dining',sub:'Breakfast / American',town:'Surf City',phone:'(609) 494-1667',web:'https://www.wallyslbi.com',icon:'🍳',note:'Family-owned Surf City landmark 50+ years. Breakfast, lunch, and dinner daily.'},
+    {id:151,name:'LBI Table',cat:'Dining',sub:'Breakfast / Brunch',town:'Beach Haven',web:'https://lbitable.com',icon:'🍳',note:'Popular breakfast and brunch with fresh, locally-sourced menu.'},
+    {id:152,name:'Dock & Claw Clam Bar',cat:'Dining',sub:'Raw Bar / Seafood',town:'Beach Haven',phone:'(609) 342-0863',web:'https://dockandclaw.com',icon:'🦞',note:'BYOB raw bar and seafood shack. Clams, oysters, lobster rolls on the bay. Hidden gem.'},
+    {id:153,name:"Howard's Seafood Restaurant",cat:'Dining',sub:'Seafood',town:'Long Beach Township',phone:'(609) 492-2319',web:'https://howardsrestaurant.com',icon:'🦞',note:'LBI institution since 1950. Famous for the Original French Fried Lobster and award-winning chowder.'},
+    {id:154,name:'The Beach House',cat:'Dining',sub:'Seafood / American',town:'Beach Haven Terrace',phone:'(609) 492-1997',web:'https://www.thebeachhouselbi.com',icon:'🏠',note:'Seafood, steaks, pastas. Local favorite with a relaxed shore vibe.'},
+    {id:155,name:'Baked on the Beach',cat:'Dining',sub:'Bakery',town:'Surf City',phone:'(609) 361-3200',web:'https://www.bakedonlbi.com',icon:'🧁',note:'Made-from-scratch baked goods — cakes, cookies, pastries, and coffee. Open seasonally.'},
+    {id:156,name:'The Corner Bakery',cat:'Dining',sub:'Bakery',town:'Surf City',phone:'(609) 207-6300',web:'https://www.cornerbakerylbi.com',icon:'🥐',note:'Custom cakes, pastries, and coffee. Open Fri–Sun. A little gem in Surf City.'},
+    {id:157,name:"Ferrara's Island Bakery",cat:'Dining',sub:'Bakery',town:'Ship Bottom',phone:'(609) 494-1919',icon:'🥖',note:'Classic Italian bakery. Breads, pastries, and baked goods made fresh daily.'},
+    {id:158,name:'Crust & Crumb Bakery',cat:'Dining',sub:'Bakery',town:'Beach Haven',icon:'🧁',note:'Family-run bakery in Bay Village since 1987. Fresh pastries, cakes, and baked treats.'},
+    {id:159,name:"Parker's Garage & Oyster Saloon",cat:'Dining',sub:'Seafood / Oyster Bar',town:'Beach Haven',phone:'(609) 492-1066',web:'https://www.parkersgaragelbi.com',icon:'🦪',note:'Elevated seafood, raw bar, and shared plates in a converted garage on the bay. BYOB.'},
+    {id:160,name:'Mud City Crab House',cat:'Dining',sub:'Crab House / Seafood',town:'Manahawkin',phone:'(609) 713-0451',web:'https://www.mudcitycrabhouse.com',icon:'🦀',note:'Mainland bayside — jumbo lump crab cakes, blue crabs, outdoor dining. Mud Shuttle to/from LBI.'},
+    {id:161,name:'BLVD Pizza',cat:'Dining',sub:'Pizza',town:'Surf City',phone:'(609) 494-5623',web:'https://www.blvdpizzalbi.com',icon:'🍕',note:'Gourmet pies and slices on the LBI strip. Solid go-to for pizza.'},
+    {id:162,name:'The Boatyard',cat:'Dining',sub:'Bar & Grill / Marina',town:'Manahawkin',phone:'(609) 494-1371',web:'https://theboatyardnj.com',icon:'⚓',note:'Waterfront bar and grill just off the causeway. Casual food, craft beer, boat rentals. Dog-friendly.'},
+    {id:163,name:'Custard Hut & Pizza',cat:'Dining',sub:'Ice Cream / Pizza',town:'Brant Beach',phone:'(609) 361-0900',icon:'🍦',note:'LBI summertime staple since the 1950s. Soft serve custard and pizza. Open until midnight.'},
+    {id:164,name:'Playa Bowls Beach Haven',cat:'Dining',sub:'Açaí Bowls',town:'Beach Haven',phone:'(609) 467-5818',web:'https://playabowls.com',icon:'🍓',note:'Fresh açaí bowls, pitaya bowls, smoothies, and juices.'},
+    {id:165,name:'Playa Bowls Surf City',cat:'Dining',sub:'Açaí Bowls',town:'Surf City',phone:'(609) 342-1908',web:'https://playabowls.com',icon:'🍓',note:'Fresh açaí bowls, pitaya bowls, smoothies, and juices.'},
+    {id:166,name:'Ship Bottom Shellfish',cat:'Dining',sub:'Seafood Market',town:'Ship Bottom',phone:'(609) 494-0088',web:'https://www.shipbottomshellfish.com',icon:'🦞',note:'Family-owned seafood market, takeout, and sit-down. Fresh local shellfish, crab, and fish daily.'},
+    {id:167,name:'The Old Causeway Steak & Oyster House',cat:'Dining',sub:'Steak / Seafood',town:'Manahawkin',phone:'(609) 488-1327',web:'https://www.oldcauseway.com',icon:'🥩',note:'Upscale steaks and oysters on the mainland bayside. Free Mud Shuttle to/from island.'},
+    {id:168,name:"Ellis' Chicken & Crab Cakes",cat:'Dining',sub:'Casual / Seafood',town:'Beach Haven',phone:'(609) 342-1100',web:'https://www.ellislbi.com',icon:'🍗',note:"Fried chicken meets jumbo lump crab cakes. Thu–Sun 11:30 AM–9 PM."},
+    {id:169,name:"Bird & Betty's (Tide Table)",cat:'Dining',sub:'Seafood / Pizza / Bar',town:'Beach Haven',phone:'(609) 492-3000',web:'https://www.birdandbettys.com',icon:'🐦',note:'Waterfront wood-fired pizza, seafood, cocktails, and live music. Laid-back and fun.',img:'https://welcometolbi.com/wp-content/uploads/2024/03/LBICC-Business-Listing-41.png'},
+    {id:170,name:"Parker's Pearl",cat:'Dining',sub:'Oyster Co-op / Raw Bar',town:'Beach Haven',web:'https://www.parkersgaragelbi.com/oyster-coop/',icon:'🦪',note:"Sustainably farmed oysters — retail and raw bar at Parker's Garage."},
+    {id:201,name:'Ron Jon Surf Shop',cat:'Shopping',sub:'Surf / Apparel',town:'Ship Bottom',phone:'(609) 494-8844',web:'https://www.ronjonsurfshop.com',icon:'🏄',note:'The original Ron Jon, open since 1961. 8,100 sq ft beach icon.',img:'https://welcometolbi.com/wp-content/uploads/2016/03/Ron-Jon-Surf-Shop.jpg'},
+    {id:202,name:'Wave Hog Surf Shop',cat:'Shopping',sub:'Surf Shop',town:'Ship Bottom',web:'https://www.wavehogsurfshop.com',icon:'🌊',note:'Core surf shop by surfers for surfers, on LBI since 2005.'},
+    {id:203,name:"South End Surf 'N Paddle",cat:'Shopping',sub:'Surf / Rentals',town:'Beach Haven',phone:'(609) 492-8823',icon:'🏄',note:'Surf shop and paddleboard rentals on the south end.'},
+    {id:204,name:'Acme Beach and Bike',cat:'Shopping',sub:'Bike / Surf / Rentals',town:'Long Beach Township',phone:'(609) 492-5150',icon:'🚲',note:'Bike rentals, surf gear, and water sport rentals.'},
+    {id:210,name:'Surf City 5&10 Inc.',cat:'Shopping',sub:'Gift / General',town:'Surf City',phone:'(609) 494-1872',icon:'🎁',note:'Classic dime store with beach gifts, toys, and novelties. A throwback.'},
+    {id:211,name:'Making Waves',cat:'Shopping',sub:'Apparel / Jewelry',town:'Beach Haven',phone:'(609) 492-9150',icon:'💍',note:"Women's apparel, jewelry, and coastal accessories."},
+    {id:212,name:'The Mod Hatter',cat:'Shopping',sub:'Gift / Jewelry',town:'Beach Haven',phone:'(609) 492-0999',icon:'🧢',note:'Eclectic gifts, jewelry, and hats.'},
+    {id:213,name:"B&B Department Stores North",cat:'Shopping',sub:'Department Store',town:'Beach Haven',phone:'(609) 492-3050',icon:'🏬',note:'Full-service beach department store. Apparel, beach gear, and more.'},
+    {id:214,name:"Chick's LBI Shop",cat:'Shopping',sub:'Apparel / Printing',town:'Beach Haven',phone:'(609) 492-1171',icon:'👕',note:'Custom printing and LBI apparel. Great for group shirts and souvenirs.'},
+    {id:215,name:'Little Bungalow',cat:'Shopping',sub:'Apparel / Home Decor',town:'Surf City',phone:'(609) 494-1802',icon:'🌸',note:"Boho-coastal women's fashion and home decor."},
+    {id:216,name:'Society Beach',cat:'Shopping',sub:'Apparel',town:'Surf City',phone:'(609) 467-5444',icon:'👙',note:"Women's beach apparel and resort wear.",img:'https://welcometolbi.com/wp-content/uploads/2019/08/LBICC-Business-Listing-58.png'},
+    {id:220,name:'Oskar Huber Furniture & Design',cat:'Shopping',sub:'Furniture / Design',town:'Ship Bottom',phone:'(609) 494-8127',web:'https://www.oskarhuber.com',icon:'🛋️',note:"LBI's premier home furnishings store."},
+    {id:221,name:'k+co Living',cat:'Shopping',sub:'Home Decor / Design',town:'Beach Haven',phone:'(973) 220-2171',icon:'🏠',note:'Contemporary coastal home decor and interior design services.'},
+    {id:222,name:'The Spotted Whale',cat:'Shopping',sub:'Home Decor',town:'Beach Haven',phone:'(609) 467-7407',icon:'🐳',note:'Coastal-inspired home decor and gifts. Also has a Barnegat Light location.'},
+    {id:223,name:'Barnegat Light Garden and Gift',cat:'Shopping',sub:'Gift / Garden',town:'Barnegat Light',phone:'(609) 709-5227',icon:'🌿',note:'Garden supplies, gifts, and home accents on the north end.'},
+    {id:224,name:'The Seawife',cat:'Shopping',sub:'Antiques / Home Decor',town:'Barnegat Light',phone:'(609) 361-8039',icon:'⚓',note:'Antiques and curated coastal decor at Viking Village.'},
+    {id:230,name:"Kapler's Pharmacy",cat:'Shopping',sub:'Pharmacy',town:'Beach Haven',phone:'(609) 492-9221',icon:'💊',note:'Independent local pharmacy. Island pharmacy staple.'},
+    {id:231,name:'Farias Surf & Sport',cat:'Shopping',sub:'Surf / Sport',town:'Beach Haven',phone:'(609) 492-0200',icon:'🏄',note:'Family-owned surf shop since 1969. Six locations — surfboards, swimwear, bikes, kids gear.'},
+    {id:232,name:"Lang's Liquor",cat:'Shopping',sub:'Liquor Store',town:'Ship Bottom',phone:'(609) 494-6182',web:'https://www.langsliquors.com',icon:'🍷',note:'Serving LBI since 1950. Wine, spirits, beer, and tobacco. Local delivery available.'},
+    {id:233,name:"Rommel's Liquor Store",cat:'Shopping',sub:'Liquor Store',town:'Beach Haven',phone:'(609) 492-6101',icon:'🍾',note:'South end staple for wine, beer, and spirits.'},
+    {id:234,name:'Neptune Wines & Liquors',cat:'Shopping',sub:'Liquor Store',town:'Harvey Cedars',phone:'(609) 698-7800',web:'https://www.neptunewinesliquors.com',icon:'🍷',note:'Mid-island bottle shop. Wine, liquor, beer, and delivery throughout LBI.'},
+    {id:235,name:'The Keepers Liquor',cat:'Shopping',sub:'Liquor Store',town:'Barnegat Light',phone:'(609) 494-2489',web:'https://thekeepersliquor.com',icon:'🍺',note:'North-end liquor store. In business 36+ years. Open until 10 PM on weekends.'},
+    {id:236,name:'Island Shop',cat:'Shopping',sub:'Clothing / Boutique',town:'Brant Beach',phone:'(609) 494-2120',web:'https://www.islandshoplbi.com',icon:'👗',note:"LBI's go-to for shore ladies apparel for over 80 years."},
+    {id:237,name:'Coconuts',cat:'Shopping',sub:'Souvenir / Gifts',town:'Beach Haven',phone:'(609) 492-3711',web:'https://shopcoconuts.com',icon:'🥥',note:'LBI-branded beach apparel, sweatshirts, tees, hats, and gifts.'},
+    {id:238,name:'Wawa (Long Beach Township)',cat:'Shopping',sub:'Convenience Store',town:'Long Beach Township',phone:'(609) 492-1960',icon:'☕',note:'Open 24/7. Full Wawa with hoagies, coffee, gas, and all the essentials.'},
+    {id:239,name:'Wawa (Ship Bottom)',cat:'Shopping',sub:'Convenience Store',town:'Ship Bottom',icon:'☕',note:'Open 24/7. Ship Bottom Wawa near the causeway.'},
+    {id:240,name:"Okie's Butcher Shop",cat:'Shopping',sub:'Butcher / Deli',town:'Surf City',phone:'(609) 494-5577',web:'https://okiesbutchershop.com',icon:'🥩',note:'Full-service butcher and deli. Quality meats, custom sandwiches, catering. Mon–Sat 7 AM–6 PM.'},
+    {id:241,name:'Stutz Candies',cat:'Shopping',sub:'Candy / Gifts',town:'Long Beach Township',phone:'(609) 494-5303',web:'https://www.stutzcandy.com',icon:'🍫',note:"LBI's beloved candy shop since 1938. Homemade chocolates, fudge, nonpareils, and nut confections."},
+    {id:301,name:'Beach Haven Watersports',cat:'Water Sports & Rentals',sub:'Multi-Sport Rentals',town:'Beach Haven Gardens',phone:'(609) 492-7500',web:'https://www.beachhavenwatersports.com',icon:'🚤',note:'Pontoon boats, kayaks, SUPs, and Sea-Doos. Walk-ins welcome.'},
+    {id:302,name:"Starky's Ship Bottom Marine Center",cat:'Water Sports & Rentals',sub:'Multi-Sport Rentals',town:'Ship Bottom',phone:'(609) 494-5252',web:'https://www.starkyslbiwatercraftrentals.com',icon:'🛥️',note:'Pontoon boats, waverunners, SUPs, kayaks. One mile south of causeway.'},
+    {id:303,name:'Holgate H2O Sports',cat:'Water Sports & Rentals',sub:'Multi-Sport Rentals',town:'Holgate',web:'https://www.holgateh2osports.com',icon:'🌊',note:'Kayaks, jet skis, pontoon boats, and skiff rentals on the south end.'},
+    {id:304,name:'Sandy Avocado Surf',cat:'Water Sports & Rentals',sub:'Surf Lessons',town:'Beach Haven',phone:'(615) 513-4885',icon:'🏄',note:'Surf lessons for all levels including kids. Lessons on the beach.'},
+    {id:305,name:"South End Surf 'N Paddle",cat:'Water Sports & Rentals',sub:'Surf / SUP',town:'Beach Haven',phone:'(609) 492-8823',icon:'🏄',note:'Surfboard and paddleboard rentals. Surf instruction available.'},
+    {id:306,name:'Historic Viking Village',cat:'Water Sports & Rentals',sub:'Fishing / Marina',town:'Barnegat Light',phone:'(609) 494-0113',web:'https://www.vikingvillage.net',icon:'⚓',note:'Working fishing village. Head boat fishing, bait & tackle, fresh seafood market.',img:'https://welcometolbi.com/wp-content/uploads/2015/12/Business-Directory-Listings-800-%C3%97-450-px-800-%C3%97-450-px-24.png'},
+    {id:307,name:'Freedom Boat Club',cat:'Water Sports & Rentals',sub:'Boat Club',town:'Beach Haven',phone:'(609) 289-4391',web:'https://www.freedomboatclub.com',icon:'⛵',note:'Membership-based boat club. Access to multiple vessels, no ownership hassle.'},
+    {id:308,name:'Acme Beach and Bike',cat:'Water Sports & Rentals',sub:'Bike / Water Rentals',town:'Long Beach Township',phone:'(609) 492-5150',icon:'🚲',note:'Bike and water sports rentals including kayaks and SUPs.'},
+    {id:309,name:'LBI Surfing School & Bike Rentals',cat:'Water Sports & Rentals',sub:'Surf Lessons / Rentals',town:'Surf City',web:'https://lbisurfing.com',icon:'🏄',note:'Expert surf instruction plus rentals of bikes, surfboards, paddleboards, and kayaks.'},
+    {id:310,name:'Surf City Bait and Tackle',cat:'Water Sports & Rentals',sub:'Bait & Tackle',town:'Surf City',icon:'🎣',note:"LBI's oldest continuously operating bait and tackle shop since 1947. Rod rentals + free weekly fishing lessons."},
+    {id:312,name:'Surf Buggy Bike Shop',cat:'Water Sports & Rentals',sub:'Bike Shop / Rentals',town:'Beach Haven',phone:'(609) 492-9777',web:'https://www.surfbuggybikeshop.com',icon:'🚲',note:'Bike sales, repairs, and rentals. Beach cruisers, kids bikes, and hybrids. Open daily in season.'},
+    {id:313,name:'Shore Brake Cyclery',cat:'Water Sports & Rentals',sub:'Bike Shop / Rentals',town:'Ship Bottom',phone:'(609) 361-9511',web:'https://www.shorebrake.com',icon:'🚵',note:'Full-service bike shop. Rentals, repairs, accessories, and new bikes for sale.'},
+    {id:314,name:'The Boardwalk of LBI',cat:'Water Sports & Rentals',sub:'Boat Charters',town:'Beach Haven',phone:'(609) 492-2525',web:'https://www.theboatwalk.com',icon:'⛵',note:'Parasailing, sunset cruises, dolphin watch, fishing charters, kayak and SUP rentals. Season May–Oct.'},
+    {id:401,name:'Fantasy Island Amusement Park',cat:'Entertainment',sub:'Amusement Park',town:'Beach Haven',phone:'(609) 492-4000',web:'https://www.fantasyislandpark.com',icon:'🎡',note:"LBI's classic boardwalk amusement park. Rides, games, laser tag, arcade — open nightly in season.",img:'https://welcometolbi.com/wp-content/uploads/2016/01/3.png'},
+    {id:402,name:'Thundering Surf Water Park',cat:'Entertainment',sub:'Water Park',town:'Beach Haven',phone:'(609) 492-0869',web:'https://www.thunderingsurf.com',icon:'💦',note:'Water slides, lazy river, and splash zone. Kid-friendly family attraction.'},
+    {id:410,name:'Hartland Golf and Arcade',cat:'Entertainment',sub:'Mini Golf / Arcade',town:'Brant Beach',phone:'(609) 494-4882',web:'https://www.hartlandgolfandarcade.com',icon:'⛳',note:'Two 18-hole mini golf courses and full arcade. Family fun all day.'},
+    {id:412,name:'Flamingo Miniature Golf',cat:'Entertainment',sub:'Mini Golf',town:'Surf City',phone:'(609) 494-4070',icon:'🦩',note:'Classic mini golf in Surf City. Fun for all ages.'},
+    {id:413,name:'Sand Trap Miniature Golf',cat:'Entertainment',sub:'Mini Golf',town:'Ship Bottom',phone:'(609) 494-5551',icon:'⛳',note:'Glow-in-the-dark mini golf and classic outdoor course.'},
+    {id:420,name:'New Jersey Maritime Museum',cat:'Entertainment',sub:'Museum',town:'Beach Haven',phone:'(609) 492-0202',web:'https://www.njmaritimemuseum.org',icon:'🚢',note:'Fascinating museum dedicated to maritime history of NJ and LBI. Shipwreck artifacts, diving history.'},
+    {id:421,name:'LBI Historical Museum',cat:'Entertainment',sub:'Museum',town:'Beach Haven',phone:'(609) 492-0700',icon:'🏛️',note:'Local history of Long Beach Island — photos, artifacts, and rotating exhibits.'},
+    {id:422,name:'Viking Shows at Viking Village',cat:'Entertainment',sub:'Cultural / Marina',town:'Barnegat Light',phone:'(609) 494-0113',web:'https://www.vikingvillage.net',icon:'⚓',note:'Working fishing village with cultural events, art galleries, and fresh seafood.'},
+    {id:423,name:'Ocean County Library — LBI Branch',cat:'Entertainment',sub:'Library',town:'Ship Bottom',phone:'(609) 494-2480',web:'https://www.theoceancountylibrary.org',icon:'📚',note:'Public library branch on LBI. Programs, events, and resources for all ages.'},
+    {id:430,name:'Surf City Yacht Club',cat:'Entertainment',sub:'Yacht Club / Marina',town:'Surf City',web:'https://www.surfcityyc.com',icon:'⛵',note:'Sailing, racing, and social events. Junior sailing programs available.'},
+    {id:431,name:'Brant Beach Yacht Club',cat:'Entertainment',sub:'Yacht Club / Marina',town:'Brant Beach',phone:'(609) 494-3456',icon:'⛵',note:'Yacht club with active sailing programs and marina on the bay.'},
+    {id:432,name:'Little Egg Harbor Yacht Club',cat:'Entertainment',sub:'Yacht Club / Marina',town:'Beach Haven',phone:'(609) 492-1300',web:'https://www.lehyc.com',icon:'⛵',note:'One of the oldest sailing clubs in NJ. Racing, sailing instruction, and junior programs.'},
+    {id:440,name:'St. Francis Community Center',cat:'Entertainment',sub:'Community Center',town:'Ship Bottom',phone:'(609) 494-0409',icon:'🏊',note:'Pool, gym, and fitness classes. Open to the public in season.'},
+    {id:441,name:'Bayview Park',cat:'Entertainment',sub:'Park / Sports',town:'Beach Haven',icon:'⚽',note:'Public park with basketball, tennis, and recreation fields in Beach Haven.'},
+    {id:501,name:'Hotel LBI',cat:'Lodging',sub:'Hotel',town:'Ship Bottom',phone:'(609) 494-5001',web:'https://www.hotellbi.com',icon:'🏨',note:'Modern boutique hotel near the causeway. Contemporary amenities and great location.'},
+    {id:502,name:'Daddy O Restaurant & Hotel',cat:'Lodging',sub:'Boutique Hotel',town:'Brant Beach',phone:'(609) 494-1300',web:'https://www.daddyohotel.com',icon:'🏩',note:'Boutique hotel with acclaimed farm-to-table restaurant. Pool, modern rooms, and great cocktails.'},
+    {id:503,name:'Surf City Hotel',cat:'Lodging',sub:'Hotel',town:'Surf City',phone:'(609) 494-7281',web:'https://www.surfcityhotel.com',icon:'🏨',note:'Casual hotel in Surf City with easy beach access.'},
+    {id:504,name:'Drifting Sands Oceanfront Hotel',cat:'Lodging',sub:'Oceanfront Hotel',town:'Ship Bottom',phone:'(609) 494-2582',web:'https://www.driftingsands.com',icon:'🌊',note:'Oceanfront hotel with private beach access and stunning Atlantic views.'},
+    {id:506,name:'The Sand Castle Bed & Breakfast',cat:'Lodging',sub:'Bed & Breakfast',town:'Beach Haven',phone:'(609) 492-1220',web:'https://sandcastlelbi.com',icon:'🏰',note:'Charming Victorian B&B in the heart of Beach Haven. Breakfast included.'},
+    {id:507,name:'The Beach Club at Pearl Street',cat:'Lodging',sub:'Hotel',town:'Beach Haven',phone:'(609) 492-8060',icon:'🏖️',note:'Hotel with beach access in Beach Haven. Walk to dining and entertainment.'},
+    {id:508,name:'Coral Seas Oceanfront Motel',cat:'Lodging',sub:'Oceanfront Motel',town:'Beach Haven',phone:'(609) 492-1141',icon:'🌊',note:'Classic oceanfront motel steps from the sand. Seasonal. Budget-friendly.'},
+    {id:509,name:'North Shore Inn',cat:'Lodging',sub:'Inn',town:'Barnegat Light',phone:'(609) 494-5001',icon:'🏡',note:'Cozy inn on the north end. Great for couples and quiet getaways.'},
+    {id:511,name:'Sea Horse Motel',cat:'Lodging',sub:'Motel',town:'Harvey Cedars',phone:'(609) 494-5006',icon:'🐴',note:'Affordable mid-island motel with pool. Family-friendly and seasonal.'},
+    {id:512,name:'Spray Beach Oceanfront Hotel',cat:'Lodging',sub:'Oceanfront Hotel',town:'Spray Beach',phone:'(609) 492-1501',web:'https://www.spraybeachhotel.com',icon:'🌊',note:'Oceanfront hotel in Spray Beach with direct beach access and bar.'},
+    {id:513,name:'The Sea Shell Resort & Beach Club',cat:'Lodging',sub:'Resort',town:'Beach Haven',phone:'(609) 492-4611',web:'https://www.seashellresort.com',icon:'🐚',note:'Full resort experience with beach club, pool, and multiple dining options.'},
+    {id:601,name:'Freeman & Company Real Estate',cat:'Services',sub:'Real Estate',town:'Beach Haven',phone:'(609) 492-1100',web:'https://www.freemanco.com',icon:'🏠',note:'Leading LBI real estate agency specializing in vacation rentals and sales.'},
+    {id:602,name:'Berkshire Hathaway HomeServices Zack Shore Realtors',cat:'Services',sub:'Real Estate',town:'Ship Bottom',phone:'(609) 494-6900',web:'https://www.zackshore.com',icon:'🏡',note:'Full-service real estate for buyers, sellers, and renters across LBI.'},
+    {id:603,name:'Mancini Realty Company, Inc.',cat:'Services',sub:'Real Estate',town:'Beach Haven',phone:'(609) 492-4790',web:'https://www.mancinirealty.com',icon:'🏘️',note:'Family-owned realty serving LBI since 1959. Rentals and sales island-wide.'},
+    {id:604,name:'The Van Dyk Group LBI',cat:'Services',sub:'Real Estate',town:'Beach Haven',phone:'(609) 492-5700',web:'https://www.vandykgroup.com',icon:'🏠',note:'Award-winning LBI real estate team for buyers, sellers, and investors.'},
+    {id:605,name:'Vacation Rentals LBI (VRLBI)',cat:'Services',sub:'Vacation Rentals',town:'Beach Haven',web:'https://www.vrlbi.com',icon:'🏖️',note:'Curated vacation rental marketplace for LBI properties. Cottages to oceanfront homes.'},
+    {id:610,name:'MarineMax Brant Beach Marina',cat:'Services',sub:'Marine Services',town:'Brant Beach',phone:'(609) 494-0660',web:'https://www.marinemax.com',icon:'⚓',note:'Full-service marina with boat sales, service, storage, and dock access.'},
+    {id:620,name:'HMG Construction',cat:'Services',sub:'Construction',town:'Long Beach Township',phone:'(609) 492-4590',web:'https://www.hmgconstruction.com',icon:'🏗️',note:'LBI residential construction, renovation, and custom home building.'},
+    {id:621,name:'HMG Plumbing LLC',cat:'Services',sub:'Plumbing',town:'Long Beach Township',phone:'(609) 492-4590',icon:'🔧',note:'Licensed plumbing contractor serving all of LBI. Emergency service available.'},
+    {id:630,name:'Sandy Paws Dog Sitting, LLC',cat:'Services',sub:'Pet Care',town:'Long Beach Township',phone:'(609) 339-1800',icon:'🐾',note:'Professional dog sitting and walking on LBI. In-home care available island-wide.'},
+    {id:631,name:'Relax Concierge LBI',cat:'Services',sub:'Concierge',town:'Beach Haven',icon:'🛎️',note:'Vacation concierge service — grocery shopping, gear delivery, activity planning, and more.'},
+    {id:632,name:'Luggers',cat:'Services',sub:'Moving / Luggage',town:'Beach Haven',icon:'🧳',note:'Luggage and gear transport service for LBI visitors. Haul your stuff from car to cottage.'},
+    {id:640,name:'The SandPaper',cat:'Services',sub:'Local Publication',town:'Surf City',phone:'(609) 494-5900',web:'https://www.thesandpaper.net',icon:'📰',note:"LBI's local weekly newspaper since 1976. Best source for island news and events."},
+    {id:641,name:'Meridian Urgent Care LBI',cat:'Services',sub:'Urgent Care',town:'Ship Bottom',phone:'(609) 361-2677',icon:'🏥',note:'Walk-in urgent care. Mon–Fri 8 AM–6 PM, Sat 8 AM–4 PM. No appointment needed.'},
+    {id:642,name:'Island Wellness Center & Yoga',cat:'Services',sub:'Spa / Yoga',town:'Beach Haven',web:'https://iwc.massagetherapy.com',icon:'🧘',note:'Massage therapy, Watsu, reiki, beach yoga, and body-mind counseling.'},
+    {id:701,name:'Kahunaville Bar & Grill',cat:'Nightlife',sub:'Bar',town:'Beach Haven',icon:'🌺',note:'Lively island-themed bar. DJ nights, tropical drinks, and a party atmosphere.'},
+    {id:702,name:'Terrace Tavern',cat:'Nightlife',sub:'Bar / Live Music',town:'Beach Haven',phone:'(609) 492-5666',icon:'🎵',note:'Longtime Beach Haven watering hole. Live music, good bar food, and a friendly crowd.'},
+    {id:703,name:'Ship Bottom Brewery',cat:'Nightlife',sub:'Brewery',town:'Ship Bottom',phone:'(609) 361-7825',web:'https://shipbottombrewery.com',icon:'🍺',note:'Craft brewery with taproom. LBI-inspired ales, IPAs, and seasonal releases. Food trucks on site.'},
+    {id:704,name:'The Gateway Restaurant & Lounge',cat:'Nightlife',sub:'Bar / Lounge',town:'Ship Bottom',phone:'(609) 494-9494',icon:'🍹',note:'Full bar and lounge right near the causeway. Good food and drinks.'},
+    {id:706,name:'Delaware Avenue Oyster House & Bar',cat:'Nightlife',sub:'Bar / Raw Bar',town:'Beach Haven',phone:'(609) 492-0200',icon:'🦪',note:'Lively bar with raw bar, live music, and a great late-night scene.'},
+    {id:707,name:'The WooHoo',cat:'Nightlife',sub:'Bar / Nightclub',town:'Beach Haven',icon:'🎊',note:'High-energy nightclub and bar. Late night dancing and DJ events.'},
+    {id:709,name:'Hudson House Bar',cat:'Nightlife',sub:'Bar',town:'Beach Haven',icon:'🥃',note:'Cozy neighborhood bar with craft cocktails and local craft beer on tap.'},
+    {id:710,name:'The Marlin & Triton',cat:'Nightlife',sub:'Bar / Restaurant',town:'Harvey Cedars',phone:'(609) 494-5900',web:'https://www.themarlinandtriton.com',icon:'🐟',note:'Waterfront dining and bar. Sushi, cocktails, and live entertainment nights.'},
+    {id:711,name:'Northside Bar & Grille',cat:'Nightlife',sub:'Bar / Grill',town:'Barnegat Light',phone:'(609) 494-5600',icon:'🍺',note:'North-end neighborhood bar with food and cold drafts. Casual and welcoming.'},
+    {id:712,name:'Spray Beach Oceanfront Hotel & Bar',cat:'Nightlife',sub:'Bar / Hotel',town:'Spray Beach',phone:'(609) 492-1501',web:'https://www.spraybeachhotel.com',icon:'🌊',note:'Oceanfront hotel bar open to the public. Great ocean views and sunset drinks.'},
+    {id:713,name:'The Sea Shell Resort & Beach Club',cat:'Nightlife',sub:'Beach Club / Bar',town:'Beach Haven',phone:'(609) 492-4611',web:'https://www.seashellresort.com',icon:'🐚',note:'Beach club bar with live entertainment, pool scene, and resort amenities.'},
+    {id:801,name:'Blue Claw Seafood Market',cat:'Dining',sub:'Seafood Market',town:'Surf City',phone:'(609) 361-0050',web:'https://www.blueclawlbi.com',icon:'🦞',note:'Fresh-caught local seafood market. Great for lobsters, clams, and daily catch.',img:'https://welcometolbi.com/wp-content/uploads/2026/03/LBICC-Business-Listing-74.png'},
+    {id:802,name:"Fishmonger's Daughter General Store",cat:'Shopping',sub:'General Store',town:'Barnegat Light',web:'https://www.fishmongersdaughtergeneral.com',icon:'🐠',note:'Unique coastal general store in Barnegat Light.',img:'https://welcometolbi.com/wp-content/uploads/2026/04/4.png'},
+    {id:803,name:'Beach Bites',cat:'Dining',sub:'Casual / Seafood',town:'Beach Haven',phone:'(609) 664-1634',web:'https://www.beachbiteslbi.com',icon:'🦀',note:'Burgers, crab cakes, chicken and more. Casual eats on the bay.',img:'https://welcometolbi.com/wp-content/uploads/2026/04/5.png'},
+    {id:804,name:"The Little Outfit",cat:'Shopping',sub:'Kids / Apparel',town:'Ship Bottom',phone:'(609) 494-3622',web:'https://www.littleoutfitlbi.com',icon:'👶',note:"Children's boutique. Newborn–size 10. 35 years in business.",img:'https://welcometolbi.com/wp-content/uploads/2024/03/LBICC-Business-Listing-7.png'},
+    {id:805,name:'Lotus Flower Fitness',cat:'Services',sub:'Spa / Yoga / Fitness',town:'Ship Bottom',phone:'(201) 788-4966',web:'https://www.lotusflowerfit.com',icon:'🧘',note:'Yoga, fitness, and wellness classes on LBI.',img:'https://welcometolbi.com/wp-content/uploads/2026/02/LBICC-Business-Listing-67.png'},
+    {id:806,name:'Brain Freeze Ice Cream Parlor',cat:'Dining',sub:'Ice Cream',town:'Beach Haven',icon:'🍦',note:'Classic ice cream parlor in Beach Haven.'},
+    {id:807,name:"Hurley's at Holgate Motel",cat:'Lodging',sub:'Motel',town:'Long Beach Township',phone:'(609) 492-2266',web:'https://www.hurleysinn.com',icon:'🏨',note:'Beachside motel in Holgate at the southern tip of LBI.',img:'https://welcometolbi.com/wp-content/uploads/2015/11/LBICC-Business-Listing-70.png'},
+  ];
+
+  let currentCat = 'all';
+
+  function setCat(cat, btn) {
+    currentCat = cat;
+    document.querySelectorAll('#cat-tabs .pill-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderBiz();
+  }
+
+  function renderBiz() {
+    const q = (document.getElementById('biz-search').value || '').toLowerCase();
+    const town = document.getElementById('town-filter').value;
+    const list = document.getElementById('biz-list');
+    const countEl = document.getElementById('biz-count');
+
+    const filtered = businesses.filter(b => {
+      const matchCat = currentCat === 'all' || b.cat === currentCat;
+      const matchTown = !town || b.town === town;
+      const matchQ = !q || b.name.toLowerCase().includes(q) ||
+        b.sub.toLowerCase().includes(q) || b.town.toLowerCase().includes(q) ||
+        (b.note && b.note.toLowerCase().includes(q));
+      return matchCat && matchTown && matchQ;
+    });
+
+    countEl.textContent = filtered.length + ' place' + (filtered.length !== 1 ? 's' : '');
+
+    list.innerHTML = filtered.map(b => {
+      const [c1, c2] = catColors[b.cat] || ['#64748b','#94a3b8'];
+      const phoneLink = b.phone ? `<a href="tel:${b.phone}" style="color:var(--teal-deep);text-decoration:none;font-size:11px;font-weight:600">📞 ${b.phone}</a>` : '';
+      const webLink = b.web ? `<a href="${b.web}" target="_blank" style="color:var(--teal-deep);text-decoration:none;font-size:11px;font-weight:600">🌐 Website</a>` : '';
+      const links = [phoneLink, webLink].filter(Boolean).join('<span style="color:var(--line);margin:0 6px">·</span>');
+      const initials = b.name.split(' ').filter(w=>w.length>2).slice(0,2).map(w=>w[0].toUpperCase()).join('') || b.name[0].toUpperCase();
+      const fallback = `<div style="width:64px;height:64px;background:linear-gradient(135deg,${c1},${c2});border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:${initials.length>1?'18':'22'}px;font-weight:800;letter-spacing:-0.5px;flex-shrink:0">${initials}</div>`;
+      const thumb = b.img
+        ? `<img src="${b.img}" alt="${b.name}" style="width:64px;height:64px;object-fit:cover;border-radius:12px;flex-shrink:0" onerror="this.outerHTML=${JSON.stringify('<div style=\'width:64px;height:64px;background:linear-gradient(135deg,' + c1 + ',' + c2 + ');border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:800;flex-shrink:0\'>' + initials + '</div>')}">`
+        : fallback;
+      return `<div class="card" style="padding:14px;transition:box-shadow 150ms ease">
+        <div style="display:flex;gap:14px">
+          ${thumb}
+          <div style="flex:1;min-width:0">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--navy);line-height:1.25">${b.name}</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--slate-soft);margin-top:3px">${b.town} · ${b.sub}</div>
+            <div style="font-size:12px;color:var(--slate);margin-top:6px;line-height:1.5">${b.note || ''}</div>
+            ${links ? `<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">${links}</div>` : ''}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Render on load
+  document.addEventListener('DOMContentLoaded', renderBiz);
+
+
+  function filterBeaches(btn, filter) {
+    document.querySelectorAll('.pill-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.beach-card').forEach(card => {
+      if (filter === 'all') {
+        card.style.display = '';
+      } else {
+        const tags = card.dataset.tags || '';
+        card.style.display = tags.includes(filter) ? '' : 'none';
+      }
+    });
+  }
+</script>
+</body>
+</html>

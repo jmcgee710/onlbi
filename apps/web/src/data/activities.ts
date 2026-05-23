@@ -1,0 +1,72 @@
+export const activities = [
+  {
+    id: 1, name: 'Barnegat Bay Kayak Tours', cat: 'On the Water', icon: '🛶', town: 'Surf City',
+    price: '$45/person', duration: '2 hrs', bookingRequired: true, rating: 4.9, reviews: 142,
+    desc: 'Guided paddle through the back-bay marshes. See osprey nests, dolphins in season, and the skyline of LBI from the water. All skill levels — equipment included.',
+    tags: ['Guided', 'Family Friendly', 'Dolphin Watching', 'All Levels'],
+    tip: '🐬 Dolphin sightings are common on the morning tour June–August. Book the 8 AM slot.',
+    phone: '(609) 494-7890', featured: true, availability: 'Available today',
+  },
+  {
+    id: 2, name: 'LBI Surf School', cat: 'On the Water', icon: '🏄', town: 'Ship Bottom',
+    price: '$65/person', duration: '90 min', bookingRequired: true, rating: 4.8, reviews: 98,
+    desc: 'Private and group lessons for all ages. Foam boards and wetsuits provided. Instructors have taught thousands of first-timers over 15 seasons.',
+    tags: ['Lessons', 'Beginner Friendly', 'Kids OK', 'Equipment Included'],
+    tip: '🌊 Book the 7 AM lesson — glassier water and smaller crowds than afternoon.',
+    phone: '(609) 494-2233', featured: true, availability: '2 spots left today',
+  },
+  {
+    id: 3, name: 'Barnegat Bay Sailing Charters', cat: 'On the Water', icon: '⛵', town: 'Beach Haven',
+    price: '$120/person', duration: '3 hrs', bookingRequired: true, rating: 4.7, reviews: 67,
+    desc: "Sunset and afternoon sails on a classic 38ft sloop. Captain provides narration on bay ecology and LBI history. BYOB welcome.",
+    tags: ['Scenic', 'Adults', 'BYOB', 'Sunset Sail'],
+    tip: '🌅 The Friday sunset sail sells out every week — book a week ahead.',
+    phone: '(609) 492-8811', featured: false, availability: 'Available tomorrow',
+  },
+  {
+    id: 4, name: 'Jet Ski & Waverunner Rentals', cat: 'On the Water', icon: '🚤', town: 'Surf City',
+    price: '$90/hr', duration: '1 hr min', bookingRequired: false, rating: 4.5, reviews: 203,
+    desc: 'Self-guided waverunner rentals on Barnegat Bay. Quick safety briefing included. Must be 18+ to operate, 16+ with adult.',
+    tags: ['Thrill Seekers', 'No Experience Needed', 'Walk-in OK'],
+    tip: '⛽ Fuel is included — they\'ll try to upsell you on an extra hour, which is usually worth it.',
+    phone: '(609) 494-5500', featured: false, availability: 'Walk-ins welcome',
+  },
+  {
+    id: 5, name: 'Stand-Up Paddleboard Rentals', cat: 'On the Water', icon: '🧍', town: 'Harvey Cedars',
+    price: '$30/hr', duration: 'Flexible', bookingRequired: false, rating: 4.6, reviews: 88,
+    desc: 'Flat-water SUP on the bay side. Perfect for beginners. Half and full-day rentals available.',
+    tags: ['Beginner Friendly', 'Solo or Group', 'Kids OK'],
+    tip: '🌊 Bay side only — much calmer than the ocean side. Great for kids.',
+    phone: '(609) 494-3311', featured: false, availability: 'Walk-ins welcome',
+  },
+  {
+    id: 6, name: 'Back Bay Fishing Charters', cat: 'On the Water', icon: '🎣', town: 'Barnegat Light',
+    price: '$95/person', duration: '4 hrs', bookingRequired: true, rating: 4.8, reviews: 176,
+    desc: 'Head boat and private fishing trips out of Viking Village. Flounder, striped bass, bluefish in season. Rods, bait, and cleaning included.',
+    tags: ['Fishing', 'All Ages', 'Equipment Included', 'Early Morning'],
+    tip: '🐟 First mate knows every flounder hole in the bay. Tip well and ask questions.',
+    phone: '(609) 494-0055', featured: true, availability: 'Available today',
+  },
+  {
+    id: 7, name: 'Bike Rentals — Island Pedals', cat: 'On Land', icon: '🚲', town: 'Beach Haven',
+    price: '$20/day', duration: 'Full day', bookingRequired: false, rating: 4.7, reviews: 312,
+    desc: 'Beach cruisers, tandems, kids bikes, and tag-alongs. Helmet and lock included. Delivery to rental properties available for groups of 4+.',
+    tags: ['Family Friendly', 'Delivery Available', 'Kids OK'],
+    tip: '🚲 The bike path runs 18 miles end-to-end — riding Beach Haven to Barnegat Light is a bucket list LBI experience.',
+    phone: '(609) 492-7433', featured: true, availability: 'Walk-ins welcome',
+  },
+  {
+    id: 8, name: 'Mini Golf at Fantasy Island', cat: 'On Land', icon: '⛳', town: 'Beach Haven',
+    price: '$12/person', duration: '45 min', bookingRequired: false, rating: 4.4, reviews: 445,
+    desc: "Classic LBI mini golf next to the amusement park. 18 holes with water features and beach theming. Great for all ages.",
+    tags: ['Family Friendly', 'Kids OK', 'No Experience Needed', 'Walk-in OK'],
+    tip: '⛳ Go after 6 PM — shorter waits and cooler temps.',
+    phone: '(609) 492-4000', featured: false, availability: 'Walk-ins welcome',
+  },
+]
+
+export const catColors: Record<string, string> = {
+  'On the Water': '#0077b6',
+  'On Land':      '#2a9d8f',
+  'Family':       '#7c3aed',
+}
