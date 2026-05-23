@@ -248,7 +248,7 @@ export default function TodayPage() {
                     </span>
                   )}
                 </div>
-                <div className="beach-temp">{b.temp.replace('°F', '')}°</div>
+                <div className="beach-temp">{b.temp ? `${b.temp.replace('°F', '')}°` : '—'}</div>
                 <div className="beach-go">→</div>
               </div>
             ))}
