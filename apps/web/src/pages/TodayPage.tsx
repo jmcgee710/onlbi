@@ -7,6 +7,12 @@ import { useNow } from '../hooks/useNow'
 import { useWeather } from '../hooks/useWeather'
 import { useWaterTemp } from '../hooks/useWaterTemp'
 import { useUV, classifyUV } from '../hooks/useUV'
+import {
+  classifyBugLevel,
+  describeBugs,
+  describeWind,
+  windDirCategory,
+} from '../lib/scoring'
 
 // Water temp comes from a Tides & Currents station that has a temp sensor.
 // AC is the closest reliable one to LBI.
@@ -246,6 +252,15 @@ export default function TodayPage() {
   const heroCondition = liveCurrent?.shortForecast ?? heroToday?.shortForecast ?? 'Sunny'
   const heroWind = heroToday?.wind ?? 'SSW 12'
 
+  // Bug pressure for the hero copy + rip-status row.
+  const heroBugScore = heroToday?.bugScore ?? 65
+  const heroBugLevel = classifyBugLevel(heroBugScore)
+  const heroWindDirCat = windDirCategory(heroToday?.windDir ?? 'S')
+  const bugCopy = describeBugs(heroBugScore, heroWindDirCat, now)
+  const windCopy = heroToday
+    ? describeWind(heroToday.windSpeed, heroToday.windDir)
+    : 'a soft southwest breeze'
+
   const mockForecast = [
     { dow: 'Today', hi: 81, lo: 65, ico: 'Sun',      score: 88 },
     { dow: 'Sun',   hi: 78, lo: 62, ico: 'CloudSun', score: 71 },
@@ -269,14 +284,15 @@ export default function TodayPage() {
               <div className="hero-sub">
                 {heroToday ? (
                   <>
-                    {heroToday.shortForecast}, winds {heroWind}.
+                    {heroToday.shortForecast} with {windCopy}.
+                    {bugCopy && <> {bugCopy}</>}
                     {nextHigh && (
                       <> <strong>Next high tide at {nextHigh.time}.</strong></>
                     )}
                   </>
                 ) : (
                   <>
-                    Clear skies and a soft southwest breeze.{' '}
+                    Clear skies with a soft southwest breeze.{' '}
                     <strong>High tide at 10:45.</strong>
                   </>
                 )}
@@ -362,7 +378,7 @@ export default function TodayPage() {
           </div>
           <div className="rip-status">
             <span>🌊 Rip current risk · <strong>Low across the island</strong></span>
-            <span style={{ fontSize: 11, opacity: 0.7, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Updated 8:42 am</span>
+            <span>🪰 Bugs · <strong>{heroBugLevel}</strong></span>
           </div>
         </div>
 

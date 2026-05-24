@@ -1,4 +1,10 @@
 import { useEffect, useState } from 'react'
+import {
+  computeBeachDayScore,
+  computeBugScore,
+  parseWindSpeed,
+  type IconType,
+} from '../lib/scoring'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // useWeather — fetch a 5-day forecast from the National Weather Service.
@@ -15,11 +21,14 @@ export type ForecastDay = {
   dow: string // "Today", "Sun", "Mon", ...
   hi: number // °F
   lo: number // °F
-  ico: 'Sun' | 'CloudSun' | 'Cloud' | 'Rain'
-  wind: string // "SSW 10"
+  ico: IconType
+  wind: string // "SSW 10" display string
+  windDir: string // "SSW"
+  windSpeed: number // mph, parsed
   shortForecast: string // "Sunny"
   precipPct: number // 0-100
-  score: number // 0-100 crude beach-day score
+  bugScore: number // 0-100, higher = fewer bugs
+  score: number // 0-100 beach-day score (already factors bugs)
 }
 
 export type CurrentConditions = {
@@ -61,16 +70,6 @@ function mapIcon(short: string): ForecastDay['ico'] {
 
 function dayOfWeek(iso: string): string {
   return new Date(iso).toLocaleDateString('en-US', { weekday: 'short' })
-}
-
-// Crude beach-day score: starts at 100, loses points for precipitation chance
-// and a bit for low temps. Refine over time as more signals come in.
-function scoreDay(precipPct: number, hi: number, ico: ForecastDay['ico']): number {
-  let s = 100 - precipPct
-  if (hi < 70) s -= 15
-  if (hi < 60) s -= 15
-  if (ico === 'Cloud') s -= 5
-  return Math.max(0, Math.min(100, Math.round(s)))
 }
 
 function windShort(windSpeed: string, windDir: string): string {
@@ -116,42 +115,58 @@ export function useWeather(lat: number, lon: number) {
           icon: first.icon,
         })
 
-        // Pair day+night periods into days. If the first period is a night
-        // period (after sunset), today only has a low temperature.
+        // Build one ForecastDay record per period (or pair of periods).
+        // Helper keeps this loop readable; it computes bug score + beach
+        // score for the day from wind, temp, precip, and the date.
+        const buildDay = (
+          dow: string,
+          dayP: NwsPeriod,
+          night?: NwsPeriod,
+        ): ForecastDay => {
+          const ico = mapIcon(dayP.shortForecast)
+          const hi = dayP.temperature
+          const lo = night?.temperature ?? dayP.temperature
+          const precipPct = dayP.probabilityOfPrecipitation?.value ?? 0
+          const windSpeed = parseWindSpeed(dayP.windSpeed)
+          const date = new Date(dayP.startTime)
+          const bugScore = computeBugScore(dayP.windDirection, windSpeed, date)
+          const score = computeBeachDayScore({
+            precipPct,
+            hi,
+            ico,
+            windSpeed,
+            bugScore,
+          })
+          return {
+            dow,
+            hi,
+            lo,
+            ico,
+            wind: windShort(dayP.windSpeed, dayP.windDirection),
+            windDir: dayP.windDirection,
+            windSpeed,
+            shortForecast: dayP.shortForecast,
+            precipPct,
+            bugScore,
+            score,
+          }
+        }
+
+        // Pair day+night periods. The first slot may be a standalone "Tonight".
         const days: ForecastDay[] = []
         let i = 0
         let isFirstSlot = true
         while (i < periods.length && days.length < 5) {
           const p = periods[i]
-          const precipPct = p.probabilityOfPrecipitation?.value ?? 0
-          const ico = mapIcon(p.shortForecast)
           if (!p.isDaytime) {
-            // Standalone night period (only happens for "Tonight" on the first slot)
-            days.push({
-              dow: isFirstSlot ? 'Tonight' : dayOfWeek(p.startTime),
-              hi: p.temperature, // no day data — use night temp as best signal
-              lo: p.temperature,
-              ico,
-              wind: windShort(p.windSpeed, p.windDirection),
-              shortForecast: p.shortForecast,
-              precipPct,
-              score: scoreDay(precipPct, p.temperature, ico),
-            })
+            // Standalone night period (only on the first slot when it's evening)
+            const dow = isFirstSlot ? 'Tonight' : dayOfWeek(p.startTime)
+            days.push(buildDay(dow, p))
             i++
           } else {
             const night = periods[i + 1]
-            const hi = p.temperature
-            const lo = night?.temperature ?? p.temperature
-            days.push({
-              dow: isFirstSlot ? 'Today' : dayOfWeek(p.startTime),
-              hi,
-              lo,
-              ico,
-              wind: windShort(p.windSpeed, p.windDirection),
-              shortForecast: p.shortForecast,
-              precipPct,
-              score: scoreDay(precipPct, hi, ico),
-            })
+            const dow = isFirstSlot ? 'Today' : dayOfWeek(p.startTime)
+            days.push(buildDay(dow, p, night))
             i += 2
           }
           isFirstSlot = false
