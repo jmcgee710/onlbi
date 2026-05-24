@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // useBuoy — fetch the latest observation from an NDBC buoy.
-// Source: https://www.ndbc.noaa.gov/data/realtime2/{station}.txt
-//   - Free, no API key, plain text, CORS-enabled
-//   - Updated every ~10 min when the buoy is up
-//   - Returns most-recent reading first
+// NDBC doesn't send CORS headers on www.ndbc.noaa.gov, so we fetch through
+// our own Vercel edge function at /api/buoy?station=… which proxies the
+// realtime2 text feed with permissive CORS + a 5-min edge cache.
 // Buoy 44091 ("Barnegat") is the closest offshore buoy to LBI.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -94,7 +93,7 @@ export function useBuoy(station: string) {
 
   useEffect(() => {
     let cancelled = false
-    const url = `https://www.ndbc.noaa.gov/data/realtime2/${station}.txt`
+    const url = `/api/buoy?station=${encodeURIComponent(station)}`
 
     fetch(url)
       .then((r) => {

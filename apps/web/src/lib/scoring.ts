@@ -129,6 +129,24 @@ export function computeBeachDayScore(args: {
   return Math.max(0, Math.min(100, Math.round(s)))
 }
 
+/** Map beach-day score to a tier label matching the bar's quartiles. */
+export function scoreTier(score: number): 'Stormy' | 'Decent' | 'Great' | 'Peak' {
+  if (score >= 85) return 'Peak'
+  if (score >= 70) return 'Great'
+  if (score >= 45) return 'Decent'
+  return 'Stormy'
+}
+
+/** Plain-language verdict suitable for the score card hero line. */
+export function scoreVerdict(score: number): string {
+  if (score >= 90) return 'A peak day to be on the sand.'
+  if (score >= 80) return 'A great day to be on the sand.'
+  if (score >= 65) return 'Solid beach day — go.'
+  if (score >= 45) return 'Decent — workable with the right spot.'
+  if (score >= 25) return 'Tough day — bring a book.'
+  return 'Storm day — stay inside.'
+}
+
 /** Plain-language wind description for hero copy. */
 export function describeWind(speed: number, dir: string): string {
   const d = dir.toUpperCase()

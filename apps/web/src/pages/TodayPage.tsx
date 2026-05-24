@@ -15,6 +15,7 @@ import {
   classifyBugLevel,
   describeBugs,
   describeWind,
+  scoreVerdict,
   windDirCategory,
 } from '../lib/scoring'
 import { friendlyShortForecast, tideContext } from '../lib/copy'
@@ -362,39 +363,53 @@ export default function TodayPage() {
           </button>
         )}
 
-        {/* Beach Day Score */}
-        <div className="card score-card">
-          <div className="card-head">
-            <div>
-              <h2 className="card-title">Beach Day Score</h2>
-              <div className="card-sub" style={{ marginTop: 4 }}>How LBI feels right now</div>
-            </div>
-            <button className="section-link">Methodology ↗</button>
-          </div>
-          <div className="score-grid">
-            <div className="score-num">88<sub>/100</sub></div>
-            <div className="score-meta">
-              <div className="score-verdict">A great day to be on the sand.</div>
-              <div className="score-bullets">
-                <span>Calm SSW breeze · steady at 12 mph</span>
-                <span>Water warming through afternoon</span>
-                <span className="warn">UV 8 — sunscreen + reapply by 1 pm</span>
+        {/* Beach Day Score — derived from today's live forecast + bug score. */}
+        {(() => {
+          const score = heroToday?.score ?? 88
+          const verdict = scoreVerdict(score)
+          return (
+            <div className="card score-card">
+              <div className="card-head">
+                <div>
+                  <h2 className="card-title">Beach Day Score</h2>
+                  <div className="card-sub" style={{ marginTop: 4 }}>How LBI feels right now</div>
+                </div>
+                <button className="section-link">Methodology ↗</button>
+              </div>
+              <div className="score-grid">
+                <div className="score-num">{score}<sub>/100</sub></div>
+                <div className="score-meta">
+                  <div className="score-verdict">{verdict}</div>
+                  <div className="score-bullets">
+                    {heroToday && (
+                      <span>{describeWind(heroToday.windSpeed, heroToday.windDir)}</span>
+                    )}
+                    {liveWaterTemp != null && (
+                      <span>Water {Math.round(liveWaterTemp)}°F at Atlantic City</span>
+                    )}
+                    {liveUV != null && (
+                      <span className={liveUV >= 6 ? 'warn' : undefined}>
+                        UV {Math.round(liveUV)} — {classifyUV(liveUV)}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="score-bar">
+                <div className="score-bar-track">
+                  <div className="score-bar-fill" style={{ width: `${score}%` }} />
+                </div>
+                <div className="score-bar-labels">
+                  <span>Stormy</span><span>Decent</span><span>Great</span><span>Peak</span>
+                </div>
+              </div>
+              <div className="rip-status">
+                <span>🌊 Rip current risk · <strong>Low across the island</strong></span>
+                <span>🪰 Bugs · <strong>{heroBugLevel}</strong></span>
               </div>
             </div>
-          </div>
-          <div className="score-bar">
-            <div className="score-bar-track">
-              <div className="score-bar-fill" style={{ width: '88%' }} />
-            </div>
-            <div className="score-bar-labels">
-              <span>Stormy</span><span>Decent</span><span>Great</span><span>Peak</span>
-            </div>
-          </div>
-          <div className="rip-status">
-            <span>🌊 Rip current risk · <strong>Low across the island</strong></span>
-            <span>🪰 Bugs · <strong>{heroBugLevel}</strong></span>
-          </div>
-        </div>
+          )
+        })()}
 
         {/* Tides — split into Bay and Ocean since they differ in timing + height */}
         <TideCard
