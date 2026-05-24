@@ -88,33 +88,59 @@ function TideChart({
     return 14 + (1 - norm) * (H - 28)
   }
 
-  // Smooth bezier curve through the high/low events.
   const sorted = [...points].sort((a, b) => a.tFrac - b.tFrac)
-  let path = `M ${x(sorted[0].tFrac)} ${y(sorted[0].ft)}`
-  for (let i = 1; i < sorted.length; i++) {
-    const p0 = sorted[i - 1]
-    const p1 = sorted[i]
+
+  // Extrapolate synthetic boundary points at t=0 and t=1 so the curve spans
+  // the full chart instead of stopping at the first/last real event.
+  // Tide cycle is ~12.4 hours, so half-cycle ≈ 6.2 h = 0.258 day-fraction.
+  // Beyond the first event (going backwards) the next opposite-type tide sat
+  // ~6.2 h earlier — we use the day's avg high/low to estimate that anchor,
+  // then linearly interpolate from there to the first real event at t=0.
+  // Same logic forward from the last real event for t=1.
+  const HALF_CYCLE = 6.2 / 24
+  const highs = sorted.filter((p) => p.type === 'High')
+  const lows = sorted.filter((p) => p.type === 'Low')
+  const avgHigh = highs.length ? highs.reduce((s, p) => s + p.ft, 0) / highs.length : sorted[0].ft
+  const avgLow = lows.length ? lows.reduce((s, p) => s + p.ft, 0) / lows.length : sorted[0].ft
+
+  const first = sorted[0]
+  const last = sorted[sorted.length - 1]
+  const priorAnchorFt = first.type === 'High' ? avgLow : avgHigh
+  const priorAnchorT = first.tFrac - HALF_CYCLE
+  const nextAnchorFt = last.type === 'High' ? avgLow : avgHigh
+  const nextAnchorT = last.tFrac + HALF_CYCLE
+  const leftFt =
+    priorAnchorFt + ((0 - priorAnchorT) / (first.tFrac - priorAnchorT)) * (first.ft - priorAnchorFt)
+  const rightFt =
+    last.ft + ((1 - last.tFrac) / (nextAnchorT - last.tFrac)) * (nextAnchorFt - last.ft)
+
+  const padded: TidePoint[] = [
+    { tFrac: 0, ft: leftFt, type: first.type },
+    ...sorted,
+    { tFrac: 1, ft: rightFt, type: last.type },
+  ]
+
+  // Smooth bezier curve across the padded points.
+  let path = `M ${x(padded[0].tFrac)} ${y(padded[0].ft)}`
+  for (let i = 1; i < padded.length; i++) {
+    const p0 = padded[i - 1]
+    const p1 = padded[i]
     const dx = (p1.tFrac - p0.tFrac) * W
     path += ` C ${x(p0.tFrac) + dx / 2} ${y(p0.ft)}, ${x(p1.tFrac) - dx / 2} ${y(p1.ft)}, ${x(p1.tFrac)} ${y(p1.ft)}`
   }
   const fillPath = `${path} L ${W} ${H} L 0 ${H} Z`
 
-  // Interpolate tide height at `nowT` along the curve so the "now" dot lands on it.
-  let nowFt = sorted[0].ft
-  if (nowT <= sorted[0].tFrac) {
-    nowFt = sorted[0].ft
-  } else if (nowT >= sorted[sorted.length - 1].tFrac) {
-    nowFt = sorted[sorted.length - 1].ft
-  } else {
-    for (let i = 1; i < sorted.length; i++) {
-      if (sorted[i].tFrac >= nowT) {
-        const p0 = sorted[i - 1]
-        const p1 = sorted[i]
-        const tt = (nowT - p0.tFrac) / (p1.tFrac - p0.tFrac)
-        const e = tt * tt * (3 - 2 * tt)
-        nowFt = p0.ft + (p1.ft - p0.ft) * e
-        break
-      }
+  // Interpolate height at `nowT` along the padded curve so the dot lands on it
+  // regardless of where in the day we are.
+  let nowFt = padded[0].ft
+  for (let i = 1; i < padded.length; i++) {
+    if (padded[i].tFrac >= nowT) {
+      const p0 = padded[i - 1]
+      const p1 = padded[i]
+      const tt = (nowT - p0.tFrac) / (p1.tFrac - p0.tFrac)
+      const e = tt * tt * (3 - 2 * tt)
+      nowFt = p0.ft + (p1.ft - p0.ft) * e
+      break
     }
   }
 
