@@ -3,9 +3,13 @@ import { useEffect, useState } from 'react'
 // ─────────────────────────────────────────────────────────────────────────────
 // useTides — fetch today's high/low tide events from NOAA
 // Source: api.tidesandcurrents.noaa.gov (free, no API key, CORS-enabled)
-// Station 8534720 = Atlantic City. Closest reliable tide station to LBI.
-// ⚠️  Tides at Barnegat Inlet will differ by ~10–20 min from AC — refine later
-//     with a Barnegat-specific station if/when one is available.
+// Pass a 7-digit NOAA station ID. Common LBI-area stations:
+//   8534208  Beach Haven Coast Guard Station (bay side)
+//   8534720  Atlantic City (Ocean)
+//   8534048  Beach Haven Crest (LBI, likely bay side)
+//   8533615  Barnegat Inlet, USCG Station (north end of LBI)
+//   8534319  Tuckerton / Little Egg Inlet (south of Holgate)
+// Find more at: https://tidesandcurrents.noaa.gov/map/index.html
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type TideEvent = {
@@ -13,8 +17,6 @@ export type TideEvent = {
   type: 'High' | 'Low'
   ft: string // "0.3ft"
 }
-
-const STATION = '8534720' // NOAA Atlantic City
 
 function fmtDate(d: Date): string {
   // YYYYMMDD for NOAA's date params
@@ -42,7 +44,7 @@ type NOAAResponse = {
   error?: { message: string }
 }
 
-export function useTides() {
+export function useTides(station: string) {
   const [tides, setTides] = useState<TideEvent[] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -51,7 +53,7 @@ export function useTides() {
     const url =
       `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter` +
       `?product=predictions&begin_date=${today}&end_date=${today}` +
-      `&datum=MLLW&station=${STATION}&time_zone=lst_ldt` +
+      `&datum=MLLW&station=${station}&time_zone=lst_ldt` +
       `&units=english&interval=hilo&format=json`
 
     let cancelled = false
@@ -74,7 +76,7 @@ export function useTides() {
         }))
         setTides(events)
         // eslint-disable-next-line no-console
-        console.log('[useTides] live NOAA tides loaded:', events)
+        console.log(`[useTides ${station}] live NOAA tides loaded:`, events)
       })
       .catch((err: unknown) => {
         if (cancelled) return
@@ -87,7 +89,7 @@ export function useTides() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [station])
 
   return { tides, error, loading: tides === null && error === null }
 }

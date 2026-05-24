@@ -2,8 +2,14 @@ import { useState } from 'react'
 import { tideKeyTimes, forecast } from '../data/conditions'
 import { beaches } from '../data/beaches'
 import { todayEvents, happyHoursActive } from '../data/events'
-import { useTides } from '../hooks/useTides'
+import { useTides, type TideEvent } from '../hooks/useTides'
 import { useNow } from '../hooks/useNow'
+
+// NOAA station IDs — change here if you want different reference points.
+const BAY_STATION = '8534208' // Beach Haven Coast Guard Station
+const BAY_NAME = 'Beach Haven Coast Guard Station'
+const OCEAN_STATION = '8534720' // Atlantic City (Ocean) — nearest dedicated ocean station
+const OCEAN_NAME = 'Atlantic City (Ocean)'
 
 // ─── TIME HELPERS ─────────────────────────────────────────────────────────────
 // Convert "4:22 AM" to fraction of day (0=midnight, 0.5=noon, 1=next midnight)
@@ -123,6 +129,60 @@ function TideChart({
   )
 }
 
+// ─── TIDE CARD ───────────────────────────────────────────────────────────────
+// Self-contained card for one tide station (bay or ocean). Computes its own
+// chart points and "next event" highlight from the events it receives.
+function TideCard({
+  title,
+  stationName,
+  liveTides,
+  loading,
+  fallbackEvents,
+  nowT,
+  nowLabel,
+}: {
+  title: string
+  stationName: string
+  liveTides: TideEvent[] | null
+  loading: boolean
+  fallbackEvents: TideEvent[]
+  nowT: number
+  nowLabel: string
+}) {
+  const events = liveTides ?? fallbackEvents
+  const tidePoints: TidePoint[] = events.map((e) => ({
+    tFrac: timeStrToFrac(e.time),
+    ft: parseFloat(e.ft),
+    type: e.type,
+  }))
+  const nextEventIndex = events.findIndex((e) => timeStrToFrac(e.time) > nowT)
+
+  return (
+    <div className="card">
+      <div className="card-head">
+        <h2 className="card-title">{title}</h2>
+        <span className="card-sub">
+          {loading
+            ? 'Loading…'
+            : liveTides
+              ? `🟢 Live · ${stationName}`
+              : `Sample · ${stationName}`}
+        </span>
+      </div>
+      <TideChart nowT={nowT} nowLabel={nowLabel} points={tidePoints} />
+      <div className="tide-events">
+        {events.map((t, i) => (
+          <div key={i} className={`tide-event ${i === nextEventIndex ? 'now' : ''}`}>
+            <div className="lab">{t.type}{i === nextEventIndex ? ' · Next' : ''}</div>
+            <div className="time">{t.time}</div>
+            <div className="ft">{t.ft}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ─── FORECAST ICONS ───────────────────────────────────────────────────────────
 function WeatherIcon({ type }: { type: string }) {
   if (type === 'Sun') return <span style={{ fontSize: 28 }}>☀️</span>
@@ -135,26 +195,16 @@ function WeatherIcon({ type }: { type: string }) {
 export default function TodayPage() {
   const [activeDay, setActiveDay] = useState(0)
   const today = forecast[0]
-  const { tides: liveTides, loading: tidesLoading } = useTides()
-  // Show live NOAA data when available, fall back to mock so the page never blanks
-  const tideEvents = liveTides ?? tideKeyTimes
 
-  // Live clock — re-renders every minute so the chart marker tracks real time.
+  // Two independent NOAA fetches — bay tides and ocean tides differ in both
+  // timing and amplitude, so they get their own charts.
+  const { tides: bayTides, loading: bayLoading } = useTides(BAY_STATION)
+  const { tides: oceanTides, loading: oceanLoading } = useTides(OCEAN_STATION)
+
+  // Live clock — re-renders every minute so the chart markers track real time.
   const now = useNow()
   const nowT = dateToFrac(now)
   const nowLabel = fmtNowLabel(now)
-
-  // Parse the tide event strings into (tFrac, ft) so the chart and "next" logic
-  // both work whether we're on live NOAA data or the mock fallback.
-  const tidePoints: TidePoint[] = tideEvents.map((e) => ({
-    tFrac: timeStrToFrac(e.time),
-    ft: parseFloat(e.ft),
-    type: e.type,
-  }))
-
-  // The "next" tide event = the first one whose time hasn't happened yet today.
-  // -1 means all of today's events are already past (won't highlight any).
-  const nextEventIndex = tideEvents.findIndex((e) => timeStrToFrac(e.time) > nowT)
 
   const forecastData = [
     { dow: 'Today', hi: 81, lo: 65, ico: 'Sun',      score: 88 },
@@ -248,29 +298,25 @@ export default function TodayPage() {
           </div>
         </div>
 
-        {/* Tides */}
-        <div className="card">
-          <div className="card-head">
-            <h2 className="card-title">Today's Tides</h2>
-            <span className="card-sub">
-              {tidesLoading
-                ? 'Loading…'
-                : liveTides
-                  ? '🟢 Live · NOAA Atlantic City'
-                  : 'Sample data'}
-            </span>
-          </div>
-          <TideChart nowT={nowT} nowLabel={nowLabel} points={tidePoints} />
-          <div className="tide-events">
-            {tideEvents.map((t, i) => (
-              <div key={i} className={`tide-event ${i === nextEventIndex ? 'now' : ''}`}>
-                <div className="lab">{t.type}{i === nextEventIndex ? ' · Next' : ''}</div>
-                <div className="time">{t.time}</div>
-                <div className="ft">{t.ft}</div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Tides — split into Bay and Ocean since they differ in timing + height */}
+        <TideCard
+          title="Bay Tide"
+          stationName={BAY_NAME}
+          liveTides={bayTides}
+          loading={bayLoading}
+          fallbackEvents={tideKeyTimes}
+          nowT={nowT}
+          nowLabel={nowLabel}
+        />
+        <TideCard
+          title="Ocean Tide"
+          stationName={OCEAN_NAME}
+          liveTides={oceanTides}
+          loading={oceanLoading}
+          fallbackEvents={tideKeyTimes}
+          nowT={nowT}
+          nowLabel={nowLabel}
+        />
 
         {/* Forecast */}
         <div className="card">
