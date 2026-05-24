@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { tideKeyTimes, forecast } from '../data/conditions'
 import { beaches } from '../data/beaches'
 import { todayEvents, happyHoursActive } from '../data/events'
+import { useTides } from '../hooks/useTides'
 
 // ─── TIDE CHART ──────────────────────────────────────────────────────────────
 function TideChart() {
@@ -78,6 +79,9 @@ function WeatherIcon({ type }: { type: string }) {
 export default function TodayPage() {
   const [activeDay, setActiveDay] = useState(0)
   const today = forecast[0]
+  const { tides: liveTides, loading: tidesLoading } = useTides()
+  // Show live NOAA data when available, fall back to mock so the page never blanks
+  const tideEvents = liveTides ?? tideKeyTimes
 
   const forecastData = [
     { dow: 'Today', hi: 81, lo: 65, ico: 'Sun',      score: 88 },
@@ -175,11 +179,17 @@ export default function TodayPage() {
         <div className="card">
           <div className="card-head">
             <h2 className="card-title">Today's Tides</h2>
-            <span className="card-sub">High slack 10:45 am</span>
+            <span className="card-sub">
+              {tidesLoading
+                ? 'Loading…'
+                : liveTides
+                  ? '🟢 Live · NOAA Atlantic City'
+                  : 'Sample data'}
+            </span>
           </div>
           <TideChart />
           <div className="tide-events">
-            {tideKeyTimes.map((t, i) => (
+            {tideEvents.map((t, i) => (
               <div key={i} className={`tide-event ${i === 1 ? 'now' : ''}`}>
                 <div className="lab">{t.type}{i === 1 ? ' · Now' : ''}</div>
                 <div className="time">{t.time}</div>
