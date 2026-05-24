@@ -310,7 +310,7 @@ export default function TodayPage() {
                 suf: '/11',
                 sub: liveUV != null ? `${classifyUV(liveUV)} · live` : 'High · reapply at 1 pm',
               },
-              { label: 'Bridge', val: '12', suf: ' min', sub: 'Causeway · light' },
+              { label: 'Bridge', val: '—', suf: '', sub: 'Live data coming soon' },
             ].map((s) => (
               <div className="hero-stat" key={s.label}>
                 <div className="label">{s.label}</div>
@@ -418,10 +418,20 @@ export default function TodayPage() {
         {/* Metrics */}
         <div className="metrics">
           {[
-            { ico: '🌉', val: '12', suf: ' min', lab: 'Bridge wait' },
-            { ico: '🌊', val: '72', suf: '°',    lab: 'Water temp' },
-            { ico: '☀️', val: '8',  suf: '',      lab: 'UV index · high' },
-            { ico: '🏖️', val: '6/6', suf: '',    lab: 'Beaches open' },
+            { ico: '🌉', val: '—', suf: '', lab: 'Bridge wait · soon' },
+            {
+              ico: '🌊',
+              val: liveWaterTemp != null ? String(Math.round(liveWaterTemp)) : '72',
+              suf: '°',
+              lab: 'Water temp',
+            },
+            {
+              ico: '☀️',
+              val: liveUV != null ? String(Math.round(liveUV)) : '8',
+              suf: '',
+              lab: liveUV != null ? `UV · ${classifyUV(liveUV)}` : 'UV index · high',
+            },
+            { ico: '🏖️', val: '6/6', suf: '', lab: 'Beaches open' },
           ].map((m, i) => (
             <div className="metric" key={i}>
               <div className="metric-ico"><span style={{ fontSize: 18 }}>{m.ico}</span></div>
