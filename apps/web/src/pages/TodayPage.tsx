@@ -5,6 +5,12 @@ import { todayEvents, happyHoursActive } from '../data/events'
 import { useTides, type TideEvent } from '../hooks/useTides'
 import { useNow } from '../hooks/useNow'
 import { useWeather } from '../hooks/useWeather'
+import { useWaterTemp } from '../hooks/useWaterTemp'
+import { useUV, classifyUV } from '../hooks/useUV'
+
+// Water temp comes from a Tides & Currents station that has a temp sensor.
+// AC is the closest reliable one to LBI.
+const WATER_TEMP_STATION = '8534720' // Atlantic City
 
 // NOAA station IDs — change here if you want different reference points.
 const BAY_STATION = '8534208' // Beach Haven Coast Guard Station
@@ -217,6 +223,11 @@ export default function TodayPage() {
   const { forecast: liveForecast, current: liveCurrent, loading: weatherLoading } =
     useWeather(LBI_LAT, LBI_LON)
 
+  // Live water temp from NOAA Tides & Currents (AC station has the sensor).
+  const { temp: liveWaterTemp } = useWaterTemp(WATER_TEMP_STATION)
+  // Live UV index from Open-Meteo (NWS doesn't expose UV in standard forecast).
+  const { uv: liveUV } = useUV(LBI_LAT, LBI_LON)
+
   // Find the next upcoming HIGH tide on the ocean side for the hero sub-line.
   const oceanEvents = oceanTides ?? tideKeyTimes
   const nextHigh = oceanEvents.find(
@@ -281,11 +292,26 @@ export default function TodayPage() {
           </div>
           <div className="hero-stats">
             {[
-              { label: 'Water',    val: '72', suf: '°F',  sub: 'Warming through 3 pm' },
-              { label: 'Wind',     val: heroWind, suf: '', sub: heroToday ? heroToday.shortForecast : 'Light, steady' },
-              { label: 'UV Index', val: '8', suf: '/11', sub: 'High · reapply at 1 pm' },
-              { label: 'Bridge',   val: '12', suf: ' min', sub: 'Causeway · light' },
-            ].map(s => (
+              {
+                label: 'Water',
+                val: liveWaterTemp != null ? String(Math.round(liveWaterTemp)) : '72',
+                suf: '°F',
+                sub: liveWaterTemp != null ? 'Atlantic City buoy · live' : 'Warming through 3 pm',
+              },
+              {
+                label: 'Wind',
+                val: heroWind,
+                suf: '',
+                sub: heroToday ? heroToday.shortForecast : 'Light, steady',
+              },
+              {
+                label: 'UV Index',
+                val: liveUV != null ? String(Math.round(liveUV)) : '8',
+                suf: '/11',
+                sub: liveUV != null ? `${classifyUV(liveUV)} · live` : 'High · reapply at 1 pm',
+              },
+              { label: 'Bridge', val: '12', suf: ' min', sub: 'Causeway · light' },
+            ].map((s) => (
               <div className="hero-stat" key={s.label}>
                 <div className="label">{s.label}</div>
                 <div className="val">{s.val}<small>{s.suf}</small></div>
