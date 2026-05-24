@@ -163,6 +163,15 @@ export function scoreTier(score: number): 'Stormy' | 'Decent' | 'Great' | 'Peak'
   return 'Stormy'
 }
 
+/** Short tier label for the three-score row (Lounge / Swim / Surf). */
+export function scoreShortLabel(score: number): string {
+  if (score >= 85) return 'Peak'
+  if (score >= 70) return 'Great'
+  if (score >= 50) return 'Decent'
+  if (score >= 25) return 'Tough'
+  return 'Skip'
+}
+
 /** Plain-language verdict suitable for the score card hero line. */
 export function scoreVerdict(score: number): string {
   if (score >= 90) return 'A peak day to be on the sand.'
@@ -171,6 +180,118 @@ export function scoreVerdict(score: number): string {
   if (score >= 45) return 'Decent — workable with the right spot.'
   if (score >= 25) return 'Tough day — bring a book.'
   return 'Storm day — stay inside.'
+}
+
+// ── ACTIVITY-SPECIFIC SCORES ─────────────────────────────────────────────────
+// Each scorer weights factors differently — a clear cold-water big-surf day
+// can be Peak for lounging and Tough for swimming at the same time.
+
+/**
+ * Lounge / sunbathing / walk-the-beach score. Cares about air temp comfort,
+ * sun, wind (sand-blowing), and bugs. Ignores water entirely.
+ */
+export function computeLoungeScore(args: {
+  precipPct: number
+  hi: number
+  ico: IconType
+  windSpeed: number
+  bugScore: number
+}): number {
+  let s = 100
+  s -= args.precipPct * 0.6
+  if (args.ico === 'Cloud') s -= 8
+  if (args.ico === 'Rain') s -= 35
+  if (args.hi < 70) s -= 12
+  if (args.hi < 60) s -= 18
+  if (args.hi > 92) s -= 8
+  if (args.windSpeed > 20) s -= 10
+  if (args.windSpeed > 30) s -= 15
+  // Bugs hit lounging hardest — you're staying put
+  if (args.bugScore < 25) s -= 30
+  else if (args.bugScore < 45) s -= 15
+  else if (args.bugScore < 65) s -= 5
+  if (args.hi >= 78 && args.hi <= 88 && args.ico === 'Sun') s += 5
+  return Math.max(0, Math.min(100, Math.round(s)))
+}
+
+/**
+ * Swim score. Sea temp is dominant — water below 65°F is genuinely cold even
+ * on a perfect-weather day. Big waves hurt swimmability (and safety).
+ */
+export function computeSwimScore(args: {
+  seaTempF: number | null
+  waveHeightFt: number | null
+  hi: number
+  precipPct: number
+  ico: IconType
+  windSpeed: number
+  bugScore: number
+}): number {
+  let s = 100
+  if (args.seaTempF == null) s -= 15
+  else if (args.seaTempF < 55) s -= 60
+  else if (args.seaTempF < 60) s -= 40
+  else if (args.seaTempF < 65) s -= 25
+  else if (args.seaTempF < 70) s -= 10
+  if (args.waveHeightFt != null) {
+    if (args.waveHeightFt > 6) s -= 35
+    else if (args.waveHeightFt > 4) s -= 18
+    else if (args.waveHeightFt > 3) s -= 8
+  }
+  if (args.hi < 72) s -= 8
+  if (args.hi < 65) s -= 12
+  s -= args.precipPct * 0.4
+  if (args.ico === 'Rain') s -= 30
+  if (args.windSpeed > 25) s -= 10
+  if (args.bugScore < 25) s -= 10
+  return Math.max(0, Math.min(100, Math.round(s)))
+}
+
+/**
+ * Surf score. Wants 2.5–6 ft waves with period ≥ 8s (groundswell). Offshore
+ * wind (W component) cleans up the faces; onshore (E) blows it out.
+ * Without buoy data we return a neutral score (data unknown).
+ */
+export function computeSurfScore(args: {
+  waveHeightFt: number | null
+  wavePeriodSec: number | null
+  windDir: string
+  windSpeed: number
+  precipPct: number
+  seaTempF: number | null
+}): number {
+  if (args.waveHeightFt == null) return 50
+  let s = 50
+  const h = args.waveHeightFt
+  if (h < 1) s += -25
+  else if (h < 2) s += 0
+  else if (h < 3) s += 25
+  else if (h < 5) s += 40 // sweet spot
+  else if (h < 7) s += 25
+  else if (h < 9) s += 10
+  else s += -15
+  if (args.wavePeriodSec != null) {
+    const p = args.wavePeriodSec
+    if (p < 6) s -= 15
+    else if (p < 8) s -= 5
+    else if (p < 10) s += 5
+    else if (p < 13) s += 10
+    else s += 8
+  }
+  const dirCat = windDirCategory(args.windDir)
+  if (dirCat === 'west') {
+    if (args.windSpeed < 5) s += 8
+    else if (args.windSpeed < 12) s += 15
+    else if (args.windSpeed < 18) s += 5
+    else s -= 8
+  } else if (dirCat === 'east') {
+    s -= args.windSpeed > 15 ? 20 : 10
+  } else if (args.windSpeed > 18) {
+    s -= 8
+  }
+  s -= args.precipPct * 0.2
+  if (args.seaTempF != null && args.seaTempF < 50) s -= 10
+  return Math.max(0, Math.min(100, Math.round(s)))
 }
 
 /** Plain-language wind description for hero copy. */

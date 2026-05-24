@@ -13,10 +13,12 @@ import { useBuoy } from '../hooks/useBuoy'
 const BUOY_STATION = '44091' // Barnegat
 import {
   classifyBugLevel,
-  computeOceanPenalty,
+  computeLoungeScore,
+  computeSwimScore,
+  computeSurfScore,
   describeBugs,
   describeWind,
-  scoreVerdict,
+  scoreShortLabel,
   windDirCategory,
 } from '../lib/scoring'
 import { friendlyShortForecast, tideContext } from '../lib/copy'
@@ -378,64 +380,133 @@ export default function TodayPage() {
           </button>
         )}
 
-        {/* Beach Day Score — derived from live weather, bugs, AND ocean
-            conditions (cold water + big waves can drag a perfect-weather day
-            out of the Peak tier when the water isn't actually usable). */}
+        {/* Three activity scores — same day can rate differently for lounging
+            vs swimming vs surfing (e.g. perfect sun + 55°F water + 9ft surf
+            = Peak lounge, Tough swim, Great surf). */}
         {(() => {
-          const weatherScore = heroToday?.score ?? 88
-          const oceanPenalty = computeOceanPenalty(
-            buoy?.waveHeightFt ?? null,
-            buoy?.waterTempF ?? null,
-          )
-          const score = Math.max(0, weatherScore - oceanPenalty)
-          const verdict = scoreVerdict(score)
+          const loungeScore = heroToday
+            ? computeLoungeScore({
+                precipPct: heroToday.precipPct,
+                hi: heroToday.hi,
+                ico: heroToday.ico,
+                windSpeed: heroToday.windSpeed,
+                bugScore: heroToday.bugScore,
+              })
+            : 88
+          const swimScore = heroToday
+            ? computeSwimScore({
+                seaTempF: buoy?.waterTempF ?? liveWaterTemp ?? null,
+                waveHeightFt: buoy?.waveHeightFt ?? null,
+                hi: heroToday.hi,
+                precipPct: heroToday.precipPct,
+                ico: heroToday.ico,
+                windSpeed: heroToday.windSpeed,
+                bugScore: heroToday.bugScore,
+              })
+            : 65
+          const surfScore = heroToday
+            ? computeSurfScore({
+                waveHeightFt: buoy?.waveHeightFt ?? null,
+                wavePeriodSec: buoy?.wavePeriodSec ?? null,
+                windDir: heroToday.windDir,
+                windSpeed: heroToday.windSpeed,
+                precipPct: heroToday.precipPct,
+                seaTempF: buoy?.waterTempF ?? null,
+              })
+            : 50
+
+          const pillars: Array<{ emoji: string; label: string; score: number }> = [
+            { emoji: '🏖️', label: 'Lounge', score: loungeScore },
+            { emoji: '🏊', label: 'Swim', score: swimScore },
+            { emoji: '🏄', label: 'Surf', score: surfScore },
+          ]
+
           return (
             <div className="card score-card">
               <div className="card-head">
                 <div>
-                  <h2 className="card-title">Beach Day Score</h2>
-                  <div className="card-sub" style={{ marginTop: 4 }}>How LBI feels right now</div>
+                  <h2 className="card-title">Today's Scores</h2>
+                  <div className="card-sub" style={{ marginTop: 4 }}>
+                    By how you'd use the beach
+                  </div>
                 </div>
                 <button className="section-link">Methodology ↗</button>
               </div>
-              <div className="score-grid">
-                <div className="score-num">{score}<sub>/100</sub></div>
-                <div className="score-meta">
-                  <div className="score-verdict">{verdict}</div>
-                  <div className="score-bullets">
-                    {heroToday && (
-                      <span>{describeWind(heroToday.windSpeed, heroToday.windDir)}</span>
-                    )}
-                    {liveWaterTemp != null && (
-                      <span>Water {Math.round(liveWaterTemp)}°F at Atlantic City</span>
-                    )}
-                    {liveUV != null && (
-                      <span className={liveUV >= 6 ? 'warn' : undefined}>
-                        UV {Math.round(liveUV)} — {classifyUV(liveUV)}
-                      </span>
-                    )}
-                    {buoy?.waveHeightFt != null && buoy.waveHeightFt >= 2.5 && (
-                      <span className={buoy.waveHeightFt >= 4 ? 'warn' : undefined}>
-                        Surf {buoy.waveHeightFt.toFixed(1)} ft offshore
-                        {buoy.waveHeightFt >= 4 ? ' — rough water' : ''}
-                      </span>
-                    )}
-                    {buoy?.waterTempF != null && buoy.waterTempF < 65 && (
-                      <span className="warn">
-                        Sea temp {Math.round(buoy.waterTempF)}°F — cold for swimming
-                      </span>
-                    )}
+
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: 16,
+                  margin: '12px 0 18px',
+                }}
+              >
+                {pillars.map((p) => (
+                  <div key={p.label} style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: 30, lineHeight: 1 }}>{p.emoji}</div>
+                    <div
+                      style={{
+                        fontFamily: 'var(--font-display)',
+                        fontSize: 56,
+                        fontWeight: 300,
+                        color: 'var(--navy)',
+                        lineHeight: 1,
+                        letterSpacing: '-0.03em',
+                        marginTop: 6,
+                      }}
+                    >
+                      {p.score}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 10.5,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.16em',
+                        color: 'var(--slate, #6b8580)',
+                        marginTop: 4,
+                      }}
+                    >
+                      {p.label}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 13,
+                        color: 'var(--teal-deep, #1b3654)',
+                        fontStyle: 'italic',
+                        marginTop: 4,
+                      }}
+                    >
+                      {scoreShortLabel(p.score)}
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
-              <div className="score-bar">
-                <div className="score-bar-track">
-                  <div className="score-bar-fill" style={{ width: `${score}%` }} />
-                </div>
-                <div className="score-bar-labels">
-                  <span>Stormy</span><span>Decent</span><span>Great</span><span>Peak</span>
-                </div>
+
+              <div className="score-bullets">
+                {heroToday && (
+                  <span>{describeWind(heroToday.windSpeed, heroToday.windDir)}</span>
+                )}
+                {liveWaterTemp != null && (
+                  <span>Water {Math.round(liveWaterTemp)}°F at Atlantic City</span>
+                )}
+                {liveUV != null && (
+                  <span className={liveUV >= 6 ? 'warn' : undefined}>
+                    UV {Math.round(liveUV)} — {classifyUV(liveUV)}
+                  </span>
+                )}
+                {buoy?.waveHeightFt != null && buoy.waveHeightFt >= 2.5 && (
+                  <span className={buoy.waveHeightFt >= 4 ? 'warn' : undefined}>
+                    Surf {buoy.waveHeightFt.toFixed(1)} ft offshore
+                    {buoy.waveHeightFt >= 4 ? ' — rough water' : ''}
+                  </span>
+                )}
+                {buoy?.waterTempF != null && buoy.waterTempF < 65 && (
+                  <span className="warn">
+                    Sea temp {Math.round(buoy.waterTempF)}°F — cold for swimming
+                  </span>
+                )}
               </div>
+
               <div className="rip-status">
                 <span>🌊 Rip current risk · <strong>Low across the island</strong></span>
                 <span>🪰 Bugs · <strong>{heroBugLevel}</strong></span>
