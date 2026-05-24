@@ -4,12 +4,18 @@ import { beaches } from '../data/beaches'
 import { todayEvents, happyHoursActive } from '../data/events'
 import { useTides, type TideEvent } from '../hooks/useTides'
 import { useNow } from '../hooks/useNow'
+import { useWeather } from '../hooks/useWeather'
 
 // NOAA station IDs — change here if you want different reference points.
 const BAY_STATION = '8534208' // Beach Haven Coast Guard Station
 const BAY_NAME = 'Beach Haven Coast Guard Station'
 const OCEAN_STATION = '8534720' // Atlantic City (Ocean) — nearest dedicated ocean station
 const OCEAN_NAME = 'Atlantic City (Ocean)'
+
+// Coordinates for the NWS forecast lookup. Beach Haven proper.
+// Weather is essentially uniform across 18-mi LBI, so one point is fine.
+const LBI_LAT = 39.5604
+const LBI_LON = -74.2429
 
 // ─── TIME HELPERS ─────────────────────────────────────────────────────────────
 // Convert "4:22 AM" to fraction of day (0=midnight, 0.5=noon, 1=next midnight)
@@ -206,13 +212,17 @@ export default function TodayPage() {
   const nowT = dateToFrac(now)
   const nowLabel = fmtNowLabel(now)
 
-  const forecastData = [
+  // Live 5-day forecast from NWS.
+  const { forecast: liveForecast, loading: weatherLoading } = useWeather(LBI_LAT, LBI_LON)
+
+  const mockForecast = [
     { dow: 'Today', hi: 81, lo: 65, ico: 'Sun',      score: 88 },
     { dow: 'Sun',   hi: 78, lo: 62, ico: 'CloudSun', score: 71 },
     { dow: 'Mon',   hi: 72, lo: 60, ico: 'Rain',     score: 34 },
     { dow: 'Tue',   hi: 75, lo: 61, ico: 'Cloud',    score: 74 },
     { dow: 'Wed',   hi: 83, lo: 66, ico: 'Sun',      score: 94 },
   ]
+  const forecastData = liveForecast ?? mockForecast
 
   return (
     <div className="content">
@@ -322,7 +332,13 @@ export default function TodayPage() {
         <div className="card">
           <div className="card-head">
             <h2 className="card-title">Five-day outlook</h2>
-            <button className="section-link">Hourly →</button>
+            <span className="card-sub">
+              {weatherLoading
+                ? 'Loading…'
+                : liveForecast
+                  ? '🟢 Live · NWS forecast'
+                  : 'Sample data'}
+            </span>
           </div>
           <div className="forecast">
             {forecastData.map((d, i) => (
