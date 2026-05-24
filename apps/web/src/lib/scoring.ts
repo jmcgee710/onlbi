@@ -50,14 +50,20 @@ export function isFlySeason(date: Date): boolean {
 
 /**
  * Bug score: 0 = swarmed, 100 = none. Higher is better.
- * Combines wind direction (off-shore = bad), wind speed (strong west grounds
- * the bugs, light wind lets them hover), and seasonal severity.
+ * Outside fly season the score is essentially fixed (greenheads aren't out
+ * so wind direction doesn't matter). Inside fly season, wind direction is
+ * the dominant factor and the season modifier amplifies it.
  */
 export function computeBugScore(
   windDir: string,
   windSpeed: number,
   date: Date,
 ): number {
+  if (!isFlySeason(date)) {
+    // Light wind anywhere can let normal flying insects hover, but no greenheads
+    return windSpeed < 5 ? 80 : 95
+  }
+
   const dirCat = windDirCategory(windDir)
   let score = dirCat === 'west' ? 25 : dirCat === 'east' ? 90 : 60
 
@@ -65,15 +71,13 @@ export function computeBugScore(
   if (dirCat === 'west' && windSpeed > 18) score += 20
   if (windSpeed < 5) score -= 10
 
-  // Seasonal severity
+  // Seasonal severity (we're already inside fly season here)
   if (isGreenheadPeak(date)) {
     if (dirCat === 'west') score -= 20
     else if (dirCat === 'neutral') score -= 10
-  } else if (isFlySeason(date)) {
-    if (dirCat === 'west') score -= 10
   } else {
-    // Off-season: even a west wind isn't really a problem
-    if (dirCat === 'west') score += 15
+    // Broader season but not peak (late June or early September)
+    if (dirCat === 'west') score -= 10
   }
 
   return Math.max(0, Math.min(100, Math.round(score)))
@@ -104,16 +108,19 @@ export function computeBeachDayScore(args: {
   bugScore: number
 }): number {
   let s = 100
-  s -= args.precipPct
-  if (args.hi < 70) s -= 15
-  if (args.hi < 60) s -= 15
+  // Softer precip penalty — 30% chance shouldn't tank the score; 100% should
+  // still hurt a lot. Half-weight keeps it proportional without crashing.
+  s -= args.precipPct * 0.5
+  if (args.hi < 70) s -= 12
+  if (args.hi < 60) s -= 18
   if (args.ico === 'Cloud') s -= 10
-  if (args.ico === 'Rain') s -= 20
+  if (args.ico === 'Rain') s -= 25
   if (args.windSpeed > 25) s -= 10
 
-  // Bug penalty scales with severity
-  if (args.bugScore < 25) s -= 20
-  else if (args.bugScore < 45) s -= 10
+  // Bug penalty scales with severity — bumped up because bugs really do
+  // ruin a beach day, especially during greenhead peak.
+  if (args.bugScore < 25) s -= 25
+  else if (args.bugScore < 45) s -= 12
   else if (args.bugScore < 65) s -= 5
 
   // Ideal beach day bonus
@@ -142,15 +149,11 @@ export function describeWind(speed: number, dir: string): string {
  */
 export function describeBugs(
   bugScore: number,
-  dirCat: WindDirCategory,
+  _dirCat: WindDirCategory,
   date: Date,
 ): string {
-  // Outside fly season, only call it out when the wind is keeping bugs away
-  if (!isFlySeason(date)) {
-    if (dirCat === 'east' && bugScore >= 80)
-      return 'Onshore breeze — bug-free beach.'
-    return ''
-  }
+  // Off-season: greenheads aren't out, no need to mention bugs at all
+  if (!isFlySeason(date)) return ''
   if (bugScore >= 80) return 'Onshore breeze keeping greenheads away.'
   if (bugScore >= 60) return ''
   if (bugScore >= 40) return 'Pack repellent — some greenheads expected.'

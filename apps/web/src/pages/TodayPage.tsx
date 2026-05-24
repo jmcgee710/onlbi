@@ -13,6 +13,7 @@ import {
   describeWind,
   windDirCategory,
 } from '../lib/scoring'
+import { friendlyShortForecast, tideContext } from '../lib/copy'
 
 // Water temp comes from a Tides & Currents station that has a temp sensor.
 // AC is the closest reliable one to LBI.
@@ -249,7 +250,9 @@ export default function TodayPage() {
   const heroToday = liveForecast?.[0]
   const heroHi = heroToday?.hi ?? 81
   const heroLo = heroToday?.lo ?? 65
-  const heroCondition = liveCurrent?.shortForecast ?? heroToday?.shortForecast ?? 'Sunny'
+  const heroConditionRaw =
+    liveCurrent?.shortForecast ?? heroToday?.shortForecast ?? 'Sunny'
+  const heroCondition = friendlyShortForecast(heroConditionRaw)
   const heroWind = heroToday?.wind ?? 'SSW 12'
 
   // Bug pressure for the hero copy + rip-status row.
@@ -284,10 +287,15 @@ export default function TodayPage() {
               <div className="hero-sub">
                 {heroToday ? (
                   <>
-                    {heroToday.shortForecast} with {windCopy}.
+                    {friendlyShortForecast(heroToday.shortForecast)} with {windCopy}.
                     {bugCopy && <> {bugCopy}</>}
                     {nextHigh && (
-                      <> <strong>Next high tide at {nextHigh.time}.</strong></>
+                      <>
+                        {' '}
+                        <strong>
+                          Next high tide {tideContext(nextHigh.time, now)}.
+                        </strong>
+                      </>
                     )}
                   </>
                 ) : (
