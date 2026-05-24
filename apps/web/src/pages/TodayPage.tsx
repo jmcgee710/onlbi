@@ -3,34 +3,85 @@ import { tideKeyTimes, forecast } from '../data/conditions'
 import { beaches } from '../data/beaches'
 import { todayEvents, happyHoursActive } from '../data/events'
 import { useTides } from '../hooks/useTides'
+import { useNow } from '../hooks/useNow'
+
+// ─── TIME HELPERS ─────────────────────────────────────────────────────────────
+// Convert "4:22 AM" to fraction of day (0=midnight, 0.5=noon, 1=next midnight)
+function timeStrToFrac(s: string): number {
+  const m = s.match(/(\d+):(\d+)\s*(AM|PM)/i)
+  if (!m) return 0
+  let h = Number(m[1])
+  const min = Number(m[2])
+  const isPM = m[3].toUpperCase() === 'PM'
+  if (isPM && h !== 12) h += 12
+  if (!isPM && h === 12) h = 0
+  return (h * 60 + min) / (24 * 60)
+}
+
+function dateToFrac(d: Date): number {
+  return (d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60) / (24 * 60)
+}
+
+function fmtNowLabel(d: Date): string {
+  let h = d.getHours()
+  const m = d.getMinutes()
+  const ampm = h >= 12 ? 'p' : 'a'
+  h = h % 12 === 0 ? 12 : h % 12
+  return `Now ${h}:${String(m).padStart(2, '0')}${ampm}`
+}
 
 // ─── TIDE CHART ──────────────────────────────────────────────────────────────
-function TideChart() {
-  const points = [
-    { t: 0, y: 0.85 }, { t: 0.18, y: 1.0 }, { t: 0.45, y: 0.05 },
-    { t: 0.71, y: 0.95 }, { t: 0.97, y: 0.1 }, { t: 1.0, y: 0.15 },
-  ]
-  const W = 600, H = 120
-  const x = (t: number) => t * W
-  const y = (yy: number) => 14 + yy * (H - 28)
+type TidePoint = { tFrac: number; ft: number; type: 'High' | 'Low' }
 
-  let path = `M ${x(points[0].t)} ${y(points[0].y)}`
-  for (let i = 1; i < points.length; i++) {
-    const p0 = points[i - 1], p1 = points[i]
-    const dx = (p1.t - p0.t) * W
-    path += ` C ${x(p0.t) + dx / 2} ${y(p0.y)}, ${x(p1.t) - dx / 2} ${y(p1.y)}, ${x(p1.t)} ${y(p1.y)}`
+function TideChart({
+  nowT,
+  nowLabel,
+  points,
+}: {
+  nowT: number
+  nowLabel: string
+  points: TidePoint[]
+}) {
+  const W = 600
+  const H = 120
+  const x = (t: number) => t * W
+
+  // Normalize heights so high tides sit near the top of the chart.
+  const fts = points.map((p) => p.ft)
+  const minFt = Math.min(...fts) - 0.5
+  const maxFt = Math.max(...fts) + 0.5
+  const y = (ft: number) => {
+    const norm = (ft - minFt) / (maxFt - minFt) // 0=low, 1=high
+    return 14 + (1 - norm) * (H - 28)
+  }
+
+  // Smooth bezier curve through the high/low events.
+  const sorted = [...points].sort((a, b) => a.tFrac - b.tFrac)
+  let path = `M ${x(sorted[0].tFrac)} ${y(sorted[0].ft)}`
+  for (let i = 1; i < sorted.length; i++) {
+    const p0 = sorted[i - 1]
+    const p1 = sorted[i]
+    const dx = (p1.tFrac - p0.tFrac) * W
+    path += ` C ${x(p0.tFrac) + dx / 2} ${y(p0.ft)}, ${x(p1.tFrac) - dx / 2} ${y(p1.ft)}, ${x(p1.tFrac)} ${y(p1.ft)}`
   }
   const fillPath = `${path} L ${W} ${H} L 0 ${H} Z`
-  const nowT = 0.42
 
-  let ny = 0.2
-  for (let i = 1; i < points.length; i++) {
-    if (points[i].t >= nowT) {
-      const p0 = points[i - 1], p1 = points[i]
-      const tt = (nowT - p0.t) / (p1.t - p0.t)
-      const e = tt * tt * (3 - 2 * tt)
-      ny = p0.y + (p1.y - p0.y) * e
-      break
+  // Interpolate tide height at `nowT` along the curve so the "now" dot lands on it.
+  let nowFt = sorted[0].ft
+  if (nowT <= sorted[0].tFrac) {
+    nowFt = sorted[0].ft
+  } else if (nowT >= sorted[sorted.length - 1].tFrac) {
+    nowFt = sorted[sorted.length - 1].ft
+  } else {
+    for (let i = 1; i < sorted.length; i++) {
+      if (sorted[i].tFrac >= nowT) {
+        const p0 = sorted[i - 1]
+        const p1 = sorted[i]
+        const tt = (nowT - p0.tFrac) / (p1.tFrac - p0.tFrac)
+        const e = tt * tt * (3 - 2 * tt)
+        nowFt = p0.ft + (p1.ft - p0.ft) * e
+        break
+      }
     }
   }
 
@@ -51,16 +102,21 @@ function TideChart() {
         <path d={fillPath} fill="url(#tideFill)" />
         <path d={path} fill="none" stroke="url(#tideLine)" strokeWidth="2" strokeLinecap="round" />
         <line x1={x(nowT)} x2={x(nowT)} y1={0} y2={H} stroke="#C45A3E" strokeWidth="1" strokeDasharray="2 3" opacity="0.6" />
-        <circle cx={x(nowT)} cy={y(ny)} r="5" fill="#C45A3E" />
-        <circle cx={x(nowT)} cy={y(ny)} r="9" fill="#C45A3E" opacity="0.18" />
-        <circle cx={x(0.18)} cy={y(1.0) - 2} r="3" fill="#6B9694" />
-        <circle cx={x(0.45)} cy={y(0.05) + 2} r="3" fill="#1B3654" />
-        <circle cx={x(0.71)} cy={y(0.95) - 2} r="3" fill="#6B9694" />
-        <circle cx={x(0.97)} cy={y(0.1) + 2} r="3" fill="#1B3654" />
+        <circle cx={x(nowT)} cy={y(nowFt)} r="5" fill="#C45A3E" />
+        <circle cx={x(nowT)} cy={y(nowFt)} r="9" fill="#C45A3E" opacity="0.18" />
+        {sorted.map((p, i) => (
+          <circle
+            key={i}
+            cx={x(p.tFrac)}
+            cy={y(p.ft) + (p.type === 'High' ? -2 : 2)}
+            r="3"
+            fill={p.type === 'High' ? '#6B9694' : '#1B3654'}
+          />
+        ))}
       </svg>
       <div className="tide-marks">
         <span>12a</span><span>4a</span><span>8a</span>
-        <span style={{ color: '#C45A3E', fontWeight: 700 }}>Now 10:18a</span>
+        <span style={{ color: '#C45A3E', fontWeight: 700 }}>{nowLabel}</span>
         <span>4p</span><span>8p</span><span>12a</span>
       </div>
     </div>
@@ -82,6 +138,23 @@ export default function TodayPage() {
   const { tides: liveTides, loading: tidesLoading } = useTides()
   // Show live NOAA data when available, fall back to mock so the page never blanks
   const tideEvents = liveTides ?? tideKeyTimes
+
+  // Live clock — re-renders every minute so the chart marker tracks real time.
+  const now = useNow()
+  const nowT = dateToFrac(now)
+  const nowLabel = fmtNowLabel(now)
+
+  // Parse the tide event strings into (tFrac, ft) so the chart and "next" logic
+  // both work whether we're on live NOAA data or the mock fallback.
+  const tidePoints: TidePoint[] = tideEvents.map((e) => ({
+    tFrac: timeStrToFrac(e.time),
+    ft: parseFloat(e.ft),
+    type: e.type,
+  }))
+
+  // The "next" tide event = the first one whose time hasn't happened yet today.
+  // -1 means all of today's events are already past (won't highlight any).
+  const nextEventIndex = tideEvents.findIndex((e) => timeStrToFrac(e.time) > nowT)
 
   const forecastData = [
     { dow: 'Today', hi: 81, lo: 65, ico: 'Sun',      score: 88 },
@@ -187,11 +260,11 @@ export default function TodayPage() {
                   : 'Sample data'}
             </span>
           </div>
-          <TideChart />
+          <TideChart nowT={nowT} nowLabel={nowLabel} points={tidePoints} />
           <div className="tide-events">
             {tideEvents.map((t, i) => (
-              <div key={i} className={`tide-event ${i === 1 ? 'now' : ''}`}>
-                <div className="lab">{t.type}{i === 1 ? ' · Now' : ''}</div>
+              <div key={i} className={`tide-event ${i === nextEventIndex ? 'now' : ''}`}>
+                <div className="lab">{t.type}{i === nextEventIndex ? ' · Next' : ''}</div>
                 <div className="time">{t.time}</div>
                 <div className="ft">{t.ft}</div>
               </div>
