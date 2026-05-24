@@ -212,8 +212,28 @@ export default function TodayPage() {
   const nowT = dateToFrac(now)
   const nowLabel = fmtNowLabel(now)
 
-  // Live 5-day forecast from NWS.
-  const { forecast: liveForecast, loading: weatherLoading } = useWeather(LBI_LAT, LBI_LON)
+  // Live 5-day forecast from NWS. liveCurrent is the first NWS period
+  // ("This Afternoon" / "Tonight") and is what powers the hero strip.
+  const { forecast: liveForecast, current: liveCurrent, loading: weatherLoading } =
+    useWeather(LBI_LAT, LBI_LON)
+
+  // Find the next upcoming HIGH tide on the ocean side for the hero sub-line.
+  const oceanEvents = oceanTides ?? tideKeyTimes
+  const nextHigh = oceanEvents.find(
+    (e) => e.type === 'High' && timeStrToFrac(e.time) > nowT,
+  )
+
+  // Live values for hero display, with mock fallbacks so it never blanks.
+  const heroDateStr = now.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  })
+  const heroToday = liveForecast?.[0]
+  const heroHi = heroToday?.hi ?? 81
+  const heroLo = heroToday?.lo ?? 65
+  const heroCondition = liveCurrent?.shortForecast ?? heroToday?.shortForecast ?? 'Sunny'
+  const heroWind = heroToday?.wind ?? 'SSW 12'
 
   const mockForecast = [
     { dow: 'Today', hi: 81, lo: 65, ico: 'Sun',      score: 88 },
@@ -233,24 +253,36 @@ export default function TodayPage() {
         <div className="hero">
           <div className="hero-row">
             <div>
-              <div className="hero-eyebrow">Long Beach Island · Saturday May 9</div>
+              <div className="hero-eyebrow">Long Beach Island · {heroDateStr}</div>
               <h1>Today <em>on</em><br />the island.</h1>
               <div className="hero-sub">
-                Clear skies and a soft southwest breeze. <strong>High tide at 10:45.</strong> The bridge is moving — go now if you're going.
+                {heroToday ? (
+                  <>
+                    {heroToday.shortForecast}, winds {heroWind}.
+                    {nextHigh && (
+                      <> <strong>Next high tide at {nextHigh.time}.</strong></>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    Clear skies and a soft southwest breeze.{' '}
+                    <strong>High tide at 10:45.</strong>
+                  </>
+                )}
               </div>
             </div>
             <div>
               <div className="hero-temps">
-                <span className="big">81</span><span className="deg">°</span>
-                <span className="lo">/ 65°</span>
+                <span className="big">{heroHi}</span><span className="deg">°</span>
+                <span className="lo">/ {heroLo}°</span>
               </div>
-              <div className="hero-condition">Sunny · feels 84°</div>
+              <div className="hero-condition">{heroCondition}</div>
             </div>
           </div>
           <div className="hero-stats">
             {[
               { label: 'Water',    val: '72', suf: '°F',  sub: 'Warming through 3 pm' },
-              { label: 'Wind',     val: 'SSW 12', suf: '', sub: 'Light, steady' },
+              { label: 'Wind',     val: heroWind, suf: '', sub: heroToday ? heroToday.shortForecast : 'Light, steady' },
               { label: 'UV Index', val: '8', suf: '/11', sub: 'High · reapply at 1 pm' },
               { label: 'Bridge',   val: '12', suf: ' min', sub: 'Causeway · light' },
             ].map(s => (
