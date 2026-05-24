@@ -129,6 +129,32 @@ export function computeBeachDayScore(args: {
   return Math.max(0, Math.min(100, Math.round(s)))
 }
 
+/**
+ * Ocean-conditions penalty (0-30). Applied on top of the weather-only score
+ * so that cold water + big waves correctly drag a "perfect weather day" out
+ * of the Peak tier when the water isn't actually usable.
+ *   - Cold water (< 70°F) → 5–15
+ *   - Big waves (≥ 2.5 ft) → 3–15
+ * Either input can be null (buoy offline or sensor down) — null contributes 0.
+ */
+export function computeOceanPenalty(
+  waveHeightFt: number | null,
+  seaTempF: number | null,
+): number {
+  let p = 0
+  if (seaTempF != null) {
+    if (seaTempF < 60) p += 15
+    else if (seaTempF < 65) p += 10
+    else if (seaTempF < 70) p += 5
+  }
+  if (waveHeightFt != null) {
+    if (waveHeightFt >= 6) p += 15
+    else if (waveHeightFt >= 4) p += 8
+    else if (waveHeightFt >= 2.5) p += 3
+  }
+  return p
+}
+
 /** Map beach-day score to a tier label matching the bar's quartiles. */
 export function scoreTier(score: number): 'Stormy' | 'Decent' | 'Great' | 'Peak' {
   if (score >= 85) return 'Peak'
@@ -149,8 +175,11 @@ export function scoreVerdict(score: number): string {
 
 /** Plain-language wind description for hero copy. */
 export function describeWind(speed: number, dir: string): string {
+  // Note: callers stitch this into "{forecast} with {windCopy}." — so the
+  // result needs to read naturally after "with". "calm" becomes "no wind
+  // to speak of" so the sentence isn't "Sunny with calm."
+  if (speed === 0) return 'no wind to speak of'
   const d = dir.toUpperCase()
-  if (speed === 0) return 'calm'
   let strength: string
   if (speed < 5) strength = 'a light'
   else if (speed < 10) strength = 'a gentle'

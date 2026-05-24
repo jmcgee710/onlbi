@@ -13,6 +13,7 @@ import { useBuoy } from '../hooks/useBuoy'
 const BUOY_STATION = '44091' // Barnegat
 import {
   classifyBugLevel,
+  computeOceanPenalty,
   describeBugs,
   describeWind,
   scoreVerdict,
@@ -315,8 +316,22 @@ export default function TodayPage() {
             </div>
             <div>
               <div className="hero-temps">
-                <span className="big">{heroHi}</span><span className="deg">°</span>
-                <span className="lo">/ {heroLo}°</span>
+                {heroToday?.dow === 'Tonight' ? (
+                  // After-sunset edge case: NWS gives us only the night
+                  // period, no day high. Show the low explicitly so we
+                  // don't display "65° / 65°" with the same number twice.
+                  <>
+                    <span className="big">{heroLo}</span>
+                    <span className="deg">°</span>
+                    <span className="lo">tonight</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="big">{heroHi}</span>
+                    <span className="deg">°</span>
+                    <span className="lo">/ {heroLo}°</span>
+                  </>
+                )}
               </div>
               <div className="hero-condition">{heroCondition}</div>
             </div>
@@ -363,9 +378,16 @@ export default function TodayPage() {
           </button>
         )}
 
-        {/* Beach Day Score — derived from today's live forecast + bug score. */}
+        {/* Beach Day Score — derived from live weather, bugs, AND ocean
+            conditions (cold water + big waves can drag a perfect-weather day
+            out of the Peak tier when the water isn't actually usable). */}
         {(() => {
-          const score = heroToday?.score ?? 88
+          const weatherScore = heroToday?.score ?? 88
+          const oceanPenalty = computeOceanPenalty(
+            buoy?.waveHeightFt ?? null,
+            buoy?.waterTempF ?? null,
+          )
+          const score = Math.max(0, weatherScore - oceanPenalty)
           const verdict = scoreVerdict(score)
           return (
             <div className="card score-card">
@@ -390,6 +412,17 @@ export default function TodayPage() {
                     {liveUV != null && (
                       <span className={liveUV >= 6 ? 'warn' : undefined}>
                         UV {Math.round(liveUV)} — {classifyUV(liveUV)}
+                      </span>
+                    )}
+                    {buoy?.waveHeightFt != null && buoy.waveHeightFt >= 2.5 && (
+                      <span className={buoy.waveHeightFt >= 4 ? 'warn' : undefined}>
+                        Surf {buoy.waveHeightFt.toFixed(1)} ft offshore
+                        {buoy.waveHeightFt >= 4 ? ' — rough water' : ''}
+                      </span>
+                    )}
+                    {buoy?.waterTempF != null && buoy.waterTempF < 65 && (
+                      <span className="warn">
+                        Sea temp {Math.round(buoy.waterTempF)}°F — cold for swimming
                       </span>
                     )}
                   </div>
