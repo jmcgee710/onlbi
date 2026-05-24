@@ -7,6 +7,10 @@ import { useNow } from '../hooks/useNow'
 import { useWeather } from '../hooks/useWeather'
 import { useWaterTemp } from '../hooks/useWaterTemp'
 import { useUV, classifyUV } from '../hooks/useUV'
+import { useBuoy } from '../hooks/useBuoy'
+
+// NDBC offshore buoy nearest to LBI for wave/swell/sea-temp data.
+const BUOY_STATION = '44091' // Barnegat
 import {
   classifyBugLevel,
   describeBugs,
@@ -234,6 +238,8 @@ export default function TodayPage() {
   const { temp: liveWaterTemp } = useWaterTemp(WATER_TEMP_STATION)
   // Live UV index from Open-Meteo (NWS doesn't expose UV in standard forecast).
   const { uv: liveUV } = useUV(LBI_LAT, LBI_LON)
+  // Live wave/swell from the Barnegat offshore buoy.
+  const { reading: buoy } = useBuoy(BUOY_STATION)
 
   // Find the next upcoming HIGH tide on the ocean side for the hero sub-line.
   const oceanEvents = oceanTides ?? tideKeyTimes
@@ -409,6 +415,74 @@ export default function TodayPage() {
           nowT={nowT}
           nowLabel={nowLabel}
         />
+
+        {/* Waves — only renders when the buoy actually returned a reading.
+            NDBC buoys go offline for maintenance, so hiding the card on
+            missing data is preferable to showing dashes. */}
+        {buoy && (
+          <div className="card">
+            <div className="card-head">
+              <h2 className="card-title">Waves</h2>
+              <span className="card-sub">🟢 Live · Barnegat Buoy 44091</span>
+            </div>
+            <div className="tide-events">
+              <div className="tide-event">
+                <div className="lab">Height</div>
+                <div className="time">
+                  {buoy.waveHeightFt != null
+                    ? `${buoy.waveHeightFt.toFixed(1)}ft`
+                    : '—'}
+                </div>
+                <div className="ft">significant</div>
+              </div>
+              <div className="tide-event">
+                <div className="lab">Period</div>
+                <div className="time">
+                  {buoy.wavePeriodSec != null
+                    ? `${buoy.wavePeriodSec.toFixed(0)}s`
+                    : '—'}
+                </div>
+                <div className="ft">dominant</div>
+              </div>
+              <div className="tide-event">
+                <div className="lab">Direction</div>
+                <div className="time">{buoy.waveDir ?? '—'}</div>
+                <div className="ft">
+                  {buoy.waveDirDeg != null ? `${Math.round(buoy.waveDirDeg)}°` : ''}
+                </div>
+              </div>
+              <div className="tide-event">
+                <div className="lab">Sea temp</div>
+                <div className="time">
+                  {buoy.waterTempF != null
+                    ? `${Math.round(buoy.waterTempF)}°F`
+                    : '—'}
+                </div>
+                <div className="ft">offshore</div>
+              </div>
+            </div>
+            <div
+              style={{
+                fontSize: 11,
+                opacity: 0.6,
+                marginTop: 8,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+              }}
+            >
+              {(() => {
+                const mins = Math.max(
+                  0,
+                  Math.round((now.getTime() - buoy.observedAt.getTime()) / 60000),
+                )
+                if (mins < 60) return `Observed ${mins} min ago`
+                const h = Math.floor(mins / 60)
+                const m = mins % 60
+                return `Observed ${h}h${m > 0 ? ` ${m}m` : ''} ago`
+              })()}
+            </div>
+          </div>
+        )}
 
         {/* Forecast */}
         <div className="card">
