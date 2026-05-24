@@ -1,6 +1,6 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { tideKeyTimes, forecast } from '../data/conditions'
-import { beaches } from '../data/beaches'
 import { todayEvents, happyHoursActive } from '../data/events'
 import { useTides, type TideEvent } from '../hooks/useTides'
 import { useNow } from '../hooks/useNow'
@@ -345,27 +345,58 @@ export default function TodayPage() {
                 val: liveWaterTemp != null ? String(Math.round(liveWaterTemp)) : '72',
                 suf: '°F',
                 sub: liveWaterTemp != null ? 'Atlantic City buoy · live' : 'Warming through 3 pm',
+                href: null as string | null,
               },
               {
                 label: 'Wind',
                 val: heroWind,
                 suf: '',
                 sub: heroToday ? heroToday.shortForecast : 'Light, steady',
+                href: null,
               },
               {
                 label: 'UV Index',
                 val: liveUV != null ? String(Math.round(liveUV)) : '8',
                 suf: '/11',
                 sub: liveUV != null ? `${classifyUV(liveUV)} · live` : 'High · reapply at 1 pm',
+                href: null,
               },
-              { label: 'Bridge', val: '—', suf: '', sub: 'Live data coming soon' },
-            ].map((s) => (
-              <div className="hero-stat" key={s.label}>
-                <div className="label">{s.label}</div>
-                <div className="val">{s.val}<small>{s.suf}</small></div>
-                <div className="sub">{s.sub}</div>
-              </div>
-            ))}
+              {
+                label: 'Traffic',
+                val: '→',
+                suf: '',
+                sub: 'NJ511 + beach cams',
+                href: '/getting-around',
+              },
+            ].map((s) => {
+              const inner = (
+                <>
+                  <div className="label">{s.label}</div>
+                  <div className="val">
+                    {s.val}
+                    <small>{s.suf}</small>
+                  </div>
+                  <div className="sub">{s.sub}</div>
+                </>
+              )
+              if (s.href) {
+                return (
+                  <Link
+                    to={s.href}
+                    key={s.label}
+                    className="hero-stat"
+                    style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+                  >
+                    {inner}
+                  </Link>
+                )
+              }
+              return (
+                <div className="hero-stat" key={s.label}>
+                  {inner}
+                </div>
+              )
+            })}
           </div>
         </div>
 
@@ -632,57 +663,65 @@ export default function TodayPage() {
       {/* RIGHT COLUMN */}
       <div className="col">
 
-        {/* Metrics */}
+        {/* Metrics — live water + UV, plus a link to the traffic/cams page.
+            "Beaches open" tile was removed: aggregate-only data is misleading
+            without per-beach status, which we don't have a real feed for. */}
         <div className="metrics">
           {[
-            { ico: '🌉', val: '—', suf: '', lab: 'Bridge wait · soon' },
             {
               ico: '🌊',
               val: liveWaterTemp != null ? String(Math.round(liveWaterTemp)) : '72',
               suf: '°',
               lab: 'Water temp',
+              href: null as string | null,
             },
             {
               ico: '☀️',
               val: liveUV != null ? String(Math.round(liveUV)) : '8',
               suf: '',
               lab: liveUV != null ? `UV · ${classifyUV(liveUV)}` : 'UV index · high',
+              href: null,
             },
-            { ico: '🏖️', val: '6/6', suf: '', lab: 'Beaches open' },
-          ].map((m, i) => (
-            <div className="metric" key={i}>
-              <div className="metric-ico"><span style={{ fontSize: 18 }}>{m.ico}</span></div>
-              <div>
-                <div className="metric-val">{m.val}<small>{m.suf && ' ' + m.suf}</small></div>
-                <div className="metric-lab">{m.lab}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Beach status */}
-        <div className="card">
-          <div className="card-head">
-            <h2 className="card-title">Beach status</h2>
-            <button className="section-link">All beaches →</button>
-          </div>
-          <div className="beaches">
-            {beaches.map((b, i) => (
-              <div className="beach" key={i}>
-                <span className={`beach-status ${b.status === 'amber' ? 'warn' : ''}`} />
-                <div className="beach-name">
-                  {b.name}
-                  {b.badge && (
-                    <span className={`beach-tag ${b.badge.includes('Best') ? 'best' : b.badge.includes('Rip') ? 'rip' : b.badge.includes('Choppy') ? 'choppy' : 'wild'}`}>
-                      {b.badge.replace(/[^\w\s]/g, '').trim()}
-                    </span>
-                  )}
+            {
+              ico: '🚦',
+              val: '→',
+              suf: '',
+              lab: 'Traffic & cams',
+              href: '/getting-around',
+            },
+          ].map((m) => {
+            const inner = (
+              <>
+                <div className="metric-ico">
+                  <span style={{ fontSize: 18 }}>{m.ico}</span>
                 </div>
-                <div className="beach-temp">{b.temp ? `${b.temp.replace('°F', '')}°` : '—'}</div>
-                <div className="beach-go">→</div>
+                <div>
+                  <div className="metric-val">
+                    {m.val}
+                    <small>{m.suf && ' ' + m.suf}</small>
+                  </div>
+                  <div className="metric-lab">{m.lab}</div>
+                </div>
+              </>
+            )
+            if (m.href) {
+              return (
+                <Link
+                  to={m.href}
+                  key={m.lab}
+                  className="metric"
+                  style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+                >
+                  {inner}
+                </Link>
+              )
+            }
+            return (
+              <div className="metric" key={m.lab}>
+                {inner}
               </div>
-            ))}
-          </div>
+            )
+          })}
         </div>
 
         {/* Events */}
