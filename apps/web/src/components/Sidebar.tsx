@@ -1,13 +1,14 @@
 import { useNavigate, useLocation } from 'react-router-dom'
+import { Sun, Umbrella, UtensilsCrossed, Anchor, Compass, Accessibility, Bell } from 'lucide-react'
 
 const nav = [
-  { id: '/', label: 'Today', icon: '☀', meta: undefined, dot: false, section: 'island' },
-  { id: '/beaches', label: 'Beaches', icon: '⛱', meta: '6 open', dot: false, section: 'island' },
-  { id: '/eat', label: 'Eat & Drink', icon: '⚡', meta: 'Happy hr', dot: false, section: 'island' },
-  { id: '/do', label: 'Things To Do', icon: '⚓', meta: undefined, dot: false, section: 'island' },
-  { id: '/getting-around', label: 'Getting Around', icon: '🚌', meta: undefined, dot: false, section: 'practical' },
-  { id: '/accessibility', label: 'Accessibility', icon: '♿', meta: undefined, dot: false, section: 'practical' },
-  { id: '/alerts', label: 'Alerts', icon: '🔔', meta: undefined, dot: true, section: 'practical' },
+  { id: '/',               label: 'Today',          Icon: Sun,             meta: undefined,   dot: false, section: 'island' },
+  { id: '/beaches',        label: 'Beaches',         Icon: Umbrella,        meta: '6 open',    dot: false, section: 'island' },
+  { id: '/eat',            label: 'Eat & Drink',     Icon: UtensilsCrossed, meta: 'Happy hr',  dot: false, section: 'island' },
+  { id: '/do',             label: 'Things To Do',    Icon: Anchor,          meta: undefined,   dot: false, section: 'island' },
+  { id: '/getting-around', label: 'Getting Around',  Icon: Compass,         meta: undefined,   dot: false, section: 'practical' },
+  { id: '/accessibility',  label: 'Accessibility',   Icon: Accessibility,   meta: undefined,   dot: false, section: 'practical' },
+  { id: '/alerts',         label: 'Alerts',          Icon: Bell,            meta: undefined,   dot: true,  section: 'practical' },
 ]
 
 export default function Sidebar() {
@@ -16,7 +17,7 @@ export default function Sidebar() {
 
   const isActive = (id: string) => id === '/' ? pathname === '/' : pathname.startsWith(id)
 
-  const island = nav.filter(n => n.section === 'island')
+  const island    = nav.filter(n => n.section === 'island')
   const practical = nav.filter(n => n.section === 'practical')
 
   return (
@@ -34,12 +35,12 @@ export default function Sidebar() {
       <div>
         <div className="nav-section-label">The Island</div>
         <nav className="nav">
-          {island.map(n => (
-            <button key={n.id} className="nav-item" aria-current={isActive(n.id) ? 'true' : undefined}
-              onClick={() => navigate(n.id)}>
-              <span style={{ fontSize: 16 }}>{n.icon}</span>
-              <span>{n.label}</span>
-              {n.meta && <span className="nav-meta">{n.meta}</span>}
+          {island.map(({ id, label, Icon, meta }) => (
+            <button key={id} className="nav-item" aria-current={isActive(id) ? 'true' : undefined}
+              onClick={() => navigate(id)}>
+              <Icon size={18} strokeWidth={1.5} />
+              <span>{label}</span>
+              {meta && <span className="nav-meta">{meta}</span>}
             </button>
           ))}
         </nav>
@@ -48,12 +49,12 @@ export default function Sidebar() {
       <div>
         <div className="nav-section-label">Practical</div>
         <nav className="nav">
-          {practical.map(n => (
-            <button key={n.id} className="nav-item" aria-current={isActive(n.id) ? 'true' : undefined}
-              onClick={() => navigate(n.id)}>
-              <span style={{ fontSize: 16 }}>{n.icon}</span>
-              <span>{n.label}</span>
-              {n.dot && <span className="nav-dot" />}
+          {practical.map(({ id, label, Icon, dot }) => (
+            <button key={id} className="nav-item" aria-current={isActive(id) ? 'true' : undefined}
+              onClick={() => navigate(id)}>
+              <Icon size={18} strokeWidth={1.5} />
+              <span>{label}</span>
+              {dot && <span className="nav-dot" />}
             </button>
           ))}
         </nav>
