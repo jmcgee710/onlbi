@@ -3,207 +3,334 @@ import { shuttleRoutes, cameras, parkingLots, trafficStatus } from '../data/gett
 
 type Tab = 'transit' | 'traffic' | 'parking' | 'cams'
 
-function parkingColor(avail: number, cap: number) {
+function parkingColor(avail: number, cap: number): { bar: string; text: string; label: string } {
   const pct = avail / cap
-  if (avail === 0) return { bar: 'bg-red-500', text: 'text-red-600', label: 'FULL' }
-  if (pct < 0.2)  return { bar: 'bg-amber-400', text: 'text-amber-600', label: `${avail} left` }
-  return              { bar: 'bg-green-500', text: 'text-green-600', label: `${avail} open` }
+  if (avail === 0) return { bar: 'var(--coral)',      text: 'var(--coral)',      label: 'FULL' }
+  if (pct < 0.2)  return { bar: 'var(--sun)',         text: 'var(--sun)',         label: `${avail} left` }
+  return              { bar: 'var(--moss)',        text: 'var(--moss)',        label: `${avail} open` }
 }
+
+const liveCams = cameras.filter(c => c.status === 'live').length
 
 export default function GettingAroundPage() {
   const [tab, setTab] = useState<Tab>('transit')
 
   return (
-    <div>
-      {/* Header */}
-      <div className="bg-[#0d1b2a] px-5 py-5 md:px-8">
-        <h1 className="text-2xl font-black text-white mb-1">🚌 Getting Around</h1>
-        <p className="text-sm text-white/60">Transit, traffic, parking & live cams</p>
-      </div>
+    <div className="pg-wrap">
 
-      {/* Tab switcher */}
-      <div className="bg-white border-b border-gray-200 px-5 md:px-8">
-        <div className="flex gap-1 overflow-x-auto">
-          {([['transit', '🚌 Transit'], ['traffic', '🚗 Traffic'], ['parking', '🅿️ Parking'], ['cams', '📷 Cams']] as [Tab, string][]).map(([k, l]) => (
-            <button key={k} onClick={() => setTab(k)}
-              className={`py-3 px-3 text-sm font-bold border-b-2 whitespace-nowrap transition-colors ${tab === k ? 'border-[#0077b6] text-[#0077b6]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}>
-              {l}
+      {/* ── Hero ─────────────────────────────────────────────────────────────── */}
+      <div className="pg-hero">
+        <div className="pg-eyebrow">
+          <span>Getting Around</span>
+          <span className="rule" />
+          <span>LBI · Transit · Traffic · Parking</span>
+        </div>
+        <h1>Getting <em>Around</em></h1>
+        <p className="pg-lede">
+          LBI Beach Shuttle routes, causeway traffic tips, parking availability
+          &amp; live beach cameras — everything to move around the island.
+        </p>
+        <div className="pg-tabs">
+          {([
+            ['transit', 'Transit',  shuttleRoutes.length, 'routes'],
+            ['traffic', 'Traffic',  'Rt', '72'],
+            ['parking', 'Parking',  parkingLots.length, 'lots'],
+            ['cams',    'Cameras',  liveCams, 'live'],
+          ] as [Tab, string, string | number, string][]).map(([t, lbl, val, em]) => (
+            <button
+              key={t}
+              className={`pg-tab${tab === t ? ' active' : ''}`}
+              onClick={() => setTab(t)}
+            >
+              <span className="tab-lbl">{lbl}</span>
+              <span className="tab-val">{val}<em> {em}</em></span>
             </button>
           ))}
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 md:px-8 py-5">
+      <div className="pg-grid">
 
-        {/* TRANSIT */}
-        {tab === 'transit' && (
-          <div className="md:grid md:grid-cols-3 md:gap-6">
-            <div className="md:col-span-2 space-y-4">
-              <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
-                <p className="text-sm font-bold text-[#0077b6]">🎟️ LBI Beach Shuttle</p>
-                <p className="text-xs text-blue-700 mt-1">Memorial Day – Labor Day · Day passes available at kiosks · $2/ride or $8 day pass</p>
+        {/* ── Main column ────────────────────────────────────────────────────── */}
+        <div>
+
+          {/* TRANSIT */}
+          {tab === 'transit' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div className="aside-card advisory">
+                <p className="aside-title" style={{ fontSize: 17, marginBottom: 6 }}>LBI Beach Shuttle</p>
+                <p className="aside-body">
+                  Memorial Day – Labor Day · Day passes available at kiosks.{' '}
+                  <strong>$2/ride · $8 day pass</strong>
+                </p>
               </div>
+
               {shuttleRoutes.map((r, i) => (
-                <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                  <p className="font-black text-gray-900 mb-1">{r.route}</p>
-                  <p className="text-xs text-gray-400 mb-3">🔄 {r.freq} · First: {r.firstRun} · Last: {r.lastRun} · {r.fare}</p>
-                  <div className="flex items-center gap-1 flex-wrap">
+                <div key={i} className="lc">
+                  <div className="lc-head" style={{ marginBottom: 0 }}>
+                    <div>
+                      <h3 className="lc-name" style={{ fontSize: 22 }}>{r.route}</h3>
+                    </div>
+                    <span className="lc-cta">{r.fare}</span>
+                  </div>
+                  <div className="st-row c3" style={{ marginTop: 16 }}>
+                    <div className="st">
+                      <div className="st-lbl">Frequency</div>
+                      <div className="st-val" style={{ fontSize: 17 }}>{r.freq}</div>
+                    </div>
+                    <div className="st">
+                      <div className="st-lbl">First Run</div>
+                      <div className="st-val" style={{ fontSize: 17 }}>{r.firstRun}</div>
+                    </div>
+                    <div className="st">
+                      <div className="st-lbl">Last Run</div>
+                      <div className="st-val" style={{ fontSize: 17 }}>{r.lastRun}</div>
+                    </div>
+                  </div>
+                  <div className="lc-feats" style={{ flexWrap: 'nowrap', overflowX: 'auto', gap: 8 }}>
                     {r.stops.map((s, j) => (
-                      <div key={j} className="flex items-center gap-1">
-                        <span className="bg-blue-50 text-[#0077b6] text-[10px] font-bold rounded-lg px-2 py-1">{s}</span>
-                        {j < r.stops.length - 1 && <span className="text-gray-300 text-xs">→</span>}
-                      </div>
+                      <span key={j} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                        <span style={{
+                          background: 'rgba(72,108,107,0.1)', color: 'var(--teal-deep)',
+                          fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 4,
+                        }}>{s}</span>
+                        {j < r.stops.length - 1 && <span style={{ color: 'var(--slate-soft)', fontSize: 11 }}>→</span>}
+                      </span>
                     ))}
                   </div>
                 </div>
               ))}
-              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4">
-                <p className="text-sm font-bold text-gray-700 mb-1">🚲 Bike Path</p>
-                <p className="text-xs text-gray-500 leading-relaxed">The LBI bike path runs 18 miles from Barnegat Light to Holgate along the bay side. Open year-round. Rentals available at multiple locations.</p>
-              </div>
-            </div>
-            <div className="hidden md:block space-y-4">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                <p className="text-sm font-bold text-gray-800 mb-3">📋 Quick Reference</p>
-                <div className="space-y-2 text-xs text-gray-600">
-                  <div className="flex justify-between"><span>Day pass</span><span className="font-bold">$8</span></div>
-                  <div className="flex justify-between"><span>Single ride</span><span className="font-bold">$2</span></div>
-                  <div className="flex justify-between"><span>Season</span><span className="font-bold">Memorial – Labor Day</span></div>
-                  <div className="flex justify-between"><span>Routes</span><span className="font-bold">{shuttleRoutes.length} active</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
-        {/* TRAFFIC */}
-        {tab === 'traffic' && (
-          <div className="md:grid md:grid-cols-2 md:gap-6 space-y-4 md:space-y-0">
-            <div className="space-y-4">
-              {/* Causeway status */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                <div className="flex justify-between items-start mb-3">
+              <div className="lc">
+                <div className="lc-head" style={{ marginBottom: 0 }}>
                   <div>
-                    <p className="font-black text-gray-900">Route 72 Causeway</p>
-                    <p className="text-xs text-gray-400">Manahawkin Bay Bridge</p>
+                    <h3 className="lc-name" style={{ fontSize: 22 }}>🚲 18-Mile Bike Path</h3>
+                    <p className="lc-sub">Barnegat Light → Holgate · Bay side</p>
                   </div>
-                  <span className="text-xs bg-amber-50 text-amber-700 font-bold rounded-full px-3 py-1">Moderate</span>
                 </div>
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-3">
-                  <p className="text-xs font-semibold text-amber-800">⏱ Estimated Wait: {trafficStatus.causeway.wait}</p>
-                  <p className="text-xs text-amber-700 mt-1">{trafficStatus.rt72}</p>
-                </div>
-                <p className="text-[10px] text-gray-400">Updated {trafficStatus.causeway.updated} · Powered by NJ511</p>
-              </div>
-
-              {/* Peak times */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                <p className="text-sm font-bold text-gray-800 mb-3">📅 Expected Peak Times</p>
-                <div className="space-y-2">
-                  {[
-                    { day: 'Friday',   dir: 'Eastbound (to LBI)', time: '2 PM – 8 PM',  level: 'Heavy' },
-                    { day: 'Saturday', dir: 'Both directions',     time: '10 AM – 2 PM', level: 'Moderate' },
-                    { day: 'Sunday',   dir: 'Westbound (from LBI)',time: '2 PM – 7 PM',  level: 'Heavy' },
-                    { day: 'Monday',   dir: 'Westbound (from LBI)',time: '12 PM – 5 PM', level: 'Moderate' },
-                  ].map((t, i) => (
-                    <div key={i} className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0">
-                      <div>
-                        <p className="text-xs font-bold text-gray-800">{t.day}</p>
-                        <p className="text-[10px] text-gray-400">{t.dir} · {t.time}</p>
-                      </div>
-                      <span className={`text-[10px] font-bold rounded-full px-2 py-0.5 ${t.level === 'Heavy' ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-600'}`}>{t.level}</span>
-                    </div>
-                  ))}
-                </div>
+                <p style={{ fontSize: 13, color: 'var(--ink-soft)', lineHeight: 1.5, marginTop: 14 }}>
+                  Runs the full length of LBI along the bay side. Open year-round.
+                  Bike rentals available at multiple shops across the island.
+                </p>
               </div>
             </div>
-            <div className="space-y-4">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                <p className="text-sm font-bold text-gray-800 mb-3">🛣️ Alternate Routes</p>
-                <div className="space-y-3">
-                  {[
-                    { name: 'Route 539 North', desc: 'Via Tuckerton — adds ~15 min but avoids bridge backup', tag: 'Best alternate' },
-                    { name: 'Early Morning',   desc: 'Before 9 AM on summer weekends — typically under 5 min wait', tag: 'Recommended' },
-                    { name: 'Route 9 South',   desc: 'Via Little Egg Harbor — longer but sometimes faster on peak Saturdays', tag: 'Option' },
-                  ].map((r, i) => (
-                    <div key={i} className="pb-3 border-b border-gray-100 last:border-0 last:pb-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <p className="text-sm font-bold text-gray-800">{r.name}</p>
-                        <span className="text-[9px] bg-blue-50 text-[#0077b6] font-bold rounded px-1.5 py-0.5">{r.tag}</span>
-                      </div>
-                      <p className="text-xs text-gray-500">{r.desc}</p>
-                    </div>
-                  ))}
+          )}
+
+          {/* TRAFFIC */}
+          {tab === 'traffic' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div className="lc">
+                <div className="lc-head" style={{ marginBottom: 0 }}>
+                  <div>
+                    <h3 className="lc-name">Route 72 Causeway</h3>
+                    <p className="lc-sub">Manahawkin Bay Bridge</p>
+                  </div>
+                  <span style={{
+                    fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700,
+                    color: 'var(--sun)', background: 'rgba(212,162,78,0.1)', padding: '5px 12px', borderRadius: 4,
+                  }}>
+                    Moderate
+                  </span>
+                </div>
+                <div className="st-row c2" style={{ marginTop: 18 }}>
+                  <div className="st">
+                    <div className="st-lbl">Est. Wait</div>
+                    <div className="st-val warn">{trafficStatus.causeway.wait}</div>
+                    <div className="st-note">Updated {trafficStatus.causeway.updated}</div>
+                  </div>
+                  <div className="st">
+                    <div className="st-lbl">Conditions</div>
+                    <div className="st-val" style={{ fontSize: 16 }}>{trafficStatus.rt72}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        )}
 
-        {/* PARKING */}
-        {tab === 'parking' && (
-          <div className="md:grid md:grid-cols-3 md:gap-6">
-            <div className="md:col-span-2 space-y-3">
-              <p className="text-xs text-gray-400 mb-2">Estimates updated every 30 min · No live sensors — based on historical patterns</p>
+              <div className="lc">
+                <h3 className="lc-name" style={{ fontSize: 20, marginBottom: 18 }}>Peak Times</h3>
+                {[
+                  { day: 'Friday',   dir: 'Eastbound (to LBI)',  time: '2 PM – 8 PM',  level: 'Heavy' },
+                  { day: 'Saturday', dir: 'Both directions',      time: '10 AM – 2 PM', level: 'Moderate' },
+                  { day: 'Sunday',   dir: 'Westbound (from LBI)', time: '2 PM – 7 PM',  level: 'Heavy' },
+                  { day: 'Monday',   dir: 'Westbound (from LBI)', time: '12 PM – 5 PM', level: 'Moderate' },
+                ].map((t, i) => (
+                  <div key={i} style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '12px 0', borderBottom: i < 3 ? '1px solid var(--line-soft)' : 'none',
+                  }}>
+                    <div>
+                      <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>{t.day}</p>
+                      <p style={{ fontSize: 12, color: 'var(--slate)', marginTop: 2 }}>{t.dir} · {t.time}</p>
+                    </div>
+                    <span style={{
+                      fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700,
+                      padding: '4px 10px', borderRadius: 4,
+                      color: t.level === 'Heavy' ? 'var(--coral)' : 'var(--sun)',
+                      background: t.level === 'Heavy' ? 'rgba(196,90,62,0.08)' : 'rgba(212,162,78,0.1)',
+                    }}>{t.level}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="lc">
+                <h3 className="lc-name" style={{ fontSize: 20, marginBottom: 16 }}>Alternate Routes</h3>
+                {[
+                  { name: 'Route 539 North', desc: 'Via Tuckerton — adds ~15 min but avoids bridge backup', tag: 'Best alternate' },
+                  { name: 'Early Morning',   desc: 'Before 9 AM on summer weekends — typically under 5 min wait', tag: 'Recommended' },
+                  { name: 'Route 9 South',   desc: 'Via Little Egg Harbor — longer but sometimes faster peak Saturdays', tag: 'Option' },
+                ].map((r, i) => (
+                  <div key={i} style={{ paddingBottom: 16, marginBottom: 16, borderBottom: i < 2 ? '1px solid var(--line-soft)' : 'none' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+                      <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>{r.name}</p>
+                      <span style={{ fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: 'var(--teal-deep)', background: 'rgba(72,108,107,0.08)', padding: '3px 8px', borderRadius: 3 }}>
+                        {r.tag}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: 12.5, color: 'var(--slate)' }}>{r.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* PARKING */}
+          {tab === 'parking' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginBottom: 4 }}>
+                Estimates updated every 30 min · No live sensors — based on historical patterns
+              </p>
               {parkingLots.map((p, i) => {
                 const { bar, text, label } = parkingColor(p.avail, p.cap)
                 const pct = Math.round((1 - p.avail / p.cap) * 100)
                 return (
-                  <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <p className="text-sm font-bold text-gray-800">{p.loc}</p>
-                      <span className={`text-xs font-black ${text}`}>{label}</span>
+                  <div key={i} className="lc">
+                    <div className="lc-head" style={{ marginBottom: 0 }}>
+                      <h3 className="lc-name" style={{ fontSize: 20 }}>{p.loc}</h3>
+                      <span style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 500, color: text }}>
+                        {label}
+                      </span>
                     </div>
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-1">
-                      <div className={`h-full rounded-full transition-all ${bar}`} style={{ width: `${pct}%` }} />
+                    <div style={{ marginTop: 16 }}>
+                      <div style={{ height: 6, background: 'var(--line-soft)', borderRadius: 99, overflow: 'hidden', marginBottom: 6 }}>
+                        <div style={{ height: '100%', width: `${pct}%`, background: bar, borderRadius: 99, transition: 'width 0.3s' }} />
+                      </div>
+                      <p style={{ fontSize: 11.5, color: 'var(--slate)' }}>{p.avail}/{p.cap} spots available</p>
                     </div>
-                    <p className="text-[10px] text-gray-400">{p.avail}/{p.cap} spots available</p>
                   </div>
                 )
               })}
             </div>
-            <div className="hidden md:block space-y-4">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                <p className="text-sm font-bold text-gray-800 mb-3">🅿️ Parking Tips</p>
-                <ul className="space-y-2 text-xs text-gray-600 leading-relaxed">
-                  <li>• Arrive before 9 AM on weekends for best availability</li>
-                  <li>• Bay side streets often have spots when beach lots fill</li>
-                  <li>• Beach Haven has the most lots — also the most competition</li>
-                  <li>• Barnegat Light State Park rarely fills on weekdays</li>
-                </ul>
-              </div>
-              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
-                <p className="text-sm font-bold text-amber-800 mb-1">💡 Badge Parking</p>
-                <p className="text-xs text-amber-700 leading-relaxed">Many beach lots require a beach badge to park. Check signage. Some HC spots are unrestricted.</p>
-              </div>
-            </div>
-          </div>
-        )}
+          )}
 
-        {/* CAMS */}
-        {tab === 'cams' && (
-          <div>
-            <p className="text-xs text-gray-400 mb-4">{cameras.filter(c => c.status === 'live').length} of {cameras.length} cameras online</p>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {cameras.map((cam, i) => (
-                <div key={i} className={`rounded-2xl overflow-hidden shadow-sm ${cam.status === 'live' ? 'bg-[#0d1b2a]' : 'bg-gray-100'}`}>
-                  <div className="h-24 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="text-3xl">{cam.status === 'live' ? '🔴' : '⚫'}</div>
-                      <p className={`text-[9px] font-black mt-1 tracking-widest ${cam.status === 'live' ? 'text-white' : 'text-gray-400'}`}>
-                        {cam.status === 'live' ? 'LIVE' : 'OFFLINE'}
+          {/* CAMERAS */}
+          {tab === 'cams' && (
+            <div>
+              <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginBottom: 18 }}>
+                {liveCams} of {cameras.length} cameras online
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
+                {cameras.map((cam, i) => (
+                  <div key={i} style={{
+                    borderRadius: 8, overflow: 'hidden', border: '1px solid var(--line)',
+                    background: cam.status === 'live' ? 'var(--ink)' : 'var(--sand)',
+                  }}>
+                    <div style={{ height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 6 }}>
+                      <div style={{ width: 10, height: 10, borderRadius: '50%', background: cam.status === 'live' ? '#4ade80' : 'var(--slate-soft)' }} />
+                      <p style={{
+                        fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 700,
+                        color: cam.status === 'live' ? 'rgba(251,247,239,0.7)' : 'var(--slate-soft)',
+                      }}>
+                        {cam.status === 'live' ? 'Live' : 'Offline'}
+                      </p>
+                    </div>
+                    <div style={{ padding: '10px 14px 14px', background: cam.status === 'live' ? 'rgba(255,255,255,0.05)' : 'var(--shell)' }}>
+                      <p style={{ fontSize: 13, fontWeight: 600, color: cam.status === 'live' ? 'var(--shell)' : 'var(--ink)', lineHeight: 1.2 }}>
+                        {cam.name}
+                      </p>
+                      <p style={{ fontSize: 11, color: cam.status === 'live' ? 'rgba(251,247,239,0.5)' : 'var(--slate)', marginTop: 3 }}>
+                        {cam.location}
                       </p>
                     </div>
                   </div>
-                  <div className={`px-3 py-2 ${cam.status === 'live' ? 'bg-white/5' : 'bg-gray-50'}`}>
-                    <p className={`text-xs font-bold leading-tight ${cam.status === 'live' ? 'text-white' : 'text-gray-700'}`}>{cam.name}</p>
-                    <p className={`text-[10px] mt-0.5 ${cam.status === 'live' ? 'text-white/50' : 'text-gray-400'}`}>{cam.location}</p>
+                ))}
+              </div>
+            </div>
+          )}
+
+        </div>
+
+        {/* ── Sidebar ───────────────────────────────────────────────────────── */}
+        <aside className="pg-aside">
+          {tab === 'transit' && (
+            <>
+              <div className="aside-card">
+                <p className="aside-title">Quick Reference</p>
+                <div className="aside-mini">
+                  <div>
+                    <div className="st-lbl">Day Pass</div>
+                    <div className="st-val" style={{ fontSize: 24, marginTop: 4 }}>$8</div>
+                  </div>
+                  <div>
+                    <div className="st-lbl">Single Ride</div>
+                    <div className="st-val" style={{ fontSize: 24, marginTop: 4 }}>$2</div>
+                  </div>
+                  <div>
+                    <div className="st-lbl">Season</div>
+                    <div className="st-val" style={{ fontSize: 14, marginTop: 4 }}>Memorial–Labor Day</div>
+                  </div>
+                  <div>
+                    <div className="st-lbl">Routes</div>
+                    <div className="st-val" style={{ fontSize: 24, marginTop: 4 }}>{shuttleRoutes.length}</div>
                   </div>
                 </div>
-              ))}
+              </div>
+            </>
+          )}
+          {tab === 'traffic' && (
+            <div className="aside-card advisory">
+              <p className="aside-title">Best Strategy</p>
+              <ul className="aside-list">
+                <li>Cross before 9 AM on summer weekends</li>
+                <li>Route 539 via Tuckerton is the best alternate</li>
+                <li>Sunday 2–7 PM is the worst westbound window</li>
+                <li>NJ511 app has real-time Rt 72 alerts</li>
+              </ul>
             </div>
-          </div>
-        )}
+          )}
+          {tab === 'parking' && (
+            <>
+              <div className="aside-card">
+                <p className="aside-title">Parking Tips</p>
+                <ul className="aside-list">
+                  <li>Arrive before 9 AM on weekends for best availability</li>
+                  <li>Bay-side streets often have spots when beach lots fill</li>
+                  <li>Beach Haven has the most lots — also the most competition</li>
+                  <li>Barnegat Light State Park rarely fills on weekdays</li>
+                </ul>
+              </div>
+              <div className="aside-card advisory">
+                <p className="aside-title">Badge Parking Note</p>
+                <p className="aside-body">
+                  Many beach lots require a beach badge to park. Check signage. HC spots are typically unrestricted near access points.
+                </p>
+              </div>
+            </>
+          )}
+          {tab === 'cams' && (
+            <div className="aside-card">
+              <p className="aside-title">Camera Coverage</p>
+              <div className="aside-mini">
+                <div>
+                  <div className="st-lbl">Live</div>
+                  <div className="st-val ok" style={{ fontSize: 28, marginTop: 4 }}>{liveCams}</div>
+                </div>
+                <div>
+                  <div className="st-lbl">Total</div>
+                  <div className="st-val" style={{ fontSize: 28, marginTop: 4 }}>{cameras.length}</div>
+                </div>
+              </div>
+            </div>
+          )}
+        </aside>
 
       </div>
     </div>
