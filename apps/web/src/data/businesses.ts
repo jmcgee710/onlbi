@@ -436,6 +436,133 @@ export const dining: Business[] = [
     web: 'https://panzones.com', icon: '🍕',
     note: 'South-end location of the LBI pizza institution. Classic Jersey Shore slices.',
   },
+  // Round 5 — May 2026 sweep
+  {
+    id: 176, name: "Mustache Bill's Diner", cat: 'Dining', subcat: 'Diner / Breakfast',
+    town: 'Barnegat Light', address: '704 Broadway, Barnegat Light, NJ 08006',
+    phone: '(609) 494-0155', web: 'https://mustachebills.com', icon: '🥞',
+    note: 'LBI legend since the 1950s — featured on Diners, Drive-Ins & Dives. Fri–Sun seasonal. Lines form early.',
+  },
+  {
+    id: 177, name: 'Blue Water Cafe', cat: 'Dining', subcat: 'Seafood / BYOB',
+    town: 'Long Beach Township', address: '11205 Long Beach Blvd, Long Beach Township, NJ 08008',
+    phone: '(609) 207-1300', web: 'https://bluewatercafelbi.com', icon: '🐠',
+    note: 'BYOB seafood and American cuisine from the owners of Stefano\'s. Generous portions, loyal following.',
+  },
+  {
+    id: 178, name: "Joey's Pizza & Pasta", cat: 'Dining', subcat: 'Pizza / Italian',
+    town: 'Ship Bottom', address: '2201 Long Beach Blvd, Ship Bottom, NJ 08008',
+    phone: '(609) 361-5000', web: 'https://joeyspizzapasta.com', icon: '🍕',
+    note: 'Popular Ship Bottom pizza and pasta. Dine-in and takeout.',
+  },
+  {
+    id: 179, name: 'Surf City Pizza', cat: 'Dining', subcat: 'Pizza / Italian',
+    town: 'Surf City', address: '1017 Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 361-7500', web: 'https://surfcitypizza.com', icon: '🍕',
+    note: 'Open year-round. Well-reviewed pizzeria and casual Italian in mid-island Surf City.',
+  },
+  {
+    id: 180, name: 'La Bamba Mexican Kitchen', cat: 'Dining', subcat: 'Mexican',
+    town: 'Brant Beach', address: '3200 Long Beach Blvd, Brant Beach, NJ 08008',
+    phone: '(609) 342-1775', web: 'https://labambalbi.com', icon: '🌮',
+    note: "LBI's go-to Mexican restaurant. Two island locations — loyal local following.",
+  },
+  {
+    id: 181, name: 'La Bamba Mexican Kitchen', cat: 'Dining', subcat: 'Mexican',
+    town: 'Beach Haven', address: '122 N Bay Ave, Beach Haven, NJ 08008',
+    phone: '(609) 342-0815', web: 'https://labambalbi.com', icon: '🌮',
+    note: 'Beach Haven location of the island\'s favorite Mexican kitchen. Participates in the annual Chowderfest.',
+  },
+  {
+    id: 182, name: 'Crêperie de la Mer', cat: 'Dining', subcat: 'French Café / Crêpes',
+    town: 'Beach Haven', address: '210 N Beach Ave, Beach Haven, NJ 08008',
+    phone: '(609) 709-1119', web: 'https://creperiedelamerlbi.com', icon: '🥐',
+    note: 'Charming French crêperie in the Beach Haven historic district. Authentic crêpes and pastries.',
+  },
+  {
+    id: 183, name: 'Cool Beans Coffee', cat: 'Dining', subcat: 'Coffee',
+    town: 'Beach Haven', address: '830 N Bay Ave, Beach Haven, NJ 08008',
+    phone: '(609) 492-8090', web: 'https://coolbeanslbi.com', icon: '☕',
+    note: 'Beloved gourmet coffee shop in Bay Village since 1993. A Beach Haven morning staple.',
+  },
+  {
+    id: 184, name: 'Country Kettle Chowda', cat: 'Dining', subcat: 'Seafood / Chowder',
+    town: 'Beach Haven', address: '830 N Bay Ave, Beach Haven, NJ 08008',
+    phone: '(609) 492-2858', web: 'https://countrykettlechowda.com', icon: '🍲',
+    note: 'Award-winning clam chowder in Bay Village since the 1970s. A must-stop on any LBI chowder trail.',
+  },
+  {
+    id: 185, name: 'Harvey Cedars Ice Cream Parlour', cat: 'Dining', subcat: 'Ice Cream',
+    town: 'Harvey Cedars', address: '8007 Long Beach Blvd, Harvey Cedars, NJ 08008',
+    phone: '(609) 361-6103', web: 'https://harveycedarsicecream.com', icon: '🍦',
+    note: 'One of the oldest businesses on LBI — family ice cream parlour established in the 1920s.',
+  },
+  {
+    id: 186, name: 'The Big Dipper', cat: 'Dining', subcat: 'Ice Cream',
+    town: 'Surf City', address: '1501 Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 494-4155', web: 'https://bigdipperlbi.com', icon: '🍨',
+    note: "Serving Richman's hand-dipped ice cream since 1970. A multigenerational Surf City tradition.",
+  },
+  {
+    id: 187, name: 'Show Place Ice Cream Parlour', cat: 'Dining', subcat: 'Ice Cream / Theater',
+    town: 'Beach Haven', address: '200 Centre St, Beach Haven, NJ 08008',
+    phone: '(609) 213-6463', icon: '🎭',
+    note: 'Interactive theatrical ice cream parlour since 1975. Servers perform singing telegrams — a one-of-a-kind LBI experience.',
+  },
+  {
+    id: 188, name: 'The Windmill', cat: 'Dining', subcat: 'Belgian Waffles / Ice Cream',
+    town: 'Beach Haven', address: '830 N Bay Ave, Beach Haven, NJ 08008',
+    phone: '(609) 492-3219', icon: '🧇',
+    note: 'Original Bay Village establishment since 1965. Belgian waffles and hand-dipped ice cream.',
+  },
+  {
+    id: 189, name: 'Lighthouse Deli', cat: 'Dining', subcat: 'Deli / Grill',
+    town: 'Surf City', address: '1718 Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 207-6167', icon: '🥪',
+    note: 'Popular breakfast and lunch deli-grill. Open 7 days in-season.',
+  },
+  {
+    id: 190, name: "Agnello's Market", cat: 'Dining', subcat: 'Market / Deli',
+    town: 'Barnegat Light', address: '1801 Central Ave, Barnegat Light, NJ 08006',
+    phone: '(609) 207-6491', web: 'https://agnellos.com', icon: '🏪',
+    note: 'Local market and sandwich shop at the north tip of the island.',
+  },
+  {
+    id: 191, name: "Agnello's Cafe", cat: 'Dining', subcat: 'Cafe / Deli',
+    town: 'Harvey Cedars', address: '6332 Long Beach Blvd, Harvey Cedars, NJ 08008',
+    phone: '(609) 207-6336', web: 'https://agnellos.com', icon: '☕',
+    note: 'Harvey Cedars cafe location — coffee, sandwiches, and market items.',
+  },
+  {
+    id: 192, name: 'Blue Claw Seafood Market', cat: 'Dining', subcat: 'Seafood Market',
+    town: 'Surf City', address: '1103 Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 361-0050', web: 'https://blueclawlbi.com', icon: '🦀',
+    note: 'Well-regarded fresh seafood market in Surf City.',
+  },
+  {
+    id: 193, name: 'Boulevard Clams', cat: 'Dining', subcat: 'Clam Bar / Seafood Market',
+    town: 'Surf City', address: '2006 Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 494-9494', web: 'https://boulevardclams.net', icon: '🦪',
+    note: 'Longtime local seafood market and casual clam restaurant. In-season daily.',
+  },
+  {
+    id: 194, name: 'Engleside Inn Restaurant', cat: 'Dining', subcat: 'Fine Dining / Hotel',
+    town: 'Beach Haven', address: '30 Engleside Ave, Beach Haven, NJ 08008',
+    phone: '(609) 492-1251', web: 'https://engleside.com', icon: '🕯️',
+    note: 'Fine dining and sushi at one of LBI\'s most established hotels. Dinner nightly in-season.',
+  },
+  {
+    id: 195, name: 'Gazebo Grill & Sushi Bar', cat: 'Dining', subcat: 'Grill / Sushi',
+    town: 'Beach Haven', address: '325 9th St, Beach Haven, NJ 08008',
+    phone: '(609) 492-5811', web: 'https://gazebogrilllbi.com', icon: '🍱',
+    note: "Bayside counter-service grill at Schooner's Wharf — burgers, wraps, sushi, outdoor seating. Seasonal.",
+  },
+  {
+    id: 196, name: 'Holiday Snack Bar', cat: 'Dining', subcat: 'Diner / Pie',
+    town: 'Beach Haven', address: '401 Centre St, Beach Haven, NJ 08008',
+    phone: '(609) 492-4544', web: 'https://holidaysnackbar.com', icon: '🥧',
+    note: "Open every summer since the 1950s. Famous for their pies — People Magazine's Best Pie in NJ, 2019. A quirky LBI classic.",
+  },
 ]
 
 // ─────────────────────────────────────────────
@@ -626,6 +753,55 @@ export const shopping: Business[] = [
     town: 'Long Beach Township', address: '8701 Long Beach Blvd, Long Beach Twp, NJ 08008',
     phone: '(609) 494-5303', web: 'https://www.stutzcandy.com', icon: '🍫',
     note: "LBI's beloved candy shop since 1938. Homemade chocolates, fudge, nonpareils, and nut confections. A shore tradition.",
+  },
+  // Round 5 additions
+  {
+    id: 244, name: 'Wink Boutique', cat: 'Shopping', subcat: 'Apparel / Boutique',
+    town: 'Surf City', address: '1913 Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 361-9300', web: 'https://winkboutiques.com', icon: '👗',
+    note: "Popular women's clothing, jewelry, and accessories boutique on LBI since 2003. Carries Free People, Z Supply, and similar brands.",
+  },
+  {
+    id: 245, name: 'The Good Life Gift Boutique', cat: 'Shopping', subcat: 'Gift / Boutique',
+    town: 'Surf City', address: '2200 Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 494-0200', icon: '🎁',
+    note: "Lifestyle boutique with women's clothing, jewelry, baby gifts, and home décor — including LBI-customized gifts.",
+  },
+  {
+    id: 246, name: 'Gifted by the Sea', cat: 'Shopping', subcat: 'Gift / Jewelry',
+    town: 'Long Beach Township', address: '6115 Long Beach Blvd, Long Beach Township, NJ 08008',
+    phone: '(609) 342-0219', web: 'https://giftedbythesea.com', icon: '💍',
+    note: 'Coastal gift and jewelry shop carrying Pandora, Vera Bradley, Lilly Pulitzer, and unique LBI items.',
+  },
+  {
+    id: 247, name: 'Song of the Sea', cat: 'Shopping', subcat: 'Gift / Home Decor',
+    town: 'Beach Haven', address: '830 N Bay Ave, Beach Haven, NJ 08008',
+    phone: '(609) 492-6326', web: 'https://songofthesealbi.com', icon: '🐚',
+    note: 'Unique coastal gift and home décor shop inside Bay Village.',
+  },
+  {
+    id: 248, name: 'Haymarket Hobbies & Toys', cat: 'Shopping', subcat: 'Hobby / Toys',
+    town: 'Ship Bottom', address: '2120 Long Beach Blvd, Ship Bottom, NJ 08008',
+    phone: '(609) 494-7228', web: 'https://haymarketlbi.com', icon: '🧩',
+    note: 'Beloved hobby, toy, game, and puzzle shop since 1976. A rainy-day family staple on LBI.',
+  },
+  {
+    id: 249, name: 'Kitty Hawk Kites', cat: 'Shopping', subcat: 'Kites / Outdoor Toys',
+    town: 'Barnegat Light', address: '701 Broadway, Barnegat Light, NJ 08006',
+    phone: '(609) 342-0956', web: 'https://kittyhawk.com', icon: '🪁',
+    note: 'Kite and outdoor toy shop near Old Barney lighthouse — a perfect fit for the island breeze.',
+  },
+  {
+    id: 250, name: 'Island Surf & Sail', cat: 'Shopping', subcat: 'Surf / Sail / Kayak',
+    town: 'Brant Beach', address: '3304 Long Beach Blvd, Brant Beach, NJ 08008',
+    phone: '(609) 494-5553', web: 'https://islandsurf-sail.com', icon: '⛵',
+    note: 'Full-service surf, kayak, and sailing shop in Brant Beach. One block from the ocean.',
+  },
+  {
+    id: 251, name: "Fisherman's Headquarters", cat: 'Shopping', subcat: 'Bait & Tackle',
+    town: 'Ship Bottom', address: '280 W 9th St, Ship Bottom, NJ 08008',
+    phone: '(609) 494-5739', web: 'https://fishermansheadquarters.com', icon: '🎣',
+    note: 'Premier bait, tackle, and fishing gear shop open year-round since the 1960s. Just over the causeway.',
   },
 ]
 
@@ -907,6 +1083,12 @@ export const entertainment: Business[] = [
     town: 'Long Beach Township', address: '69th St & Stockton Ave, Long Beach Twp, NJ 08008',
     phone: '(609) 361-1000', icon: '🌳',
     note: 'Bay-front park with kayak launches, picnic areas, and water access.',
+  },
+  {
+    id: 443, name: 'Surflight Theatre', cat: 'Entertainment', subcat: 'Theater / Arts',
+    town: 'Beach Haven', address: '201 Engleside Ave, Beach Haven, NJ 08008',
+    phone: '(609) 492-9477', web: 'https://surflight.org', icon: '🎭',
+    note: 'Professional summer stock theatre on LBI since 1950. A National Historic Register landmark — Broadway-caliber productions all season.',
   },
   {
     id: 442, name: 'Loveladies Harbor Organization', cat: 'Entertainment', subcat: 'Non-Profit / Community',
