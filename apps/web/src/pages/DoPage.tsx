@@ -23,7 +23,7 @@ function matchShopCat(subcat: string, cat: ShopCat): boolean {
   if (cat === 'Home & Decor')
     return /home|decor|furniture|design|antique|garden/i.test(subcat)
   if (cat === 'Food & Convenience')
-    return /market|deli|butcher|candy|pharmacy|liquor|convenience|grocery/i.test(subcat)
+    return /market|deli|butcher|candy|pharmacy|liquor|convenience|grocery|seafood market/i.test(subcat)
   return true
 }
 

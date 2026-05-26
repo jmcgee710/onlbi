@@ -119,42 +119,24 @@ export const dining: Business[] = [
     phone: '(609) 879-2525', icon: '🍔',
     note: 'Build-your-own burgers and hand-spun shakes.',
   },
-  // Delis & Markets
+  // Delis (eat-in spots stay in dining)
   {
-    id: 120, name: "Murphy's Fresh Markets", cat: 'Dining', subcat: 'Market / Deli',
-    town: 'Beach Haven', address: '9 S Bay Ave, Beach Haven, NJ 08008',
-    phone: '(609) 492-5100', icon: '🏪',
-    note: 'Local fresh market. Island staple for grab-and-go and fresh seafood.',
-  },
-  {
-    id: 121, name: 'Inlet Deli', cat: 'Dining', subcat: 'Deli / Market',
+    id: 121, name: 'Inlet Deli', cat: 'Dining', subcat: 'Deli',
     town: 'Ship Bottom', address: '33 W 4th St, Ship Bottom, NJ 08008',
     phone: '(609) 494-3049', icon: '🥪',
     note: 'Great sandwiches and deli staples.',
   },
   {
-    id: 122, name: "Fratello's Market & Eatery", cat: 'Dining', subcat: 'Deli / Market',
+    id: 122, name: "Fratello's Market & Eatery", cat: 'Dining', subcat: 'Deli / Italian',
     town: 'Ship Bottom', address: '2613 Long Beach Blvd, Ship Bottom, NJ 08008',
     phone: '(609) 661-7291', icon: '🥙',
     note: 'Italian market feel with fresh prepared foods.',
   },
   {
-    id: 123, name: 'Neptune Market', cat: 'Dining', subcat: 'Deli / Market',
-    town: 'Harvey Cedars', address: '8014 Long Beach Blvd, Harvey Cedars, NJ 08008',
-    phone: '(267) 625-1966', icon: '🏬',
-    note: 'Mid-island market and deli with lunch counter.',
-  },
-  {
-    id: 124, name: 'Spice It Up', cat: 'Dining', subcat: 'Deli / Market',
+    id: 124, name: 'Spice It Up', cat: 'Dining', subcat: 'Deli',
     town: 'Beach Haven', address: '9th Street, Beach Haven, NJ 08008',
     phone: '(609) 207-9906', icon: '🌶️',
     note: 'Gourmet deli with creative lunch options.',
-  },
-  {
-    id: 125, name: 'Acme Markets LBI', cat: 'Dining', subcat: 'Grocery',
-    town: 'Beach Haven Park', address: '9600 Long Beach Blvd, Beach Haven Park, NJ 08008',
-    phone: '(609) 492-0510', web: 'https://www.acmemarkets.com', icon: '🛒',
-    note: 'Full-service grocery store with in-store pharmacy. Largest grocery on the island.',
   },
   // Coffee & Treats
   {
@@ -534,7 +516,7 @@ export const dining: Business[] = [
     note: 'Popular breakfast and lunch deli-grill. Open 7 days in-season.',
   },
   {
-    id: 190, name: "Agnello's Market", cat: 'Dining', subcat: 'Market / Deli',
+    id: 190, name: "Agnello's Market", cat: 'Shopping', subcat: 'Market / Deli',
     town: 'Barnegat Light', address: '1801 Central Ave, Barnegat Light, NJ 08006',
     phone: '(609) 207-6491', web: 'https://agnellos.com', icon: '🏪',
     note: 'Local market and sandwich shop at the north tip of the island.',
@@ -546,7 +528,7 @@ export const dining: Business[] = [
     note: 'Harvey Cedars cafe location — coffee, sandwiches, and market items.',
   },
   {
-    id: 192, name: 'Blue Claw Seafood Market', cat: 'Dining', subcat: 'Seafood Market',
+    id: 192, name: 'Blue Claw Seafood Market', cat: 'Shopping', subcat: 'Seafood Market',
     town: 'Surf City', address: '1103 Long Beach Blvd, Surf City, NJ 08008',
     phone: '(609) 361-0050', web: 'https://blueclawlbi.com', icon: '🦀',
     note: 'Well-regarded fresh seafood market in Surf City.',
@@ -838,6 +820,25 @@ export const shopping: Business[] = [
     town: 'Ship Bottom', address: '280 W 9th St, Ship Bottom, NJ 08008',
     phone: '(609) 494-5739', web: 'https://fishermansheadquarters.com', icon: '🎣',
     note: 'Premier bait, tackle, and fishing gear shop open year-round since the 1960s. Just over the causeway.',
+  },
+  // Markets & Grocery (moved from dining)
+  {
+    id: 120, name: "Murphy's Fresh Markets", cat: 'Shopping', subcat: 'Market / Grocery',
+    town: 'Beach Haven', address: '9 S Bay Ave, Beach Haven, NJ 08008',
+    phone: '(609) 492-5100', icon: '🏪',
+    note: 'Local fresh market. Island staple for grab-and-go, fresh seafood, and groceries.',
+  },
+  {
+    id: 123, name: 'Neptune Market', cat: 'Shopping', subcat: 'Market / Grocery',
+    town: 'Harvey Cedars', address: '8014 Long Beach Blvd, Harvey Cedars, NJ 08008',
+    phone: '(267) 625-1966', icon: '🏬',
+    note: 'Mid-island market and deli with lunch counter.',
+  },
+  {
+    id: 125, name: 'Acme Markets', cat: 'Shopping', subcat: 'Grocery',
+    town: 'Beach Haven Park', address: '9600 Long Beach Blvd, Beach Haven Park, NJ 08008',
+    phone: '(609) 492-0510', web: 'https://www.acmemarkets.com', icon: '🛒',
+    note: 'Full-service grocery store with in-store pharmacy. Largest grocery on the island.',
   },
   {
     id: 252, name: 'Tuckerton Lumber', cat: 'Shopping', subcat: 'Hardware / Lumber',
