@@ -236,12 +236,6 @@ export const dining: Business[] = [
     phone: '(609) 492-3553', web: 'https://www.gableslbi.com', icon: '🕯️',
     note: 'Victorian inn with acclaimed dining. 3-course prix-fixe menu. Romantic, old-world LBI charm.',
   },
-  {
-    id: 146, name: "Bird & Betty's", cat: 'Dining', subcat: 'Bar & Grill',
-    town: 'Beach Haven', address: '529 Dock Rd, Beach Haven, NJ 08008',
-    phone: '(609) 492-3000', icon: '🐦',
-    note: 'Casual waterfront bar and grill on the dock. Good food, great atmosphere.',
-  },
   // Bagels & Breakfast — Round 3 additions
   {
     id: 147, name: "Bageleddi's", cat: 'Dining', subcat: 'Bagels / Breakfast',
@@ -259,7 +253,13 @@ export const dining: Business[] = [
     id: 149, name: 'Bagels & Beyond', cat: 'Dining', subcat: 'Bagels / Breakfast',
     town: 'Surf City', address: '1616 Long Beach Blvd, Surf City, NJ 08008',
     web: 'https://bagelsandbeyond.net', icon: '🥯',
-    note: 'Six LBI-area locations. Must-stop for fresh bagels and breakfast sandwiches. Local and tourist favorite alike.',
+    note: 'Multiple LBI locations. Must-stop for fresh bagels and breakfast sandwiches.',
+  },
+  {
+    id: 201, name: 'Bagels & Beyond', cat: 'Dining', subcat: 'Bagels / Breakfast',
+    town: 'Brant Beach', address: '4008 Long Beach Blvd, Brant Beach, NJ 08008',
+    phone: '(609) 494-4400', web: 'https://bagelsandbeyond.net', icon: '🥯',
+    note: 'Brant Beach location. Fresh bagels, breakfast sandwiches, and coffee.',
   },
   {
     id: 150, name: "Wally's", cat: 'Dining', subcat: 'Breakfast / American',
@@ -423,6 +423,18 @@ export const dining: Business[] = [
     town: 'Beach Haven', address: '830 N Bay Ave, Beach Haven, NJ 08008',
     icon: '🍕',
     note: 'Slice shop inside Bay Village — convenient stop between boutiques and the bay.',
+  },
+  {
+    id: 199, name: 'Station 117', cat: 'Dining', subcat: 'Bar & Grill',
+    town: 'Beach Haven', address: '117 N Bay Ave, Beach Haven, NJ 08008',
+    phone: '(609) 492-0117', web: 'https://www.station117.com', icon: '🍻',
+    note: 'Sister spot to Buckalew\'s on the same corner. Full bar and grill with a lively Beach Haven crowd.',
+  },
+  {
+    id: 200, name: 'The Local Market & Kitchen', cat: 'Dining', subcat: 'Cafe / Market',
+    town: 'Ship Bottom', address: '604 Central Ave, Ship Bottom, NJ 08008',
+    phone: '(609) 342-0061', web: 'http://www.localmarketlbi.com', icon: '☕',
+    note: 'Specialty coffee, gourmet grab-and-go, baked goods, and prepared foods. Mon–Sat 7am–5pm, Sun 7am–4pm.',
   },
   {
     id: 197, name: 'Munchies', cat: 'Dining', subcat: 'Snacks / Casual',
@@ -1317,6 +1329,18 @@ export const services: Business[] = [
     town: 'Ship Bottom', address: '901 S Long Beach Blvd, Ship Bottom, NJ 08008',
     phone: '(609) 361-2677', icon: '🏥',
     note: 'Walk-in urgent care on the island. Mon–Fri 8 AM–6 PM, Sat 8 AM–4 PM. No appointment needed.',
+  },
+  {
+    id: 643, name: 'Brennan Fuel', cat: 'Services', subcat: 'Gas / Fuel',
+    town: 'Ship Bottom', address: '237 W 8th St, Ship Bottom, NJ 08008',
+    icon: '⛽',
+    note: 'Gas station and fuel service. Ship Bottom location near the causeway.',
+  },
+  {
+    id: 644, name: 'Brennan Fuel', cat: 'Services', subcat: 'Gas / Fuel',
+    town: 'Long Beach Township', address: '13601 Long Beach Blvd, Long Beach Township, NJ 08008',
+    icon: '⛽',
+    note: 'Gas station and fuel service. Mid-island location.',
   },
   {
     id: 642, name: 'Island Wellness Center & Yoga', cat: 'Services', subcat: 'Spa / Yoga',
