@@ -42,7 +42,7 @@ export const dining: Business[] = [
     note: 'Best fish tacos on the island. Nautical-themed locals favorite.',
   },
   {
-    id: 103, name: 'Daddy O Restaurant & Hotel', cat: 'Dining', subcat: 'Upscale',
+    id: 103, name: "Daddy O's Restaurant & Hotel", cat: 'Dining', subcat: 'Upscale',
     town: 'Brant Beach', address: '4401 Long Beach Blvd, Brant Beach, NJ 08008',
     phone: '(609) 494-1300', web: 'https://www.daddyohotel.com', icon: '🍽️',
     note: 'Farm-to-table dining, amazing cocktails. Reservations highly recommended.',
@@ -1157,7 +1157,7 @@ export const lodging: Business[] = [
     note: 'Premier boutique hotel. Home of the Salt Kitchen & Bar. Rated 9.4 by guests.',
   },
   {
-    id: 502, name: 'Daddy O Restaurant & Hotel', cat: 'Lodging', subcat: 'Boutique Hotel',
+    id: 502, name: "Daddy O's Restaurant & Hotel", cat: 'Lodging', subcat: 'Boutique Hotel',
     town: 'Brant Beach', address: '4401 Long Beach Blvd, Brant Beach, NJ 08008',
     phone: '(609) 494-1300', web: 'https://www.daddyohotel.com', icon: '🏩',
     note: 'Stylish boutique hotel with acclaimed restaurant. Mid-island location.',
