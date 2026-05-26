@@ -5,7 +5,6 @@ import BeachesPage from './pages/BeachesPage'
 import BeachTownPage from './pages/BeachTownPage'
 import BeachAccessPage from './pages/BeachAccessPage'
 import AccessibilityPage from './pages/AccessibilityPage'
-import ParkingPage from './pages/ParkingPage'
 import EatPage from './pages/EatPage'
 import DoPage from './pages/DoPage'
 import GettingAroundPage from './pages/GettingAroundPage'
@@ -24,9 +23,7 @@ export default function App() {
           <Route path="accessibility" element={<AccessibilityPage />} />
           <Route path="accessibility/beach-access" element={<AccessibilityPage />} />
           <Route path="accessibility/:town" element={<AccessibilityPage />} />
-          <Route path="parking" element={<ParkingPage />} />
-          <Route path="parking/:town" element={<ParkingPage />} />
-          <Route path="eat/:category?" element={<EatPage />} />
+<Route path="eat/:category?" element={<EatPage />} />
           <Route path="eat/:town/:slug" element={<EatPage />} />
           <Route path="do/:category?" element={<DoPage />} />
           <Route path="getting-around/*" element={<GettingAroundPage />} />

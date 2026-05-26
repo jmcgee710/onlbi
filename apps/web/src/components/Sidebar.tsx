@@ -6,7 +6,6 @@ const nav = [
   { id: '/eat', label: 'Eat & Drink', icon: '⚡', meta: 'Happy hr', dot: false, section: 'island' },
   { id: '/do', label: 'Things To Do', icon: '⚓', meta: undefined, dot: false, section: 'island' },
   { id: '/getting-around', label: 'Getting Around', icon: '🚌', meta: undefined, dot: false, section: 'practical' },
-  { id: '/parking', label: 'Parking', icon: '🅿', meta: undefined, dot: false, section: 'practical' },
   { id: '/accessibility', label: 'Accessibility', icon: '♿', meta: undefined, dot: false, section: 'practical' },
   { id: '/alerts', label: 'Alerts', icon: '🔔', meta: undefined, dot: true, section: 'practical' },
 ]

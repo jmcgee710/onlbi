@@ -25,7 +25,11 @@ export default function Layout() {
 
         {/* Desktop top bar */}
         <div className="topbar" style={{ display: 'flex' } as React.CSSProperties}>
-          <div className="crumbs"><strong>Today</strong> · Saturday, May 9</div>
+          <div className="crumbs">
+            <strong>Today</strong> · {new Date().toLocaleDateString('en-US', {
+              weekday: 'long', month: 'long', day: 'numeric',
+            })}
+          </div>
           <span className="spacer" />
           <button className="icon-btn">🔍 Search the island</button>
           <button className="icon-btn">📅 Tomorrow</button>
