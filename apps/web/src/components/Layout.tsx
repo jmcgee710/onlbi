@@ -17,6 +17,9 @@ export default function Layout() {
         {/* Mobile top bar */}
         <div className="mobile-topbar">
           <img src="/logo-dark.png" alt="On LBI" style={{ height: 40, objectFit: 'contain' }} />
+          <span style={{ fontFamily: 'var(--font-display)', fontSize: 14, color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', letterSpacing: '0.01em' }}>
+            because your <span style={{ color: 'rgba(255,255,255,0.85)', fontStyle: 'normal', fontWeight: 500 }}>ON</span> the island not in it!
+          </span>
           <div style={{ display: 'flex', gap: 16 }}>
             <button style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', fontSize: 20 }}>🔍</button>
             <button style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', fontSize: 20 }}>🔔</button>
