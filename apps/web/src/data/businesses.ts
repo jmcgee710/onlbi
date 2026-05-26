@@ -405,6 +405,37 @@ export const dining: Business[] = [
     web: 'https://www.parkersgaragelbi.com/oyster-coop/', icon: '🦪',
     note: "Tide Table Group's oyster co-op at Parker's Garage. Sustainably farmed oysters — retail and raw bar. Part of their ocean-friendly mission.",
   },
+  // Round 4 additions — May 2026
+  {
+    id: 171, name: "Jack's NYC Bagels & Deli", cat: 'Dining', subcat: 'Bagels / Breakfast',
+    town: 'Beach Haven', address: '1211 Long Beach Blvd, Beach Haven, NJ 08008',
+    phone: '(609) 492-7114', web: 'https://jacksnycbagels.com', icon: '🥯',
+    note: 'New York-style water bagels, breakfast sandwiches, and deli on LBI.',
+  },
+  {
+    id: 172, name: "Dunkin'", cat: 'Dining', subcat: 'Coffee / Breakfast',
+    town: 'Ship Bottom', address: '330 W 8th St, Ship Bottom, NJ 08008',
+    web: 'https://www.dunkindonuts.com', icon: '☕',
+    note: "The island's only Dunkin' — coffee, donuts, and breakfast sandwiches. Near the Ship Bottom causeway.",
+  },
+  {
+    id: 173, name: "Rita's Italian Ice", cat: 'Dining', subcat: 'Italian Ice / Custard',
+    town: 'Surf City', address: '1801 Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 207-6494', web: 'https://www.ritasice.com', icon: '🍧',
+    note: 'Classic Jersey Shore Rita\'s — Italian ice, frozen custard, and Gelati. Seasonal.',
+  },
+  {
+    id: 174, name: "Speakeasy Pizzeria & Restaurant", cat: 'Dining', subcat: 'Pizza / Italian',
+    town: 'Ship Bottom', address: '1318 Long Beach Blvd, Ship Bottom, NJ 08008',
+    web: 'https://speakeasypizzeria.com', icon: '🍕',
+    note: 'Consistently rated one of LBI\'s best pizzerias. Full Italian menu, dine-in and takeout.',
+  },
+  {
+    id: 175, name: "Panzone's Pizza", cat: 'Dining', subcat: 'Pizza',
+    town: 'Beach Haven', address: '1106 N Bay Ave, Beach Haven, NJ 08008',
+    web: 'https://panzones.com', icon: '🍕',
+    note: 'South-end location of the LBI pizza institution. Classic Jersey Shore slices.',
+  },
 ]
 
 // ─────────────────────────────────────────────
@@ -577,6 +608,18 @@ export const shopping: Business[] = [
     town: 'Surf City', address: '2107 Long Beach Blvd, Surf City, NJ 08008',
     phone: '(609) 494-5577', web: 'https://okiesbutchershop.com', icon: '🥩',
     note: 'Full-service butcher shop and deli. Quality meats, custom sandwiches, and catering. Open Mon–Sat 7 AM–6 PM.',
+  },
+  {
+    id: 242, name: '7-Eleven', cat: 'Shopping', subcat: 'Convenience Store',
+    town: 'Ship Bottom', address: '802 Long Beach Blvd, Ship Bottom, NJ 08008',
+    phone: '(609) 361-1902', web: 'https://www.7-eleven.com', icon: '🏪',
+    note: 'Open 24/7. Snacks, drinks, coffee, and essentials. Ship Bottom location.',
+  },
+  {
+    id: 243, name: '7-Eleven', cat: 'Shopping', subcat: 'Convenience Store',
+    town: 'Beach Haven', address: '1001 N Bay Ave, Beach Haven, NJ 08008',
+    phone: '(609) 492-3501', web: 'https://www.7-eleven.com', icon: '🏪',
+    note: 'Open 24/7. Snacks, drinks, coffee, and essentials. Beach Haven location.',
   },
   {
     id: 241, name: 'Stutz Candies', cat: 'Shopping', subcat: 'Candy / Gifts',

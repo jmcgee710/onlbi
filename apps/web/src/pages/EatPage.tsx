@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { dining } from '../data/businesses'
+import { dining, nightlife } from '../data/businesses'
 import { happyHours } from '../data/eats'
 
 // ─── FILTERS ─────────────────────────────────────────────────────────────────
@@ -21,6 +21,8 @@ const HH_TAGS = ['All', 'Drafts', 'Cocktails', 'Oysters', 'Food', 'Wine', 'Seafo
 const activeCount = happyHours.filter(h => h.status === 'active').length
 const byobCount   = dining.filter(b => /BYOB/i.test(b.note ?? '')).length
 
+const NIGHTLIFE_TOWNS = ['All', 'Beach Haven', 'Barnegat Light', 'Harvey Cedars', 'Surf City', 'Ship Bottom', 'Long Beach Township', 'Brant Beach']
+
 function hhDot(s: string) {
   if (s === 'active')   return { dot: '#4ade80', label: 'Open now' }
   if (s === 'upcoming') return { dot: 'var(--sun)', label: 'Opening soon' }
@@ -28,11 +30,12 @@ function hhDot(s: string) {
 }
 
 export default function EatPage() {
-  const [tab, setTab]             = useState<'eats' | 'hh'>('eats')
+  const [tab, setTab]             = useState<'eats' | 'hh' | 'nightlife'>('eats')
   const [catFilter, setCatFilter] = useState('All')
   const [townFilter, setTownFilter] = useState('All')
   const [hhTagFilter, setHhTagFilter] = useState('All')
   const [expandedHH, setExpandedHH] = useState<number | null>(null)
+  const [nightlifeTown, setNightlifeTown] = useState('All')
 
   const activeCatTest = CAT_FILTERS.find(f => f.label === catFilter)?.test ?? (() => true)
 
@@ -79,6 +82,13 @@ export default function EatPage() {
             <span className="tab-val">
               {activeCount > 0 ? <><em>{activeCount}</em> live</> : happyHours.length + ' spots'}
             </span>
+          </button>
+          <button
+            className={`pg-tab${tab === 'nightlife' ? ' active' : ''}`}
+            onClick={() => setTab('nightlife')}
+          >
+            <span className="tab-lbl">Bars & Nightlife</span>
+            <span className="tab-val">{nightlife.length}</span>
           </button>
           <button className="pg-tab" style={{ pointerEvents: 'none' }}>
             <span className="tab-lbl">BYOB</span>
@@ -272,6 +282,61 @@ export default function EatPage() {
                     </div>
                   )
                 })}
+              </div>
+            </>
+          )}
+
+          {/* NIGHTLIFE */}
+          {tab === 'nightlife' && (
+            <>
+              <div className="pg-chips" style={{ marginBottom: 24 }}>
+                {NIGHTLIFE_TOWNS.map(t => (
+                  <button
+                    key={t}
+                    className={`pg-chip${nightlifeTown === t ? ' on' : ''}`}
+                    onClick={() => setNightlifeTown(t)}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {nightlife
+                  .filter(n => nightlifeTown === 'All' || n.town === nightlifeTown)
+                  .map(n => (
+                    <div key={n.id} className="lc">
+                      <div className="lc-head" style={{ marginBottom: 0 }}>
+                        <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                          <span style={{ fontSize: 28, lineHeight: 1, marginTop: 2 }}>{n.icon}</span>
+                          <div>
+                            <h3 className="lc-name" style={{ fontSize: 20 }}>{n.name}</h3>
+                            <p className="lc-sub">{n.town} · {n.subcat}</p>
+                          </div>
+                        </div>
+                      </div>
+                      {n.note && (
+                        <p style={{ fontSize: 12.5, color: 'var(--slate)', lineHeight: 1.45, marginTop: 12 }}>
+                          {n.note}
+                        </p>
+                      )}
+                      {(n.phone || n.web) && (
+                        <div style={{ display: 'flex', gap: 20, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)' }}>
+                          {n.phone && (
+                            <a href={`tel:${n.phone}`} style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
+                              {n.phone}
+                            </a>
+                          )}
+                          {n.web && (
+                            <a href={n.web} target="_blank" rel="noopener noreferrer"
+                              style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
+                              Website →
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
               </div>
             </>
           )}
