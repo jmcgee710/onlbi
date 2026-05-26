@@ -437,6 +437,12 @@ export const dining: Business[] = [
     note: 'South-end LBI institution since 1980. Pizza, pasta, seafood, wings, and award-winning clam chowder.',
   },
   {
+    id: 198, name: 'Bay Village Pizza', cat: 'Dining', subcat: 'Pizza',
+    town: 'Beach Haven', address: '830 N Bay Ave, Beach Haven, NJ 08008',
+    icon: '🍕',
+    note: 'Slice shop inside Bay Village — convenient stop between boutiques and the bay.',
+  },
+  {
     id: 197, name: 'Munchies', cat: 'Dining', subcat: 'Snacks / Casual',
     town: 'Surf City', address: '1409 Long Beach Blvd, Surf City, NJ 08008',
     phone: '(609) 661-7380', icon: '🌭',
@@ -684,8 +690,38 @@ export const shopping: Business[] = [
   {
     id: 231, name: 'Farias Surf & Sport', cat: 'Shopping', subcat: 'Surf / Sport',
     town: 'Beach Haven', address: '823 N Bay Ave, Beach Haven, NJ 08008',
-    phone: '(609) 492-0200', icon: '🏄',
-    note: 'Family-owned surf shop since 1969. Six locations across LBI — surfboards, swimwear, bikes, kids gear.',
+    phone: '(609) 492-0200', web: 'https://fariassurf.com', icon: '🏄',
+    note: 'Family-owned surf shop since 1969. Six LBI locations — surfboards, swimwear, bikes, kids gear.',
+  },
+  {
+    id: 253, name: 'Farias Surf & Sport', cat: 'Shopping', subcat: 'Surf / Sport',
+    town: 'Ship Bottom', address: '2800 Long Beach Blvd, Ship Bottom, NJ 08008',
+    phone: '(609) 494-7368', web: 'https://fariassurf.com', icon: '🏄',
+    note: 'Farias flagship Ship Bottom store. Surfboards, swimwear, bikes, and beach gear.',
+  },
+  {
+    id: 254, name: 'B&B Department Stores South', cat: 'Shopping', subcat: 'Department Store',
+    town: 'Ship Bottom', address: '901 Central Ave, Ship Bottom, NJ 08008',
+    phone: '(609) 361-0760', web: 'https://bnbdepartmentstore.com', icon: '🏬',
+    note: 'South island location of the LBI beach department store staple. Apparel, beach gear, and accessories.',
+  },
+  {
+    id: 255, name: "Ben & Jerry's", cat: 'Shopping', subcat: 'Ice Cream',
+    town: 'Beach Haven', address: '600 N Bay Ave, Beach Haven, NJ 08008',
+    phone: '(609) 492-6300', web: 'https://www.benjerry.com/beachhaven', icon: '🍦',
+    note: 'The one and only Ben & Jerry\'s on LBI. All the classics plus seasonal flavors.',
+  },
+  {
+    id: 256, name: 'The Cheese Shoppe', cat: 'Shopping', subcat: 'Specialty Food / Cheese',
+    town: 'Surf City', address: '1800 Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 494-4630', web: 'https://lbicheese.com', icon: '🧀',
+    note: 'Artisan cheese shop and specialty foods. Open year-round, daily 10am–6pm.',
+  },
+  {
+    id: 257, name: 'The Cheese Shoppe', cat: 'Shopping', subcat: 'Specialty Food / Cheese',
+    town: 'Beach Haven', address: '615 N Bay Ave, Beach Haven, NJ 08008',
+    phone: '(609) 833-4230', web: 'https://lbicheese.com', icon: '🧀',
+    note: 'Beach Haven location of the LBI artisan cheese shop. Opened 2024 — call ahead to confirm seasonal hours.',
   },
   // Liquor Stores — Round 3 additions
   {
