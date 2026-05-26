@@ -737,12 +737,6 @@ export const shopping: Business[] = [
     note: 'Full-service butcher shop and deli. Quality meats, custom sandwiches, and catering. Open Mon–Sat 7 AM–6 PM.',
   },
   {
-    id: 242, name: '7-Eleven', cat: 'Shopping', subcat: 'Convenience Store',
-    town: 'Ship Bottom', address: '802 Long Beach Blvd, Ship Bottom, NJ 08008',
-    phone: '(609) 361-1902', web: 'https://www.7-eleven.com', icon: '🏪',
-    note: 'Open 24/7. Snacks, drinks, coffee, and essentials. Ship Bottom location.',
-  },
-  {
     id: 243, name: '7-Eleven', cat: 'Shopping', subcat: 'Convenience Store',
     town: 'Beach Haven', address: '1001 N Bay Ave, Beach Haven, NJ 08008',
     phone: '(609) 492-3501', web: 'https://www.7-eleven.com', icon: '🏪',
