@@ -67,20 +67,20 @@ export const dining: Business[] = [
   },
   {
     id: 107, name: "Stefano's", cat: 'Dining', subcat: 'Italian',
-    town: 'Beach Haven', address: 'Beach Haven, NJ 08008',
-    phone: '(609) 492-1220', icon: '🍝',
+    town: 'Beach Haven', address: '1814 Long Beach Blvd, Beach Haven, NJ 08008',
+    phone: '(609) 492-1100', web: 'https://stefanoslbi.com', icon: '🍝',
     note: 'BYOB Italian, reservations strongly advised. Consistently rated top on the island.',
   },
   {
     id: 108, name: "Scojo's", cat: 'Dining', subcat: 'Casual',
-    town: 'Surf City', address: '1506 Long Beach Blvd, Surf City, NJ 08008',
-    phone: '(609) 494-8121', icon: '🌯',
+    town: 'Surf City', address: '307 N Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 494-8661', web: 'https://scojosnj.com', icon: '🌯',
     note: 'Great wraps and sandwiches. Casual lunch spot.',
   },
   {
     id: 109, name: "Roberto's Dolce Vita", cat: 'Dining', subcat: 'Seafood / Italian',
     town: 'Beach Haven Terrace', address: '12907 Long Beach Blvd, Beach Haven Terrace, NJ 08008',
-    phone: '(609) 492-1001', icon: '🍤',
+    phone: '(609) 492-1001', web: 'https://robertoslbi.com', icon: '🍤',
     note: 'Italian seafood in a relaxed setting.',
   },
   {
@@ -92,19 +92,19 @@ export const dining: Business[] = [
   {
     id: 111, name: 'Tucker\'s Tavern', cat: 'Dining', subcat: 'Seafood / Bar',
     town: 'Beach Haven', address: '101 S West Ave, Beach Haven, NJ 08008',
-    phone: '(609) 492-2300', icon: '🍻',
+    phone: '(609) 492-2300', web: 'https://tuckerstavern-lbi.com', icon: '🍻',
     note: 'Local tavern with solid seafood and a friendly vibe.',
   },
   {
     id: 112, name: 'Jersey Girl Grill', cat: 'Dining', subcat: 'Casual',
     town: 'Long Beach Township', address: '11101 Long Beach Blvd, Long Beach Twp, NJ 08008',
-    phone: '(609) 492-1313', icon: '🍔',
+    phone: '(609) 492-1313', web: 'https://jerseygirllbi.com', icon: '🍔',
     note: 'Casual American grill in the mid-island area.',
   },
   {
     id: 113, name: 'Dune 18', cat: 'Dining', subcat: 'Seafood / Restaurant',
     town: 'Ship Bottom', address: '1916 Long Beach Blvd, Ship Bottom, NJ 08008',
-    phone: '(609) 494-3354', icon: '🌊',
+    phone: '(609) 494-3354', web: 'https://dune18.com', icon: '🌊',
     note: 'Upscale-casual dining in Ship Bottom.',
   },
   {
@@ -122,21 +122,21 @@ export const dining: Business[] = [
   // Delis (eat-in spots stay in dining)
   {
     id: 121, name: 'Inlet Deli', cat: 'Dining', subcat: 'Deli',
-    town: 'Ship Bottom', address: '33 W 4th St, Ship Bottom, NJ 08008',
-    phone: '(609) 494-3049', icon: '🥪',
-    note: 'Great sandwiches and deli staples.',
+    town: 'Barnegat Light', address: '33 W 4th St, Barnegat Light, NJ 08006',
+    phone: '(609) 494-3049', web: 'https://inletdeli.com', icon: '🥪',
+    note: 'Great sandwiches and deli staples. North-end spot near Old Barney.',
   },
   {
     id: 122, name: "Fratello's Market & Eatery", cat: 'Dining', subcat: 'Deli / Italian',
-    town: 'Ship Bottom', address: '2613 Long Beach Blvd, Ship Bottom, NJ 08008',
-    phone: '(609) 661-7291', icon: '🥙',
+    town: 'Long Beach Township', address: '2613 Long Beach Blvd, Long Beach Township, NJ 08008',
+    phone: '(609) 661-7291', web: 'http://fratellosmarketlbi.com', icon: '🥙',
     note: 'Italian market feel with fresh prepared foods.',
   },
   {
     id: 124, name: 'Spice It Up', cat: 'Dining', subcat: 'Deli',
-    town: 'Beach Haven', address: '9th Street, Beach Haven, NJ 08008',
-    phone: '(609) 207-9906', icon: '🌶️',
-    note: 'Gourmet deli with creative lunch options.',
+    town: 'Beach Haven', address: '830 N Bay Ave, Beach Haven, NJ 08008',
+    phone: '(609) 207-9906', web: 'https://spiceituplbi.com', icon: '🌶️',
+    note: 'Gourmet deli in Bay Village with creative lunch options.',
   },
   // Coffee & Treats
   {
@@ -203,7 +203,7 @@ export const dining: Business[] = [
   {
     id: 140, name: 'Daymark Bar & Restaurant', cat: 'Dining', subcat: 'Bar / American',
     town: 'Barnegat Light', address: '404 Broadway, Barnegat Light, NJ 08006',
-    phone: '(609) 494-2100', icon: '⚓',
+    phone: '(609) 494-2100', web: 'http://daymarklbi.com', icon: '⚓',
     note: 'Chic American fare in a casual coastal environment with full bar. North-end gem.',
   },
   {
@@ -221,7 +221,7 @@ export const dining: Business[] = [
   {
     id: 143, name: 'The Arlington', cat: 'Dining', subcat: 'Bar & Grill',
     town: 'Ship Bottom', address: '1302 Long Beach Blvd, Ship Bottom, NJ 08008',
-    phone: '(609) 494-8848', web: 'http://www.arlingtonlbi.com', icon: '🍻',
+    phone: '(609) 494-8848', web: 'https://arlingtonlbi.com', icon: '🍻',
     note: 'Local bar and grill staple in Ship Bottom.',
   },
   {
@@ -269,9 +269,9 @@ export const dining: Business[] = [
   },
   {
     id: 151, name: 'LBI Table', cat: 'Dining', subcat: 'Breakfast / Brunch',
-    town: 'Beach Haven', address: 'Beach Haven, NJ 08008',
-    web: 'https://lbitable.com', icon: '🍳',
-    note: 'Popular breakfast and brunch spot in Beach Haven. Fresh, locally-sourced menu with seasonal specials.',
+    town: 'Ship Bottom', address: '502 Long Beach Blvd, Ship Bottom, NJ 08008',
+    phone: '(609) 207-6773', web: 'https://lbitable.com', icon: '🍳',
+    note: 'Popular breakfast and brunch. Fresh, locally-sourced menu with seasonal specials.',
   },
   {
     id: 152, name: 'Dock & Claw Clam Bar', cat: 'Dining', subcat: 'Raw Bar / Seafood',
@@ -421,7 +421,7 @@ export const dining: Business[] = [
   {
     id: 198, name: 'Bay Village Pizza', cat: 'Dining', subcat: 'Pizza',
     town: 'Beach Haven', address: '830 N Bay Ave, Beach Haven, NJ 08008',
-    icon: '🍕',
+    phone: '(609) 492-4484', icon: '🍕',
     note: 'Slice shop inside Bay Village — convenient stop between boutiques and the bay.',
   },
   {
@@ -512,7 +512,7 @@ export const dining: Business[] = [
   {
     id: 187, name: 'Show Place Ice Cream Parlour', cat: 'Dining', subcat: 'Ice Cream / Theater',
     town: 'Beach Haven', address: '200 Centre St, Beach Haven, NJ 08008',
-    phone: '(609) 213-6463', icon: '🎭',
+    phone: '(609) 492-9477', icon: '🎭',
     note: 'Interactive theatrical ice cream parlour since 1975. Servers perform singing telegrams — a one-of-a-kind LBI experience.',
   },
   {
@@ -522,9 +522,9 @@ export const dining: Business[] = [
     note: 'Original Bay Village establishment since 1965. Belgian waffles and hand-dipped ice cream.',
   },
   {
-    id: 189, name: 'Lighthouse Deli', cat: 'Dining', subcat: 'Deli / Grill',
+    id: 189, name: 'Lighthouse Restaurant & Grill', cat: 'Dining', subcat: 'Deli / Grill',
     town: 'Surf City', address: '1718 Long Beach Blvd, Surf City, NJ 08008',
-    phone: '(609) 207-6167', icon: '🥪',
+    phone: '(609) 207-6167', web: 'https://lighthouserestaurantgrill.com', icon: '🥪',
     note: 'Popular breakfast and lunch deli-grill. Open 7 days in-season.',
   },
   {
@@ -584,8 +584,8 @@ export const shopping: Business[] = [
   },
   {
     id: 202, name: 'Wave Hog Surf Shop', cat: 'Shopping', subcat: 'Surf Shop',
-    town: 'Ship Bottom', address: 'Ship Bottom, NJ 08008',
-    web: 'https://www.wavehogsurfshop.com', icon: '🌊',
+    town: 'Ship Bottom', address: '620 Long Beach Blvd, Ship Bottom, NJ 08008',
+    phone: '(609) 494-1040', web: 'https://www.wavehogsurfshop.com', icon: '🌊',
     note: 'Core surf shop by surfers for surfers, on LBI since 2005.',
   },
   {
@@ -610,13 +610,13 @@ export const shopping: Business[] = [
   {
     id: 211, name: 'Making Waves', cat: 'Shopping', subcat: 'Apparel / Jewelry',
     town: 'Beach Haven', address: '325 9th St Unit 9, Beach Haven, NJ 08008',
-    phone: '(609) 492-9150', icon: '💍',
+    phone: '(609) 492-9150', web: 'https://shopmakingwaves.com', icon: '💍',
     note: 'Women\'s apparel, jewelry, and coastal accessories.',
   },
   {
     id: 212, name: 'The Mod Hatter', cat: 'Shopping', subcat: 'Gift / Jewelry',
     town: 'Beach Haven', address: '391 11th Street, Beach Haven, NJ 08008',
-    phone: '(609) 492-0999', icon: '🧢',
+    phone: '(609) 492-0999', web: 'https://themodhatter.com', icon: '🧢',
     note: 'Eclectic gifts, jewelry, and hats.',
   },
   {
@@ -628,19 +628,19 @@ export const shopping: Business[] = [
   {
     id: 214, name: "Chick's LBI Shop", cat: 'Shopping', subcat: 'Apparel / Printing',
     town: 'Beach Haven', address: '857 Seagull Lane, Beach Haven, NJ 08008',
-    phone: '(609) 492-1171', icon: '👕',
+    phone: '(609) 492-1171', web: 'https://chickslbi.wordpress.com', icon: '👕',
     note: 'Custom printing and LBI apparel. Great for group shirts and souvenirs.',
   },
   {
     id: 215, name: 'Little Bungalow', cat: 'Shopping', subcat: 'Apparel / Home Decor',
     town: 'Surf City', address: '1700 Long Beach Blvd, Surf City, NJ 08008',
-    phone: '(609) 494-1802', icon: '🌸',
+    phone: '(609) 494-1802', web: 'https://shoplittlebungalow.com', icon: '🌸',
     note: 'Boho-coastal women\'s fashion and home decor.',
   },
   {
     id: 216, name: 'Society Beach', cat: 'Shopping', subcat: 'Apparel',
     town: 'Surf City', address: '2106 Long Beach Blvd, Surf City, NJ 08008',
-    phone: '(609) 467-5444', icon: '👙',
+    phone: '(609) 467-5444', web: 'https://societybeachlbi.com', icon: '👙',
     note: 'Women\'s beach apparel and resort wear.',
   },
   // Home Decor
@@ -671,14 +671,14 @@ export const shopping: Business[] = [
   {
     id: 224, name: 'The Seawife', cat: 'Shopping', subcat: 'Antiques / Home Decor',
     town: 'Barnegat Light', address: '1901 Bayview Ave, Barnegat Light, NJ 08006',
-    phone: '(609) 361-8039', icon: '⚓',
+    phone: '(609) 361-8039', web: 'https://theseawife.com', icon: '⚓',
     note: 'Antiques and curated coastal decor at Viking Village.',
   },
   // Pharmacy
   {
     id: 230, name: "Kapler's Pharmacy", cat: 'Shopping', subcat: 'Pharmacy',
     town: 'Beach Haven', address: '1 S Bay Ave, Beach Haven, NJ 08008',
-    phone: '(609) 492-9221', icon: '💊',
+    phone: '(609) 492-9221', web: 'https://kaplersrx.com', icon: '💊',
     note: 'Independent local pharmacy. Island pharmacy staple.',
   },
   {
@@ -794,7 +794,7 @@ export const shopping: Business[] = [
   {
     id: 245, name: 'The Good Life Gift Boutique', cat: 'Shopping', subcat: 'Gift / Boutique',
     town: 'Surf City', address: '2200 Long Beach Blvd, Surf City, NJ 08008',
-    phone: '(609) 494-0200', icon: '🎁',
+    phone: '(609) 494-0200', web: 'https://thegoodlifeboutique.com', icon: '🎁',
     note: "Lifestyle boutique with women's clothing, jewelry, baby gifts, and home décor — including LBI-customized gifts.",
   },
   {
