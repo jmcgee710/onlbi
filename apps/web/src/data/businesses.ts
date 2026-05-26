@@ -109,9 +109,9 @@ export const dining: Business[] = [
   },
   {
     id: 114, name: "Panzone's Pizza", cat: 'Dining', subcat: 'Pizza',
-    town: 'Ship Bottom', address: '2117 Long Beach Blvd, Ship Bottom, NJ 08008',
-    phone: '(609) 492-5103', icon: '🍕',
-    note: 'Classic Jersey Shore pizza.',
+    town: 'Surf City', address: '2117 Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 494-1114', web: 'https://panzones.com', icon: '🍕',
+    note: 'LBI institution since 1980. Pizza, pasta, wings, and award-winning clam chowder. Seasonal.',
   },
   {
     id: 115, name: 'Burger 25', cat: 'Dining', subcat: 'Burgers / Ice Cream',
@@ -433,8 +433,14 @@ export const dining: Business[] = [
   {
     id: 175, name: "Panzone's Pizza", cat: 'Dining', subcat: 'Pizza',
     town: 'Beach Haven', address: '1106 N Bay Ave, Beach Haven, NJ 08008',
-    web: 'https://panzones.com', icon: '🍕',
-    note: 'South-end location of the LBI pizza institution. Classic Jersey Shore slices.',
+    phone: '(609) 492-5103', web: 'https://panzones.com', icon: '🍕',
+    note: 'South-end LBI institution since 1980. Pizza, pasta, seafood, wings, and award-winning clam chowder.',
+  },
+  {
+    id: 197, name: 'Munchies', cat: 'Dining', subcat: 'Snacks / Casual',
+    town: 'Surf City', address: '1409 Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 661-7380', icon: '🌭',
+    note: 'Italian hot dogs, cheesesteaks, breakfast sandwiches, burgers, and desserts. Wed–Sun daytime.',
   },
   // Round 5 — May 2026 sweep
   {
@@ -797,6 +803,12 @@ export const shopping: Business[] = [
     phone: '(609) 494-5739', web: 'https://fishermansheadquarters.com', icon: '🎣',
     note: 'Premier bait, tackle, and fishing gear shop open year-round since the 1960s. Just over the causeway.',
   },
+  {
+    id: 252, name: 'Tuckerton Lumber', cat: 'Shopping', subcat: 'Hardware / Lumber',
+    town: 'Surf City', address: '200 N Long Beach Blvd, Surf City, NJ 08008',
+    phone: '(609) 494-2111', web: 'https://tlcnj.com', icon: '🔨',
+    note: 'Independent hardware, lumber, and Benjamin Moore paint dealer on LBI. Mon–Fri 7am–4pm, Sat 7am–3pm.',
+  },
 ]
 
 // ─────────────────────────────────────────────
@@ -939,6 +951,12 @@ export const nightlife: Business[] = [
     town: 'Long Beach Township', address: '11801 Long Beach Blvd, Long Beach Twp, NJ 08008',
     web: 'http://www.nardistavern.com', icon: '🍻',
     note: "Longtime local dive bar. Hosts LBI's top cover bands. Runs the Pink Party Bus courtesy shuttle home after shows.",
+  },
+  {
+    id: 715, name: 'LBI Distilling Company', cat: 'Nightlife', subcat: 'Distillery / Tasting Room',
+    town: 'Beach Haven', address: '1305 Long Beach Blvd, Beach Haven, NJ 08008',
+    phone: '(609) 661-7154', web: 'https://lbidistillingcompany.com', icon: '🥃',
+    note: "The only craft distillery on Long Beach Island — spirits made on-site, tasting bar open Fri 5–9pm, Sat–Sun 12–9pm.",
   },
   // Bars — Round 3 additions
   {
