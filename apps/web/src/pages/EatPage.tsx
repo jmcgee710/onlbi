@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { dining, nightlife } from '../data/businesses'
 import { happyHours } from '../data/eats'
+import BizLogo from '../components/BizLogo'
 
 // ─── FILTERS ─────────────────────────────────────────────────────────────────
 type CatFilter = { label: string; test: (subcat: string) => boolean }
@@ -143,7 +144,7 @@ export default function EatPage() {
                     <div key={b.id} className="lc">
                       <div className="lc-head" style={{ marginBottom: 0 }}>
                         <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                          <span style={{ fontSize: 28, lineHeight: 1, marginTop: 2 }}>{b.icon}</span>
+                          <BizLogo name={b.name} web={b.web} />
                           <div>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{b.name}</h3>
                             <p className="lc-sub">{b.town} · {b.subcat}</p>
@@ -229,7 +230,7 @@ export default function EatPage() {
                     <div key={h.id} className="lc">
                       <div className="lc-head" style={{ marginBottom: 0 }}>
                         <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                          <span style={{ fontSize: 28, lineHeight: 1, marginTop: 2 }}>{h.emoji}</span>
+                          <BizLogo name={h.name} />
                           <div>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{h.name}</h3>
                             <p className="lc-sub">{h.town} · {h.price} · {h.hours}</p>
@@ -308,7 +309,7 @@ export default function EatPage() {
                     <div key={n.id} className="lc">
                       <div className="lc-head" style={{ marginBottom: 0 }}>
                         <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                          <span style={{ fontSize: 28, lineHeight: 1, marginTop: 2 }}>{n.icon}</span>
+                          <BizLogo name={n.name} web={n.web} />
                           <div>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{n.name}</h3>
                             <p className="lc-sub">{n.town} · {n.subcat}</p>
