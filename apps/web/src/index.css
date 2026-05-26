@@ -410,6 +410,8 @@ button { font-family: inherit; cursor: pointer; }
   .score-num { font-size: 80px; }
   .tide-events { grid-template-columns: repeat(2, 1fr); }
   .forecast { grid-template-columns: repeat(5, 1fr); }
+  /* Clear the fixed bottom nav */
+  .main { padding-bottom: 72px; }
 }
 
 /* ─── MOBILE NAV ─────────────────────────────── */
