@@ -1,25 +1,53 @@
 import { useState } from 'react'
-import { waterSports, entertainment, type Business } from '../data/businesses'
+import { waterSports, entertainment, shopping, type Business } from '../data/businesses'
 
+// ─── TYPES ───────────────────────────────────────────────────────────────────
+type MainTab = 'do' | 'shop'
+
+// ─── DO filters ──────────────────────────────────────────────────────────────
+type DoCat = 'All' | 'Water Sports & Rentals' | 'Entertainment'
+const DO_CATS: DoCat[] = ['All', 'Water Sports & Rentals', 'Entertainment']
 const doItems: Business[] = [...waterSports, ...entertainment]
+
+// ─── SHOP filters ─────────────────────────────────────────────────────────────
+type ShopCat = 'All' | 'Surf & Sport' | 'Apparel & Gifts' | 'Home & Decor' | 'Food & Convenience'
+const SHOP_CATS: ShopCat[] = ['All', 'Surf & Sport', 'Apparel & Gifts', 'Home & Decor', 'Food & Convenience']
+
+function matchShopCat(subcat: string, cat: ShopCat): boolean {
+  if (cat === 'All') return true
+  if (cat === 'Surf & Sport')
+    return /surf|bike|sport|rentals|paddle|water/i.test(subcat)
+  if (cat === 'Apparel & Gifts')
+    return /apparel|clothing|boutique|gift|jewelry|souvenir|printing|department/i.test(subcat)
+  if (cat === 'Home & Decor')
+    return /home|decor|furniture|design|antique|garden/i.test(subcat)
+  if (cat === 'Food & Convenience')
+    return /market|deli|butcher|candy|pharmacy|liquor|convenience|grocery/i.test(subcat)
+  return true
+}
 
 const TOWNS = ['All', 'Beach Haven', 'Barnegat Light', 'Harvey Cedars', 'Surf City', 'Ship Bottom', 'Long Beach Township', 'Brant Beach', 'Holgate']
 
-type CatKey = 'All' | 'Water Sports & Rentals' | 'Entertainment'
-const CATS: CatKey[] = ['All', 'Water Sports & Rentals', 'Entertainment']
-
-const CAT_ICON: Record<string, string> = {
-  'Water Sports & Rentals': '🌊',
-  'Entertainment': '🎡',
+const DO_CAT_COLOR: Record<string, { color: string; bg: string }> = {
+  'Water Sports & Rentals': { color: 'var(--teal-deep)', bg: 'rgba(72,108,107,0.08)' },
+  'Entertainment':          { color: 'var(--moss)',      bg: 'rgba(107,142,92,0.1)' },
 }
 
 export default function DoPage() {
-  const [catFilter, setCatFilter]   = useState<CatKey>('All')
+  const [tab, setTab]           = useState<MainTab>('do')
+  const [doCat, setDoCat]       = useState<DoCat>('All')
+  const [shopCat, setShopCat]   = useState<ShopCat>('All')
   const [townFilter, setTownFilter] = useState('All')
 
-  const filtered = doItems.filter(a => {
-    if (catFilter  !== 'All' && a.cat  !== catFilter)  return false
+  const filteredDo = doItems.filter(a => {
+    if (doCat !== 'All' && a.cat !== doCat) return false
     if (townFilter !== 'All' && a.town !== townFilter) return false
+    return true
+  })
+
+  const filteredShop = shopping.filter(s => {
+    if (!matchShopCat(s.subcat, shopCat)) return false
+    if (townFilter !== 'All' && s.town !== townFilter) return false
     return true
   })
 
@@ -29,19 +57,29 @@ export default function DoPage() {
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <div className="pg-hero">
         <div className="pg-eyebrow">
-          <span>Things To Do</span>
+          <span>Do &amp; Shop</span>
           <span className="rule" />
-          <span>LBI · Water Sports · Entertainment</span>
+          <span>LBI · Water Sports · Entertainment · Shopping</span>
         </div>
-        <h1><em>Things</em> To Do</h1>
+        <h1><em>Do</em> &amp; Shop</h1>
         <p className="pg-lede">
-          <b>{doItems.length} activities</b> across Long Beach Island — surf lessons, kayak tours,
-          pontoon rentals, mini golf, amusements &amp; more.
+          <b>{doItems.length} activities</b> and <b>{shopping.length} shops</b> across Long Beach Island —
+          surf lessons, boat rentals, amusements, boutiques, surf shops &amp; more.
         </p>
         <div className="pg-tabs">
-          <button className="pg-tab active" style={{ pointerEvents: 'none' }}>
-            <span className="tab-lbl">All Activities</span>
+          <button
+            className={`pg-tab${tab === 'do' ? ' active' : ''}`}
+            onClick={() => setTab('do')}
+          >
+            <span className="tab-lbl">Things To Do</span>
             <span className="tab-val">{doItems.length}</span>
+          </button>
+          <button
+            className={`pg-tab${tab === 'shop' ? ' active' : ''}`}
+            onClick={() => setTab('shop')}
+          >
+            <span className="tab-lbl">Shopping</span>
+            <span className="tab-val">{shopping.length}</span>
           </button>
           <button className="pg-tab" style={{ pointerEvents: 'none' }}>
             <span className="tab-lbl">Water Sports</span>
@@ -58,123 +96,195 @@ export default function DoPage() {
 
         {/* ── Main column ────────────────────────────────────────────────────── */}
         <div>
-          {/* Category chips */}
-          <div className="pg-chips">
-            {CATS.map(c => (
-              <button
-                key={c}
-                className={`pg-chip${catFilter === c ? ' on' : ''}`}
-                onClick={() => setCatFilter(c)}
-              >
-                {CAT_ICON[c] && <span>{CAT_ICON[c]}</span>}
-                {c}
-                {c !== 'All' && (
-                  <span className="ct">{doItems.filter(a => a.cat === c).length}</span>
-                )}
-              </button>
-            ))}
-          </div>
 
-          {/* Town chips */}
-          <div className="pg-chips" style={{ marginBottom: 24 }}>
-            {TOWNS.map(t => (
-              <button
-                key={t}
-                className={`pg-chip${townFilter === t ? ' on' : ''}`}
-                onClick={() => setTownFilter(t)}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
+          {/* ── DO TAB ──────────────────────────────────────────────────────── */}
+          {tab === 'do' && (
+            <>
+              <div className="pg-chips">
+                {DO_CATS.map(c => (
+                  <button
+                    key={c}
+                    className={`pg-chip${doCat === c ? ' on' : ''}`}
+                    onClick={() => setDoCat(c)}
+                  >
+                    {c}
+                    {c !== 'All' && <span className="ct">{doItems.filter(a => a.cat === c).length}</span>}
+                  </button>
+                ))}
+              </div>
 
-          <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginBottom: 18 }}>
-            {filtered.length} result{filtered.length !== 1 ? 's' : ''} ·
-            Hours &amp; availability vary — call ahead to confirm
-          </p>
+              <div className="pg-chips" style={{ marginBottom: 24 }}>
+                {TOWNS.map(t => (
+                  <button
+                    key={t}
+                    className={`pg-chip${townFilter === t ? ' on' : ''}`}
+                    onClick={() => setTownFilter(t)}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            {filtered.map(a => (
-              <div key={a.id} className="lc">
-                <div className="lc-head" style={{ marginBottom: 0 }}>
-                  <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                    <span style={{ fontSize: 30, lineHeight: 1, marginTop: 2 }}>{a.icon}</span>
-                    <div>
-                      <h3 className="lc-name" style={{ fontSize: 20 }}>{a.name}</h3>
-                      <p className="lc-sub">{a.town} · {a.subcat}</p>
+              <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginBottom: 18 }}>
+                {filteredDo.length} result{filteredDo.length !== 1 ? 's' : ''} ·
+                Hours &amp; availability vary — call ahead to confirm
+              </p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {filteredDo.map(a => {
+                  const cc = DO_CAT_COLOR[a.cat] ?? { color: 'var(--slate)', bg: 'var(--sand)' }
+                  return (
+                    <div key={a.id} className="lc">
+                      <div className="lc-head" style={{ marginBottom: 0 }}>
+                        <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                          <span style={{ fontSize: 28, lineHeight: 1, marginTop: 2 }}>{a.icon}</span>
+                          <div>
+                            <h3 className="lc-name" style={{ fontSize: 20 }}>{a.name}</h3>
+                            <p className="lc-sub">{a.town} · {a.subcat}</p>
+                          </div>
+                        </div>
+                        <span style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700, color: cc.color, background: cc.bg, padding: '4px 10px', borderRadius: 4, flexShrink: 0 }}>
+                          {a.cat}
+                        </span>
+                      </div>
+                      {a.note && (
+                        <p style={{ fontSize: 12.5, color: 'var(--ink-soft)', lineHeight: 1.45, marginTop: 12 }}>{a.note}</p>
+                      )}
+                      {(a.phone || a.web) && (
+                        <div style={{ display: 'flex', gap: 20, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)' }}>
+                          {a.phone && <a href={`tel:${a.phone}`} style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>{a.phone}</a>}
+                          {a.web && <a href={a.web} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>Website →</a>}
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  <span style={{
-                    fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 600,
-                    color: a.cat === 'Water Sports & Rentals' ? 'var(--teal-deep)' : 'var(--moss)',
-                    background: a.cat === 'Water Sports & Rentals' ? 'rgba(72,108,107,0.08)' : 'rgba(107,142,92,0.1)',
-                    padding: '4px 10px', borderRadius: 4, flexShrink: 0,
-                  }}>
-                    {CAT_ICON[a.cat]} {a.cat}
-                  </span>
-                </div>
-
-                {a.note && (
-                  <p style={{ fontSize: 12.5, color: 'var(--ink-soft)', lineHeight: 1.45, marginTop: 12 }}>
-                    {a.note}
-                  </p>
-                )}
-
-                {(a.phone || a.web) && (
-                  <div style={{ display: 'flex', gap: 20, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)' }}>
-                    {a.phone && (
-                      <a href={`tel:${a.phone}`} style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
-                        {a.phone}
-                      </a>
-                    )}
-                    {a.web && (
-                      <a href={a.web} target="_blank" rel="noopener noreferrer"
-                        style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
-                        Website →
-                      </a>
-                    )}
+                  )
+                })}
+                {filteredDo.length === 0 && (
+                  <div style={{ padding: '48px 0', textAlign: 'center', color: 'var(--slate)' }}>
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 22 }}>Nothing matches those filters</p>
+                    <p style={{ fontSize: 13, marginTop: 6 }}>Try a different category or town</p>
                   </div>
                 )}
               </div>
-            ))}
+            </>
+          )}
 
-            {filtered.length === 0 && (
-              <div style={{ padding: '48px 0', textAlign: 'center', color: 'var(--slate)' }}>
-                <p style={{ fontFamily: 'var(--font-display)', fontSize: 22 }}>Nothing matches those filters</p>
-                <p style={{ fontSize: 13, marginTop: 6 }}>Try a different category or town</p>
+          {/* ── SHOP TAB ────────────────────────────────────────────────────── */}
+          {tab === 'shop' && (
+            <>
+              <div className="pg-chips">
+                {SHOP_CATS.map(c => (
+                  <button
+                    key={c}
+                    className={`pg-chip${shopCat === c ? ' on' : ''}`}
+                    onClick={() => setShopCat(c)}
+                  >
+                    {c}
+                    {c !== 'All' && <span className="ct">{shopping.filter(s => matchShopCat(s.subcat, c)).length}</span>}
+                  </button>
+                ))}
               </div>
-            )}
-          </div>
+
+              <div className="pg-chips" style={{ marginBottom: 24 }}>
+                {TOWNS.map(t => (
+                  <button
+                    key={t}
+                    className={`pg-chip${townFilter === t ? ' on' : ''}`}
+                    onClick={() => setTownFilter(t)}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+
+              <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginBottom: 18 }}>
+                {filteredShop.length} shop{filteredShop.length !== 1 ? 's' : ''}
+              </p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {filteredShop.map(s => (
+                  <div key={s.id} className="lc">
+                    <div className="lc-head" style={{ marginBottom: 0 }}>
+                      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                        <span style={{ fontSize: 28, lineHeight: 1, marginTop: 2 }}>{s.icon}</span>
+                        <div>
+                          <h3 className="lc-name" style={{ fontSize: 20 }}>{s.name}</h3>
+                          <p className="lc-sub">{s.town} · {s.subcat}</p>
+                        </div>
+                      </div>
+                    </div>
+                    {s.note && (
+                      <p style={{ fontSize: 12.5, color: 'var(--ink-soft)', lineHeight: 1.45, marginTop: 12 }}>{s.note}</p>
+                    )}
+                    {(s.phone || s.web) && (
+                      <div style={{ display: 'flex', gap: 20, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)' }}>
+                        {s.phone && <a href={`tel:${s.phone}`} style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>{s.phone}</a>}
+                        {s.web && <a href={s.web} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>Website →</a>}
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {filteredShop.length === 0 && (
+                  <div style={{ padding: '48px 0', textAlign: 'center', color: 'var(--slate)' }}>
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 22 }}>Nothing matches those filters</p>
+                    <p style={{ fontSize: 13, marginTop: 6 }}>Try a different category or town</p>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+
         </div>
 
         {/* ── Sidebar ───────────────────────────────────────────────────────── */}
         <aside className="pg-aside">
-          <div className="aside-card">
-            <p className="aside-title">🚲 18-Mile Bike Path</p>
-            <p className="aside-body">
-              Runs end-to-end from Barnegat Light to Holgate along the bay side.
-              Rent a cruiser and ride the whole island — a bucket-list LBI experience.
-              Multiple rental shops island-wide.
-            </p>
-          </div>
-          <div className="aside-card">
-            <p className="aside-title">Water Sports</p>
-            <ul className="aside-list">
-              <li>Pontoon boat rentals available island-wide</li>
-              <li>Surf lessons for all levels — multiple shops</li>
-              <li>Kayak &amp; SUP rentals on the bay side</li>
-              <li>Head boat fishing from Viking Village (north)</li>
-              <li>Parasailing out of Beach Haven</li>
-            </ul>
-          </div>
-          <div className="aside-card advisory">
-            <p className="aside-title">Beach Haven</p>
-            <p className="aside-body">
-              Most of LBI's amusement parks, mini golf, and family entertainment is
-              concentrated in Beach Haven at the south end. Plan at least an evening there —
-              Fantasy Island and Thundering Surf are classics.
-            </p>
-          </div>
+          {tab === 'do' ? (
+            <>
+              <div className="aside-card">
+                <p className="aside-title">🚲 18-Mile Bike Path</p>
+                <p className="aside-body">
+                  Runs end-to-end from Barnegat Light to Holgate along the bay side.
+                  Rent a cruiser and ride the whole island — a bucket-list LBI experience.
+                </p>
+              </div>
+              <div className="aside-card">
+                <p className="aside-title">Water Sports</p>
+                <ul className="aside-list">
+                  <li>Pontoon boat rentals island-wide</li>
+                  <li>Surf lessons for all levels</li>
+                  <li>Kayak &amp; SUP rentals on the bay</li>
+                  <li>Head boat fishing — Viking Village</li>
+                  <li>Parasailing out of Beach Haven</li>
+                </ul>
+              </div>
+              <div className="aside-card advisory">
+                <p className="aside-title">Beach Haven</p>
+                <p className="aside-body">
+                  Most of LBI's amusements, mini golf, and family entertainment is
+                  in Beach Haven. Fantasy Island and Thundering Surf are classics.
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="aside-card">
+                <p className="aside-title">Shopping Tips</p>
+                <ul className="aside-list">
+                  <li>Bay Village (Beach Haven) has the highest concentration of boutiques</li>
+                  <li>Ron Jon in Ship Bottom is open 24/7, year-round</li>
+                  <li>Farias has six locations across LBI — surf gear and bikes</li>
+                  <li>Oskar Huber in Ship Bottom for high-end coastal furnishings</li>
+                </ul>
+              </div>
+              <div className="aside-card advisory">
+                <p className="aside-title">Surf Shops</p>
+                <p className="aside-body">
+                  Multiple surf shops offer board rentals, lessons, and gear.
+                  Most are open daily in season — call ahead off-season.
+                </p>
+              </div>
+            </>
+          )}
         </aside>
 
       </div>

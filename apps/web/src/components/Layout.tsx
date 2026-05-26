@@ -6,7 +6,7 @@ const mobileNav = [
   { to: '/',              Icon: Sun,             label: 'Today' },
   { to: '/beaches',       Icon: Umbrella,        label: 'Beaches' },
   { to: '/eat',           Icon: UtensilsCrossed, label: 'Eat' },
-  { to: '/do',            Icon: Anchor,          label: 'Do' },
+  { to: '/do',            Icon: Anchor,          label: 'Do & Shop' },
   { to: '/accessibility', Icon: Accessibility,   label: 'Access' },
 ]
 
