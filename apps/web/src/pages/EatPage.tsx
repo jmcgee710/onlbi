@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { dining, nightlife } from '../data/businesses'
-import { happyHours } from '../data/eats'
 import BizLogo from '../components/BizLogo'
 
 // ─── FILTERS ─────────────────────────────────────────────────────────────────
@@ -12,30 +11,20 @@ const CAT_FILTERS: CatFilter[] = [
   { label: 'Breakfast',       test: s => /breakfast|bagel|brunch/i.test(s) },
   { label: 'Italian',         test: s => /italian/i.test(s) },
   { label: 'Bar & Grill',     test: s => /bar.*(grill|restaurant)|grill|tavern|sports bar/i.test(s) },
-  { label: 'Coffee & Treats', test: s => /coffee|ice cream|bakery|candy|fudge|açaí|custard/i.test(s) },
-  { label: 'Market & Deli',   test: s => /market|deli|grocery|butcher/i.test(s) },
+  { label: 'Coffee & Treats', test: s => /coffee|ice cream|bakery|candy|fudge|açaí|custard|waffle|belgian/i.test(s) },
+  { label: 'Pizza',           test: s => /pizza/i.test(s) },
+  { label: 'Deli',            test: s => /deli|market|cafe|snack/i.test(s) },
 ]
 
 const TOWNS = ['All', 'Beach Haven', 'Barnegat Light', 'Harvey Cedars', 'Surf City', 'Ship Bottom', 'Long Beach Township', 'Brant Beach', 'Manahawkin']
-const HH_TAGS = ['All', 'Drafts', 'Cocktails', 'Oysters', 'Food', 'Wine', 'Seafood', 'Live Music']
-
-const activeCount = happyHours.filter(h => h.status === 'active').length
-const byobCount   = dining.filter(b => /BYOB/i.test(b.note ?? '')).length
-
 const NIGHTLIFE_TOWNS = ['All', 'Beach Haven', 'Barnegat Light', 'Harvey Cedars', 'Surf City', 'Ship Bottom', 'Long Beach Township', 'Brant Beach']
 
-function hhDot(s: string) {
-  if (s === 'active')   return { dot: '#4ade80', label: 'Open now' }
-  if (s === 'upcoming') return { dot: 'var(--sun)', label: 'Opening soon' }
-  return                       { dot: 'var(--slate-soft)', label: 'Closed' }
-}
+const byobCount = dining.filter(b => /BYOB/i.test(b.note ?? '')).length
 
 export default function EatPage() {
-  const [tab, setTab]             = useState<'eats' | 'hh' | 'nightlife'>('eats')
-  const [catFilter, setCatFilter] = useState('All')
+  const [tab, setTab]               = useState<'eats' | 'nightlife'>('eats')
+  const [catFilter, setCatFilter]   = useState('All')
   const [townFilter, setTownFilter] = useState('All')
-  const [hhTagFilter, setHhTagFilter] = useState('All')
-  const [expandedHH, setExpandedHH] = useState<number | null>(null)
   const [nightlifeTown, setNightlifeTown] = useState('All')
 
   const activeCatTest = CAT_FILTERS.find(f => f.label === catFilter)?.test ?? (() => true)
@@ -43,12 +32,6 @@ export default function EatPage() {
   const filteredEats = dining.filter(b => {
     if (townFilter !== 'All' && b.town !== townFilter) return false
     if (catFilter  !== 'All' && !activeCatTest(b.subcat)) return false
-    return true
-  })
-
-  const filteredHH = happyHours.filter(h => {
-    if (townFilter  !== 'All' && h.town !== townFilter) return false
-    if (hhTagFilter !== 'All' && !h.tags.includes(hhTagFilter)) return false
     return true
   })
 
@@ -60,12 +43,12 @@ export default function EatPage() {
         <div className="pg-eyebrow">
           <span>Eat &amp; Drink</span>
           <span className="rule" />
-          <span>LBI · {dining.length} spots</span>
+          <span>LBI · {dining.length + nightlife.length} spots</span>
         </div>
         <h1>Eat &amp; <em>Drink</em></h1>
         <p className="pg-lede">
-          <b>{dining.length}+ spots</b> across Long Beach Island — seafood shacks, raw bars,
-          Italian, BYOB gems &amp; the best happy hours on the island.
+          <b>{dining.length} restaurants</b> and <b>{nightlife.length} bars</b> across Long
+          Beach Island — seafood shacks, raw bars, Italian, BYOB gems &amp; nightlife.
         </p>
         <div className="pg-tabs">
           <button
@@ -76,19 +59,10 @@ export default function EatPage() {
             <span className="tab-val">{dining.length}</span>
           </button>
           <button
-            className={`pg-tab${tab === 'hh' ? ' active' : ''}`}
-            onClick={() => setTab('hh')}
-          >
-            <span className="tab-lbl">Happy Hour</span>
-            <span className="tab-val">
-              {activeCount > 0 ? <><em>{activeCount}</em> live</> : happyHours.length + ' spots'}
-            </span>
-          </button>
-          <button
             className={`pg-tab${tab === 'nightlife' ? ' active' : ''}`}
             onClick={() => setTab('nightlife')}
           >
-            <span className="tab-lbl">Bars & Nightlife</span>
+            <span className="tab-lbl">Bars &amp; Nightlife</span>
             <span className="tab-val">{nightlife.length}</span>
           </button>
           <button className="pg-tab" style={{ pointerEvents: 'none' }}>
@@ -106,7 +80,6 @@ export default function EatPage() {
           {/* RESTAURANTS */}
           {tab === 'eats' && (
             <>
-              {/* Category chips */}
               <div className="pg-chips">
                 {CAT_FILTERS.map(f => (
                   <button
@@ -119,7 +92,6 @@ export default function EatPage() {
                 ))}
               </div>
 
-              {/* Town chips */}
               <div className="pg-chips" style={{ marginBottom: 24 }}>
                 {TOWNS.map(t => (
                   <button
@@ -160,13 +132,11 @@ export default function EatPage() {
                           </span>
                         )}
                       </div>
-
                       {b.note && (
                         <p style={{ fontSize: 12.5, color: 'var(--slate)', lineHeight: 1.45, marginTop: 12, fontStyle: 'italic' }}>
                           {b.note}
                         </p>
                       )}
-
                       {(b.phone || b.web) && (
                         <div style={{ display: 'flex', gap: 20, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)' }}>
                           {b.phone && (
@@ -185,7 +155,6 @@ export default function EatPage() {
                     </div>
                   )
                 })}
-
                 {filteredEats.length === 0 && (
                   <div style={{ padding: '48px 0', textAlign: 'center', color: 'var(--slate)' }}>
                     <p style={{ fontFamily: 'var(--font-display)', fontSize: 22 }}>Nothing matches those filters</p>
@@ -196,98 +165,7 @@ export default function EatPage() {
             </>
           )}
 
-          {/* HAPPY HOUR */}
-          {tab === 'hh' && (
-            <>
-              <div className="pg-chips">
-                {TOWNS.map(t => (
-                  <button
-                    key={t}
-                    className={`pg-chip${townFilter === t ? ' on' : ''}`}
-                    onClick={() => setTownFilter(t)}
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
-              <div className="pg-chips" style={{ marginBottom: 24 }}>
-                {HH_TAGS.map(t => (
-                  <button
-                    key={t}
-                    className={`pg-chip${hhTagFilter === t ? ' on' : ''}`}
-                    onClick={() => setHhTagFilter(t)}
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                {filteredHH.map(h => {
-                  const st = hhDot(h.status)
-                  const isExpanded = expandedHH === h.id
-                  return (
-                    <div key={h.id} className="lc">
-                      <div className="lc-head" style={{ marginBottom: 0 }}>
-                        <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                          <BizLogo name={h.name} />
-                          <div>
-                            <h3 className="lc-name" style={{ fontSize: 20 }}>{h.name}</h3>
-                            <p className="lc-sub">{h.town} · {h.price} · {h.hours}</p>
-                          </div>
-                        </div>
-                        <span style={{
-                          display: 'inline-flex', alignItems: 'center', gap: 6,
-                          fontSize: 11, fontWeight: 600, flexShrink: 0,
-                          color: h.status === 'active' ? 'var(--moss)' : 'var(--slate)',
-                        }}>
-                          <span style={{ width: 7, height: 7, borderRadius: '50%', background: st.dot, flexShrink: 0 }} />
-                          {h.status === 'active' ? h.closesIn : h.status === 'upcoming' ? h.opensIn : h.opensIn}
-                        </span>
-                      </div>
-
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 14 }}>
-                        {h.deals.slice(0, isExpanded ? h.deals.length : 2).map((d, i) => (
-                          <span key={i} style={{
-                            fontSize: 11, fontWeight: 600,
-                            background: 'rgba(196,90,62,0.07)', color: 'var(--coral)',
-                            padding: '4px 10px', borderRadius: 4,
-                          }}>
-                            {d}
-                          </span>
-                        ))}
-                        {!isExpanded && h.deals.length > 2 && (
-                          <span style={{ fontSize: 11, color: 'var(--slate-soft)', alignSelf: 'center' }}>
-                            +{h.deals.length - 2} more
-                          </span>
-                        )}
-                      </div>
-
-                      {isExpanded && h.tip && (
-                        <div style={{
-                          marginTop: 14, padding: '12px 16px',
-                          background: 'rgba(107,150,148,0.08)',
-                          borderRadius: 6, fontSize: 12.5, color: 'var(--teal-deep)', lineHeight: 1.45,
-                        }}>
-                          <strong style={{ display: 'block', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 4 }}>Local Tip</strong>
-                          {h.tip}
-                        </div>
-                      )}
-
-                      <button
-                        onClick={() => setExpandedHH(isExpanded ? null : h.id)}
-                        style={{ marginTop: 14, fontSize: 12, color: 'var(--teal-deep)', fontWeight: 600, background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
-                      >
-                        {isExpanded ? 'Show less ↑' : 'See all deals + tip →'}
-                      </button>
-                    </div>
-                  )
-                })}
-              </div>
-            </>
-          )}
-
-          {/* NIGHTLIFE */}
+          {/* BARS & NIGHTLIFE */}
           {tab === 'nightlife' && (
             <>
               <div className="pg-chips" style={{ marginBottom: 24 }}>
@@ -346,65 +224,41 @@ export default function EatPage() {
 
         {/* ── Sidebar ───────────────────────────────────────────────────────── */}
         <aside className="pg-aside">
-          {tab === 'eats' ? (
-            <>
-              {activeCount > 0 && (
-                <div className="aside-card">
-                  <p className="aside-title">Happy Hour Now</p>
-                  {happyHours.filter(h => h.status === 'active').map(h => (
-                    <div key={h.id} style={{ marginBottom: 12, paddingBottom: 12, borderBottom: '1px solid var(--line-soft)' }}
-                      className="last:border-0 last:mb-0 last:pb-0">
-                      <p style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 500, color: 'var(--ink)', marginBottom: 2 }}>
-                        {h.emoji} {h.name}
-                      </p>
-                      <p style={{ fontSize: 12, color: 'var(--slate)' }}>{h.town} · {h.hours}</p>
-                      <p style={{ fontSize: 12, color: 'var(--moss)', fontWeight: 600, marginTop: 3 }}>{h.closesIn}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div className="aside-card advisory">
-                <p className="aside-title">BYOB Guide</p>
-                <p className="aside-body">
-                  Many LBI restaurants are BYOB — look for the badge on each listing.
-                  Kubel's, Stefano's, and Raimondo's are classics. Always call ahead to confirm.
-                </p>
+          <div className="aside-card advisory">
+            <p className="aside-title">BYOB Guide</p>
+            <p className="aside-body">
+              Many LBI restaurants are BYOB — look for the badge on each listing.
+              Kubel's, Stefano's, and Raimondo's are classics. Always call ahead to confirm.
+            </p>
+          </div>
+          <div className="aside-card">
+            <p className="aside-title">Island Tip</p>
+            <p className="aside-body">
+              In July and August, waits at top spots can hit 1–2 hours on weekends.
+              Go early, eat late, or try the north end (Barnegat Light) for shorter waits.
+            </p>
+          </div>
+          <div className="aside-card">
+            <p className="aside-title">Quick Stats</p>
+            <div className="aside-mini">
+              <div>
+                <div className="st-lbl">Restaurants</div>
+                <div className="st-val" style={{ fontSize: 26, marginTop: 4 }}>{dining.length}</div>
               </div>
-              <div className="aside-card">
-                <p className="aside-title">Island Tip</p>
-                <p className="aside-body">
-                  In July and August, waits at top spots can hit 1–2 hours on weekends.
-                  Go early, eat late, or try the north end (Barnegat Light) for shorter waits.
-                </p>
+              <div>
+                <div className="st-lbl">Bars</div>
+                <div className="st-val" style={{ fontSize: 26, marginTop: 4 }}>{nightlife.length}</div>
               </div>
-            </>
-          ) : (
-            <>
-              <div className="aside-card">
-                <p className="aside-title">Today's Status</p>
-                <div className="aside-mini">
-                  {[
-                    { label: 'Active Now',   count: happyHours.filter(h => h.status === 'active').length,   color: 'var(--moss)' },
-                    { label: 'Opening Soon', count: happyHours.filter(h => h.status === 'upcoming').length, color: 'var(--sun)' },
-                    { label: 'Closed',       count: happyHours.filter(h => h.status === 'closed').length,   color: 'var(--slate-soft)' },
-                    { label: 'Total Spots',  count: happyHours.length,                                       color: 'var(--ink)' },
-                  ].map(s => (
-                    <div key={s.label}>
-                      <div className="st-lbl" style={{ marginBottom: 4 }}>{s.label}</div>
-                      <div className="st-val" style={{ fontSize: 28, color: s.color }}>{s.count}</div>
-                    </div>
-                  ))}
-                </div>
+              <div>
+                <div className="st-lbl">BYOB Spots</div>
+                <div className="st-val" style={{ fontSize: 26, marginTop: 4 }}>{byobCount}</div>
               </div>
-              <div className="aside-card advisory">
-                <p className="aside-title">Pro Tip</p>
-                <p className="aside-body">
-                  Happy hours on LBI tend to run 4–6 PM on weekdays. Weekends fill fast —
-                  arrive 15 min early for the best seats.
-                </p>
+              <div>
+                <div className="st-lbl">Total</div>
+                <div className="st-val" style={{ fontSize: 26, marginTop: 4 }}>{dining.length + nightlife.length}</div>
               </div>
-            </>
-          )}
+            </div>
+          </div>
         </aside>
 
       </div>
