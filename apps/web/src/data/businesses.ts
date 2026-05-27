@@ -564,6 +564,18 @@ export const dining: Business[] = [
     note: "Bayside counter-service grill at Schooner's Wharf — burgers, wraps, sushi, outdoor seating. Seasonal.",
   },
   {
+    id: 202, name: "Bowker's South Beach Deli & Grill", cat: 'Dining', subcat: 'Deli / Grill',
+    town: 'Long Beach Township', address: '5404 Long Beach Blvd, Holgate, NJ 08008',
+    phone: '(609) 492-0242', web: 'https://bowkersgratefuldeli.com', icon: '🥙',
+    note: 'Southernmost spot on LBI in Holgate. Breakfast, bagels, cheesesteaks, crumb cake, and smoothies. Classic laid-back beach-end vibe.',
+  },
+  {
+    id: 203, name: "Barry's Do Me a Flavor", cat: 'Dining', subcat: 'Ice Cream / Restaurant',
+    town: 'Beach Haven', address: '309 Centre St, Beach Haven, NJ 08008',
+    phone: '(609) 492-8259', web: 'https://barrysdomeaflavor.com', icon: '🍦',
+    note: 'LBI institution since 1987. 24 flavors of Arctic ice cream plus a full menu — cheesesteaks, fish tacos, burgers, and seafood.',
+  },
+  {
     id: 196, name: 'Holiday Snack Bar', cat: 'Dining', subcat: 'Diner / Pie',
     town: 'Beach Haven', address: '401 Centre St, Beach Haven, NJ 08008',
     phone: '(609) 492-4544', web: 'https://holidaysnackbar.com', icon: '🥧',
