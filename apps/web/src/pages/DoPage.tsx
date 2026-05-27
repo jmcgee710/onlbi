@@ -34,13 +34,14 @@ const DO_CAT_COLOR: Record<string, { color: string; bg: string }> = {
   'Entertainment':          { color: 'var(--moss)',      bg: 'rgba(107,142,92,0.1)' },
 }
 
+// Module-level so it's always available in JSX renders
+const PARK_SUBCATS = /park|nature|dog park|wildlife|boat ramp|bay beach/i
+
 export default function DoPage() {
   const [tab, setTab]           = useState<MainTab>('do')
   const [doCat, setDoCat]       = useState<DoCat>('All')
   const [shopCat, setShopCat]   = useState<ShopCat>('All')
   const [townFilter, setTownFilter] = useState('All')
-
-  const PARK_SUBCATS = /park|nature|dog park|wildlife|boat ramp|bay beach/i
 
   const filteredDo = doItems.filter(a => {
     if (townFilter !== 'All' && a.town !== townFilter) return false
@@ -85,11 +86,17 @@ export default function DoPage() {
             <span className="tab-lbl">Shopping</span>
             <span className="tab-val">{shopping.length}</span>
           </button>
-          <button className="pg-tab" style={{ pointerEvents: 'none' }}>
+          <button
+            className={`pg-tab${tab === 'do' && doCat === 'Water Sports & Rentals' ? ' active' : ''}`}
+            onClick={() => { setTab('do'); setDoCat('Water Sports & Rentals') }}
+          >
             <span className="tab-lbl">Water Sports</span>
             <span className="tab-val">{waterSports.length}</span>
           </button>
-          <button className="pg-tab" style={{ pointerEvents: 'none' }}>
+          <button
+            className={`pg-tab${tab === 'do' && doCat === 'Entertainment' ? ' active' : ''}`}
+            onClick={() => { setTab('do'); setDoCat('Entertainment') }}
+          >
             <span className="tab-lbl">Entertainment</span>
             <span className="tab-val">{entertainment.length}</span>
           </button>
