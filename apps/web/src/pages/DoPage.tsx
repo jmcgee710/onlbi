@@ -73,8 +73,8 @@ export default function DoPage() {
         </p>
         <div className="pg-tabs">
           <button
-            className={`pg-tab${tab === 'do' ? ' active' : ''}`}
-            onClick={() => setTab('do')}
+            className={`pg-tab${tab === 'do' && doCat === 'All' ? ' active' : ''}`}
+            onClick={() => { setTab('do'); setDoCat('All') }}
           >
             <span className="tab-lbl">Things To Do</span>
             <span className="tab-val">{doItems.length}</span>

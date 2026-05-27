@@ -26,12 +26,14 @@ export default function EatPage() {
   const [catFilter, setCatFilter]   = useState('All')
   const [townFilter, setTownFilter] = useState('All')
   const [nightlifeTown, setNightlifeTown] = useState('All')
+  const [byobOnly, setByobOnly]     = useState(false)
 
   const activeCatTest = CAT_FILTERS.find(f => f.label === catFilter)?.test ?? (() => true)
 
   const filteredEats = dining.filter(b => {
     if (townFilter !== 'All' && b.town !== townFilter) return false
-    if (catFilter  !== 'All' && !activeCatTest(b.subcat)) return false
+    if (byobOnly && !/BYOB/i.test(b.note ?? '')) return false
+    if (!byobOnly && catFilter !== 'All' && !activeCatTest(b.subcat)) return false
     return true
   })
 
@@ -52,20 +54,23 @@ export default function EatPage() {
         </p>
         <div className="pg-tabs">
           <button
-            className={`pg-tab${tab === 'eats' ? ' active' : ''}`}
-            onClick={() => setTab('eats')}
+            className={`pg-tab${tab === 'eats' && !byobOnly ? ' active' : ''}`}
+            onClick={() => { setTab('eats'); setByobOnly(false) }}
           >
             <span className="tab-lbl">Restaurants</span>
             <span className="tab-val">{dining.length}</span>
           </button>
           <button
             className={`pg-tab${tab === 'nightlife' ? ' active' : ''}`}
-            onClick={() => setTab('nightlife')}
+            onClick={() => { setTab('nightlife'); setByobOnly(false) }}
           >
             <span className="tab-lbl">Bars &amp; Nightlife</span>
             <span className="tab-val">{nightlife.length}</span>
           </button>
-          <button className="pg-tab" style={{ pointerEvents: 'none' }}>
+          <button
+            className={`pg-tab${byobOnly ? ' active' : ''}`}
+            onClick={() => { setTab('eats'); setByobOnly(true); setCatFilter('All') }}
+          >
             <span className="tab-lbl">BYOB</span>
             <span className="tab-val">{byobCount}</span>
           </button>
