@@ -6,8 +6,8 @@ import BizLogo from '../components/BizLogo'
 type MainTab = 'do' | 'shop'
 
 // ─── DO filters ──────────────────────────────────────────────────────────────
-type DoCat = 'All' | 'Water Sports & Rentals' | 'Entertainment'
-const DO_CATS: DoCat[] = ['All', 'Water Sports & Rentals', 'Entertainment']
+type DoCat = 'All' | 'Water Sports & Rentals' | 'Entertainment' | 'Parks & Nature'
+const DO_CATS: DoCat[] = ['All', 'Water Sports & Rentals', 'Entertainment', 'Parks & Nature']
 const doItems: Business[] = [...waterSports, ...entertainment]
 
 // ─── SHOP filters ─────────────────────────────────────────────────────────────
@@ -40,9 +40,12 @@ export default function DoPage() {
   const [shopCat, setShopCat]   = useState<ShopCat>('All')
   const [townFilter, setTownFilter] = useState('All')
 
+  const PARK_SUBCATS = /park|nature|dog park|wildlife|boat ramp|bay beach/i
+
   const filteredDo = doItems.filter(a => {
-    if (doCat !== 'All' && a.cat !== doCat) return false
     if (townFilter !== 'All' && a.town !== townFilter) return false
+    if (doCat === 'Parks & Nature') return PARK_SUBCATS.test(a.subcat)
+    if (doCat !== 'All' && a.cat !== doCat) return false
     return true
   })
 
@@ -65,7 +68,7 @@ export default function DoPage() {
         <h1><em>Do</em> &amp; Shop</h1>
         <p className="pg-lede">
           <b>{doItems.length} activities</b> and <b>{shopping.length} shops</b> across Long Beach Island —
-          surf lessons, boat rentals, amusements, boutiques, surf shops &amp; more.
+          surf lessons, boat rentals, amusements, parks, boutiques, surf shops &amp; more.
         </p>
         <div className="pg-tabs">
           <button
