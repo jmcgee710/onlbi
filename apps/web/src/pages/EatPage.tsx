@@ -120,7 +120,6 @@ export default function EatPage() {
                           <div>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{b.name}</h3>
                             <p className="lc-sub">{b.town} · {b.subcat}</p>
-                            {b.address && <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginTop: 2 }}>{b.address}</p>}
                           </div>
                         </div>
                         {isByob && (
@@ -138,8 +137,8 @@ export default function EatPage() {
                           {b.note}
                         </p>
                       )}
-                      {(b.phone || b.web) && (
-                        <div style={{ display: 'flex', gap: 20, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)' }}>
+                      {(b.phone || b.web || b.address) && (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)', alignItems: 'center' }}>
                           {b.phone && (
                             <a href={`tel:${b.phone}`} style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
                               {b.phone}
@@ -150,6 +149,11 @@ export default function EatPage() {
                               style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
                               Website →
                             </a>
+                          )}
+                          {b.address && (
+                            <span style={{ fontSize: 12, color: 'var(--slate-soft)', marginLeft: 'auto' }}>
+                              {b.address}
+                            </span>
                           )}
                         </div>
                       )}
@@ -192,7 +196,6 @@ export default function EatPage() {
                           <div>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{n.name}</h3>
                             <p className="lc-sub">{n.town} · {n.subcat}</p>
-                            {n.address && <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginTop: 2 }}>{n.address}</p>}
                           </div>
                         </div>
                       </div>
@@ -201,8 +204,8 @@ export default function EatPage() {
                           {n.note}
                         </p>
                       )}
-                      {(n.phone || n.web) && (
-                        <div style={{ display: 'flex', gap: 20, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)' }}>
+                      {(n.phone || n.web || n.address) && (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)', alignItems: 'center' }}>
                           {n.phone && (
                             <a href={`tel:${n.phone}`} style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
                               {n.phone}
@@ -213,6 +216,11 @@ export default function EatPage() {
                               style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
                               Website →
                             </a>
+                          )}
+                          {n.address && (
+                            <span style={{ fontSize: 12, color: 'var(--slate-soft)', marginLeft: 'auto' }}>
+                              {n.address}
+                            </span>
                           )}
                         </div>
                       )}

@@ -142,7 +142,6 @@ export default function DoPage() {
                           <div>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{a.name}</h3>
                             <p className="lc-sub">{a.town} · {a.subcat}</p>
-                            {a.address && <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginTop: 2 }}>{a.address}</p>}
                           </div>
                         </div>
                         <span style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700, color: cc.color, background: cc.bg, padding: '4px 10px', borderRadius: 4, flexShrink: 0 }}>
@@ -152,10 +151,11 @@ export default function DoPage() {
                       {a.note && (
                         <p style={{ fontSize: 12.5, color: 'var(--ink-soft)', lineHeight: 1.45, marginTop: 12 }}>{a.note}</p>
                       )}
-                      {(a.phone || a.web) && (
-                        <div style={{ display: 'flex', gap: 20, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)' }}>
+                      {(a.phone || a.web || a.address) && (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)', alignItems: 'center' }}>
                           {a.phone && <a href={`tel:${a.phone}`} style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>{a.phone}</a>}
                           {a.web && <a href={a.web} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>Website →</a>}
+                          {a.address && <span style={{ fontSize: 12, color: 'var(--slate-soft)', marginLeft: 'auto' }}>{a.address}</span>}
                         </div>
                       )}
                     </div>
@@ -212,17 +212,17 @@ export default function DoPage() {
                         <div>
                           <h3 className="lc-name" style={{ fontSize: 20 }}>{s.name}</h3>
                           <p className="lc-sub">{s.town} · {s.subcat}</p>
-                          {s.address && <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginTop: 2 }}>{s.address}</p>}
                         </div>
                       </div>
                     </div>
                     {s.note && (
                       <p style={{ fontSize: 12.5, color: 'var(--ink-soft)', lineHeight: 1.45, marginTop: 12 }}>{s.note}</p>
                     )}
-                    {(s.phone || s.web) && (
-                      <div style={{ display: 'flex', gap: 20, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)' }}>
+                    {(s.phone || s.web || s.address) && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--line-soft)', alignItems: 'center' }}>
                         {s.phone && <a href={`tel:${s.phone}`} style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>{s.phone}</a>}
                         {s.web && <a href={s.web} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>Website →</a>}
+                        {s.address && <span style={{ fontSize: 12, color: 'var(--slate-soft)', marginLeft: 'auto' }}>{s.address}</span>}
                       </div>
                     )}
                   </div>
