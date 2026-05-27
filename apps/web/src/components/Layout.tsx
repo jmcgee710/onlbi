@@ -1,5 +1,5 @@
-import { Outlet, NavLink } from 'react-router-dom'
-import { Sun, Umbrella, UtensilsCrossed, Anchor, Accessibility, Search, Bell, CalendarDays } from 'lucide-react'
+import { Outlet, NavLink, Link } from 'react-router-dom'
+import { Sun, Umbrella, UtensilsCrossed, Anchor, Accessibility, Bell } from 'lucide-react'
 import Sidebar from './Sidebar'
 
 const mobileNav = [
@@ -21,14 +21,9 @@ export default function Layout() {
           <span style={{ fontFamily: 'var(--font-display)', fontSize: 14, color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', letterSpacing: '0.01em' }}>
             because your <span style={{ color: 'rgba(255,255,255,0.85)', fontStyle: 'normal', fontWeight: 500 }}>ON</span> the island not in it!
           </span>
-          <div style={{ display: 'flex', gap: 16 }}>
-            <button style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', padding: 0 }}>
-              <Search size={18} strokeWidth={1.5} />
-            </button>
-            <button style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', padding: 0 }}>
-              <Bell size={18} strokeWidth={1.5} />
-            </button>
-          </div>
+          <Link to="/alerts" style={{ color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center' }}>
+            <Bell size={18} strokeWidth={1.5} />
+          </Link>
         </div>
 
         {/* Desktop top bar */}
@@ -39,15 +34,9 @@ export default function Layout() {
             })}
           </div>
           <span className="spacer" />
-          <button className="icon-btn">
-            <Search size={14} strokeWidth={1.75} /> Search the island
-          </button>
-          <button className="icon-btn">
-            <CalendarDays size={14} strokeWidth={1.75} /> Tomorrow
-          </button>
-          <button className="icon-btn primary">
-            <Bell size={14} strokeWidth={1.75} /> 1 Alert
-          </button>
+          <Link to="/alerts" className="icon-btn primary" style={{ textDecoration: 'none' }}>
+            <Bell size={14} strokeWidth={1.75} /> Alerts
+          </Link>
         </div>
 
         <Outlet />

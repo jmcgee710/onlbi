@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { tideKeyTimes, forecast } from '../data/conditions'
-import { todayEvents, happyHoursActive } from '../data/events'
+import { todayEvents } from '../data/events'
 import { useTides, type TideEvent } from '../hooks/useTides'
 import { useNow } from '../hooks/useNow'
 import { useWeather } from '../hooks/useWeather'
@@ -426,16 +426,6 @@ export default function TodayPage() {
           </div>
         </div>
 
-        {/* Happy Hour banner */}
-        {happyHoursActive.length > 0 && (
-          <button className="banner">
-            <span className="banner-tag">Happy Hour</span>
-            <span className="banner-text">
-              <strong>{happyHoursActive.length} spots running deals right now</strong> — {happyHoursActive.map(h => h.name.split(' ')[0]).join(' & ')}, til 7 pm
-            </span>
-            <span className="banner-arrow">→</span>
-          </button>
-        )}
 
         {/* Three activity scores — same day can rate differently for lounging
             vs swimming vs surfing (e.g. perfect sun + 55°F water + 9ft surf
@@ -487,7 +477,7 @@ export default function TodayPage() {
                     By how you'd use the beach
                   </div>
                 </div>
-                <button className="section-link">Methodology ↗</button>
+                <a href="https://safebeachday.com" target="_blank" rel="noopener noreferrer" className="section-link">Live conditions ↗</a>
               </div>
 
               <div
@@ -754,13 +744,20 @@ export default function TodayPage() {
         <div className="card">
           <div className="card-head">
             <h2 className="card-title">Happening today</h2>
-            <button className="section-link">Full calendar →</button>
+            <a
+              href="https://welcometolbi.com/events/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="section-link"
+            >
+              Full calendar ↗
+            </a>
           </div>
           <div className="events">
             {todayEvents.map((e, i) => {
               const hour = e.time.match(/^(\d+)/)?.[1] ?? '?'
               const ap = e.time.toLowerCase().includes('pm') ? 'pm' : 'am'
-              return (
+              const inner = (
                 <div className="event" key={i}>
                   <div className="event-time">
                     <span className="h">{hour}</span>
@@ -768,11 +765,21 @@ export default function TodayPage() {
                   </div>
                   <div>
                     <div className="event-title">{e.title}</div>
-                    <div className="event-meta">{e.venue} · {e.time}</div>
+                    <div className="event-meta">
+                      {e.venue} · {e.time}
+                      {e.recurring && (
+                        <span style={{ marginLeft: 6, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--teal-deep)', background: 'rgba(72,108,107,0.08)', padding: '2px 7px', borderRadius: 3 }}>
+                          {e.recurring}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <span className={`event-price ${e.free ? 'free' : ''}`}>{e.free ? 'Free' : e.price}</span>
                 </div>
               )
+              return e.web
+                ? <a key={i} href={e.web} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>{inner}</a>
+                : inner
             })}
           </div>
         </div>

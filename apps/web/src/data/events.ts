@@ -1,13 +1,78 @@
-export const todayEvents = [
-  { title: 'ChowderFest',              venue: 'Beach Haven',      time: '10 AM – 6 PM', cat: 'Food',     icon: '🍲', free: false, price: '$15 admission' },
-  { title: 'LBI Triathlon',            venue: 'Ship Bottom',      time: '7 AM Start',   cat: 'Sports',   icon: '🏃', free: false, price: '$75 registration' },
-  { title: 'Viking Village Fish Market', venue: 'Barnegat Light', time: '6 AM – 2 PM',  cat: 'Market',   icon: '🐟', free: true,  price: 'Free entry' },
-  { title: 'Live Jazz at Buckalew\'s', venue: 'Beach Haven',      time: '8 PM – 11 PM', cat: 'Music',    icon: '🎷', free: true,  price: 'No cover' },
-  { title: 'Kayak Tour – Barnegat Bay', venue: 'Surf City',       time: '9 AM & 2 PM',  cat: 'Activity', icon: '🛶', free: false, price: '$45/person' },
-  { title: 'Sunset Yoga on the Beach', venue: 'Harvey Cedars',    time: '6:30 PM',      cat: 'Wellness', icon: '🧘', free: false, price: '$20/class' },
-]
+// ─────────────────────────────────────────────────────────────────────────────
+// EVENTS — Recurring seasonal LBI events, updated each spring
+// These represent real annual/weekly recurring events on the island.
+// Source: welcometolbi.com/events, individual venue sites
+// ⚠️  UPDATE EACH SPRING — dates shift year to year
+// ─────────────────────────────────────────────────────────────────────────────
 
-export const happyHoursActive = [
-  { name: "Buckalew's Restaurant & Bar", town: 'Beach Haven', hours: '4 PM – 6 PM', closesIn: 'Ends in 38 min', deals: ['$2 off all drafts', '$5 house cocktails', '$1 oysters'] },
-  { name: "Daddy O Hotel & Bar",         town: 'Beach Haven', hours: '5 PM – 7 PM', closesIn: 'Ends in 1h 22min', deals: ['$6 craft cocktails', '$4 house wine', '$8 flatbreads'] },
+export type LBIEvent = {
+  title: string
+  venue: string
+  time: string
+  cat: string
+  free: boolean
+  price: string
+  web?: string
+  recurring?: string // e.g. "Every Monday in season"
+}
+
+export const todayEvents: LBIEvent[] = [
+  {
+    title: 'Fantasy Island Amusement Park',
+    venue: 'Beach Haven',
+    time: '6 PM – 11 PM',
+    cat: 'Family',
+    free: false,
+    price: 'Ride tickets',
+    web: 'https://fantasyislandlbi.com',
+    recurring: 'Nightly in season',
+  },
+  {
+    title: 'Thundering Surf Water Park',
+    venue: 'Beach Haven',
+    time: '10 AM – 6 PM',
+    cat: 'Family',
+    free: false,
+    price: 'Admission fee',
+    web: 'https://thunderingsurf.com',
+    recurring: 'Daily Memorial – Labor Day',
+  },
+  {
+    title: 'Viking Village Fish Market',
+    venue: 'Barnegat Light',
+    time: '6 AM – 2 PM',
+    cat: 'Market',
+    free: true,
+    price: 'Free entry',
+    web: 'https://vikingvillage.net',
+    recurring: 'Daily in season',
+  },
+  {
+    title: 'Surflight Theatre',
+    venue: 'Beach Haven',
+    time: '8 PM',
+    cat: 'Arts',
+    free: false,
+    price: 'Tickets from $35',
+    web: 'https://surflight.org',
+    recurring: 'Nightly Tue–Sun, June–Sept',
+  },
+  {
+    title: 'Bay Breeze Park Summer Concerts',
+    venue: 'Barnegat Light',
+    time: '7 PM – 9 PM',
+    cat: 'Music',
+    free: true,
+    price: 'Free',
+    recurring: 'Mondays in season',
+  },
+  {
+    title: 'Sunset Park Wednesday Concerts',
+    venue: 'Harvey Cedars',
+    time: '7 PM – 9 PM',
+    cat: 'Music',
+    free: true,
+    price: 'Free',
+    recurring: 'Wednesdays in season',
+  },
 ]
