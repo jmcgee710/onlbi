@@ -112,7 +112,13 @@ export default function DoPage() {
                     onClick={() => setDoCat(c)}
                   >
                     {c}
-                    {c !== 'All' && <span className="ct">{doItems.filter(a => a.cat === c).length}</span>}
+                    {c !== 'All' && (
+                      <span className="ct">
+                        {c === 'Parks & Nature'
+                          ? doItems.filter(a => PARK_SUBCATS.test(a.subcat)).length
+                          : doItems.filter(a => a.cat === c).length}
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
