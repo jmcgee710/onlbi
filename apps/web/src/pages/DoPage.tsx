@@ -142,6 +142,7 @@ export default function DoPage() {
                           <div>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{a.name}</h3>
                             <p className="lc-sub">{a.town} · {a.subcat}</p>
+                            {a.address && <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginTop: 2 }}>{a.address}</p>}
                           </div>
                         </div>
                         <span style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700, color: cc.color, background: cc.bg, padding: '4px 10px', borderRadius: 4, flexShrink: 0 }}>
@@ -211,6 +212,7 @@ export default function DoPage() {
                         <div>
                           <h3 className="lc-name" style={{ fontSize: 20 }}>{s.name}</h3>
                           <p className="lc-sub">{s.town} · {s.subcat}</p>
+                          {s.address && <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginTop: 2 }}>{s.address}</p>}
                         </div>
                       </div>
                     </div>

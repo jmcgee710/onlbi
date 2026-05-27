@@ -120,6 +120,7 @@ export default function EatPage() {
                           <div>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{b.name}</h3>
                             <p className="lc-sub">{b.town} · {b.subcat}</p>
+                            {b.address && <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginTop: 2 }}>{b.address}</p>}
                           </div>
                         </div>
                         {isByob && (
@@ -191,6 +192,7 @@ export default function EatPage() {
                           <div>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{n.name}</h3>
                             <p className="lc-sub">{n.town} · {n.subcat}</p>
+                            {n.address && <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginTop: 2 }}>{n.address}</p>}
                           </div>
                         </div>
                       </div>
