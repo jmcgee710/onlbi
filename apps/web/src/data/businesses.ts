@@ -37,7 +37,7 @@ export const dining: Business[] = [
   },
   {
     id: 102, name: 'Black Whale Bar & Fish House', cat: 'Dining', subcat: 'Bar & Grill',
-    town: 'Beach Haven', address: '112 Bay Ave, Beach Haven, NJ 08008',
+    town: 'Beach Haven', address: '100 N Pennsylvania Ave, Beach Haven, NJ 08008',
     phone: '(609) 492-0369', web: 'https://www.blackwhalebar.com', icon: '🐋',
     note: 'Best fish tacos on the island. Nautical-themed locals favorite.',
   },
@@ -55,7 +55,7 @@ export const dining: Business[] = [
   },
   {
     id: 105, name: "Buckalew's Restaurant & Bar", cat: 'Dining', subcat: 'Sports Bar',
-    town: 'Beach Haven', address: '101 Centre St, Beach Haven, NJ 08008',
+    town: 'Beach Haven', address: '101 N Bay Ave, Beach Haven, NJ 08008',
     phone: '(609) 492-1065', web: 'https://www.buckalews.com', icon: '🍺',
     note: 'Great deck, lively atmosphere. Popular happy hour spot.',
   },
@@ -208,7 +208,7 @@ export const dining: Business[] = [
   },
   {
     id: 141, name: "Black-Eyed Susans", cat: 'Dining', subcat: 'Upscale / BYOB',
-    town: 'Harvey Cedars', address: '7801 Long Beach Blvd, Harvey Cedars, NJ 08008',
+    town: 'Harvey Cedars', address: '7908 Long Beach Blvd, Harvey Cedars, NJ 08008',
     phone: '(609) 494-4990', web: 'http://www.blackeyedsusanslbi.com', icon: '🌻',
     note: 'Seasonal, chef-driven menu in an intimate BYOB setting. Highly rated by locals.',
   },
@@ -382,10 +382,10 @@ export const dining: Business[] = [
     note: 'Tide Table Group. Waterfront spot on the bay with wood-fired pizza, fresh seafood, cocktails, and live music. Laid-back and fun.',
   },
   {
-    id: 170, name: "Parker's Pearl", cat: 'Dining', subcat: 'Oyster Co-op / Raw Bar',
+    id: 170, name: "Parker's Pearl Oyster Co-op", cat: 'Dining', subcat: 'Oyster Co-op',
     town: 'Beach Haven', address: '116 Northwest Ave, Beach Haven, NJ 08008',
     web: 'https://www.parkersgaragelbi.com/oyster-coop/', icon: '🦪',
-    note: "Tide Table Group's oyster co-op at Parker's Garage. Sustainably farmed oysters — retail and raw bar. Part of their ocean-friendly mission.",
+    note: "Within Parker's Garage. House-farmed oysters — retail and raw bar counter. Part of Tide Table Group's ocean-friendly mission.",
   },
   // Round 4 additions — May 2026
   {
