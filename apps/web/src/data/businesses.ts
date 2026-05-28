@@ -171,7 +171,7 @@ export const dining: Business[] = [
   },
   {
     id: 135, name: 'Skipper Dipper', cat: 'Dining', subcat: 'Ice Cream',
-    town: 'Surf City', address: 'Long Beach Blvd, Surf City, NJ 08008',
+    town: 'Long Beach Township', address: 'Long Beach Blvd, Long Beach Township, NJ 08008',
     phone: '(609) 494-3733', web: 'https://www.skipperdipper.com', icon: '🍦',
     note: 'LBI institution since 1978. Famous for their creative ice cream flavors.',
   },
