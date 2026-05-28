@@ -158,16 +158,46 @@ export const parkingLots = [
 ]
 
 // ── TRAFFIC CAMERAS ───────────────────────────────────────────────────────────
+// All 5 LBT cams live on the same view page — clicking any opens the LBT
+// traffic-camera live view.
+const LBT_CAM_URL = 'http://lbtpublic.packetalk.net:5350/IVC/views/1-live-view.htm'
+
 export const cameras = [
   {
-    name: 'LBT Traffic Cameras',
-    desc: 'Long Beach Township public traffic cameras',
-    url: 'http://lbtpublic.packetalk.net:5350/IVC/views/1-live-view.htm',
+    name: '38th St — Northbound',
+    location: 'Long Beach Blvd, Brant Beach',
+    desc: 'Traffic cam facing north on the Boulevard',
+    url: LBT_CAM_URL,
     status: 'live',
-    location: 'Long Beach Township',
-    sourceUrl: 'https://www.longbeachtownship.com/',
   },
-  // ⚠️ Add additional cameras as discovered through field research
+  {
+    name: '38th St — Southbound',
+    location: 'Long Beach Blvd, Brant Beach',
+    desc: 'Traffic cam facing south on the Boulevard',
+    url: LBT_CAM_URL,
+    status: 'live',
+  },
+  {
+    name: '28th St — Northbound',
+    location: 'Long Beach Blvd, Ship Bottom',
+    desc: 'Traffic cam facing north on the Boulevard',
+    url: LBT_CAM_URL,
+    status: 'live',
+  },
+  {
+    name: '28th St — Southbound',
+    location: 'Long Beach Blvd, Ship Bottom',
+    desc: 'Traffic cam facing south on the Boulevard',
+    url: LBT_CAM_URL,
+    status: 'live',
+  },
+  {
+    name: 'Holgate Beach Cam',
+    location: 'Holgate, Long Beach Township',
+    desc: 'Beach cam at the southern tip of LBI',
+    url: LBT_CAM_URL,
+    status: 'live',
+  },
 ]
 
 // ── BIKING ────────────────────────────────────────────────────────────────────

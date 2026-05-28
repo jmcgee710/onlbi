@@ -225,33 +225,76 @@ export default function GettingAroundPage() {
           {tab === 'cams' && (
             <div>
               <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginBottom: 18 }}>
-                {liveCams} of {cameras.length} cameras online
+                {liveCams} of {cameras.length} cameras online · Click any to open the live LBT feed in a new tab
               </p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
-                {cameras.map((cam, i) => (
-                  <div key={i} style={{
-                    borderRadius: 8, overflow: 'hidden', border: '1px solid var(--line)',
-                    background: cam.status === 'live' ? 'var(--ink)' : 'var(--sand)',
-                  }}>
-                    <div style={{ height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 6 }}>
-                      <div style={{ width: 10, height: 10, borderRadius: '50%', background: cam.status === 'live' ? '#4ade80' : 'var(--slate-soft)' }} />
-                      <p style={{
-                        fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 700,
-                        color: cam.status === 'live' ? 'rgba(251,247,239,0.7)' : 'var(--slate-soft)',
-                      }}>
-                        {cam.status === 'live' ? 'Live' : 'Offline'}
-                      </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14 }}>
+                {cameras.map((cam, i) => {
+                  const isLive = cam.status === 'live'
+                  const card = (
+                    <div style={{
+                      borderRadius: 8, overflow: 'hidden', border: '1px solid var(--line)',
+                      background: isLive ? 'var(--ink)' : 'var(--sand)',
+                      transition: 'transform 0.15s, box-shadow 0.15s',
+                      cursor: cam.url ? 'pointer' : 'default',
+                      height: '100%',
+                    }}>
+                      <div style={{ height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 6, position: 'relative' }}>
+                        <div style={{ width: 10, height: 10, borderRadius: '50%', background: isLive ? '#4ade80' : 'var(--slate-soft)' }} />
+                        <p style={{
+                          fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 700,
+                          color: isLive ? 'rgba(251,247,239,0.7)' : 'var(--slate-soft)',
+                        }}>
+                          {isLive ? 'Live' : 'Offline'}
+                        </p>
+                        {cam.url && (
+                          <span style={{
+                            position: 'absolute', top: 8, right: 10, fontSize: 11,
+                            color: isLive ? 'rgba(251,247,239,0.5)' : 'var(--slate)',
+                          }}>
+                            ↗
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ padding: '12px 14px 14px', background: isLive ? 'rgba(255,255,255,0.05)' : 'var(--shell)' }}>
+                        <p style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 500, color: isLive ? 'var(--shell)' : 'var(--ink)', lineHeight: 1.2, marginBottom: 4 }}>
+                          {cam.name}
+                        </p>
+                        <p style={{ fontSize: 11, color: isLive ? 'rgba(251,247,239,0.5)' : 'var(--slate)' }}>
+                          {cam.location}
+                        </p>
+                      </div>
                     </div>
-                    <div style={{ padding: '10px 14px 14px', background: cam.status === 'live' ? 'rgba(255,255,255,0.05)' : 'var(--shell)' }}>
-                      <p style={{ fontSize: 13, fontWeight: 600, color: cam.status === 'live' ? 'var(--shell)' : 'var(--ink)', lineHeight: 1.2 }}>
-                        {cam.name}
-                      </p>
-                      <p style={{ fontSize: 11, color: cam.status === 'live' ? 'rgba(251,247,239,0.5)' : 'var(--slate)', marginTop: 3 }}>
-                        {cam.location}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  )
+                  return cam.url ? (
+                    <a
+                      key={i}
+                      href={cam.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: 'none', color: 'inherit' }}
+                    >
+                      {card}
+                    </a>
+                  ) : (
+                    <div key={i}>{card}</div>
+                  )
+                })}
+              </div>
+
+              <div className="aside-card" style={{ marginTop: 24 }}>
+                <p className="aside-title">About these cams</p>
+                <p className="aside-body">
+                  All cameras are public traffic & beach feeds operated by{' '}
+                  <a
+                    href="https://www.longbeachtownship.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'var(--teal-deep)', textDecoration: 'none', borderBottom: '1px solid rgba(72,108,107,0.35)' }}
+                  >
+                    Long Beach Township
+                  </a>
+                  . All 5 cams open on the same LBT live-view page in a new tab.
+                </p>
               </div>
             </div>
           )}
