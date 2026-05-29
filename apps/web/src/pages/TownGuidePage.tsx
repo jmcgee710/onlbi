@@ -45,6 +45,15 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
       '@type': 'Place',
       name: 'Long Beach Island, New Jersey',
     },
+    ...(guide.neighborhoods && guide.neighborhoods.length > 0
+      ? {
+          containsPlace: guide.neighborhoods.map(n => ({
+            '@type': 'Place',
+            name: n.name,
+            description: n.blurb,
+          })),
+        }
+      : {}),
   }
 
   return (
@@ -112,6 +121,30 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
               )}
             </article>
           ))}
+
+          {/* Neighborhoods & sections, north to south */}
+          {guide.neighborhoods && guide.neighborhoods.length > 0 && (
+            <article className="lc">
+              <h2 className="lc-name" style={{ fontSize: 24, marginBottom: 6 }}>
+                Neighborhoods &amp; Sections
+              </h2>
+              <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginBottom: 16 }}>
+                Listed north to south. {guide.shortName} isn&apos;t one continuous town — it&apos;s a string
+                of distinct sections, so where you stay really matters.
+              </p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {guide.neighborhoods.map((n, i) => (
+                  <li key={i} style={{ paddingLeft: 14, borderLeft: '2px solid var(--line)' }}>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, margin: 0 }}>{n.name}</h3>
+                    <div style={{ fontSize: 12, color: 'var(--teal-deep)', fontWeight: 600, margin: '2px 0 6px' }}>
+                      {n.position}
+                    </div>
+                    <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)', margin: 0 }}>{n.blurb}</p>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          )}
 
           {/* Who it's best for */}
           <article className="lc" style={{ background: 'var(--paper)', borderLeft: '3px solid var(--teal-deep)' }}>

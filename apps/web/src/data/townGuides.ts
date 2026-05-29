@@ -11,6 +11,16 @@ export type TownSection = {
   bullets?: string[]
 }
 
+// A named section/neighborhood within a municipality. Boundaries on LBI are
+// described by relative position (which sections it sits between) rather than
+// exact street numbers — precise street cutoffs are not publicly documented,
+// so we deliberately avoid inventing them.
+export type Neighborhood = {
+  name: string
+  position: string
+  blurb: string
+}
+
 export type TownGuide = {
   slug: string
   name: string
@@ -21,6 +31,7 @@ export type TownGuide = {
   metaDescription: string
   intro: string
   sections: TownSection[]
+  neighborhoods?: Neighborhood[]
   bestFor: string
   related: { slug: string; name: string }[]
 }
@@ -64,6 +75,11 @@ export const townGuides: TownGuide[] = [
         title: 'Where to Eat in Beach Haven',
         body:
           "Beach Haven has the densest restaurant scene on LBI. Classic picks include Black Whale Bar & Fish House for bayfront drinks, The Gables Historic Inn for fine dining in a Victorian setting, Buckalew's for casual pub fare, The Chicken or the Egg (CHEGG) for famous late-night breakfast, Parker's Garage & Oyster Saloon for elevated seafood, Stefano's for BYOB Italian, and Country Kettle Chowda for award-winning clam chowder in Bay Village. Reservations are essential on summer weekends.",
+      },
+      {
+        title: 'Beach Haven vs. the "Beach Haven" sections',
+        body:
+          "One quirk that trips up first-time visitors: Beach Haven borough is its own municipality, but several nearby sections — Beach Haven Terrace, Beach Haven Park, Beach Haven Crest, Beach Haven Gardens, and North Beach Haven — are actually part of Long Beach Township, not Beach Haven borough. They sit north of the borough along the central island. If your rental address is one of those, you'll buy Long Beach Township beach badges, not Beach Haven ones.",
       },
     ],
     bestFor: "Families with kids, first-time LBI visitors, groups who want walkable food and nightlife, and anyone who values activity over solitude.",
@@ -249,6 +265,11 @@ export const townGuides: TownGuide[] = [
         body:
           "Mustache Bill's Diner is a James Beard–recognized classic American diner — go early for breakfast. Kubel's is the legendary cash-only BYOB bar and restaurant, an LBI tradition since 1927 famous for crab cakes. Viking Fresh Off the Hook serves the freshest seafood on the island because the boats unload feet from the kitchen. Daymark Bar & Restaurant offers chic American fare in a casual coastal environment. Inlet Deli at the north tip is the spot for sandwiches.",
       },
+      {
+        title: 'High Bar Harbor',
+        body:
+          "Just west of Barnegat Light, reached by a single two-lane road, is High Bar Harbor — a secluded bayside lagoon community. Despite sharing Barnegat Light's gateway, it's technically part of Long Beach Township, not the borough. Nearly every home sits on the bay or a canal, making it one of the island's most boater-friendly enclaves.",
+      },
     ],
     bestFor: "Travelers who want the quietest, most scenic corner of LBI. Fishermen. Sunrise people. Anyone willing to drive a little farther for fewer crowds.",
     related: [
@@ -298,6 +319,91 @@ export const townGuides: TownGuide[] = [
         title: 'Where to Eat in Long Beach Township',
         body:
           "Howard's Seafood Restaurant in the Brighton Beach section is an LBI institution since 1950, famous for the Original French Fried Lobster. Jersey Girl Grill is the casual mid-island American spot. The Beach House in Beach Haven Terrace serves seafood, steaks, and pasta. Bowker's in Holgate is the south-end staple. Bayview Park yacht club and Brant Beach Yacht Club host members-only dining; check schedules for summer events.",
+      },
+    ],
+    neighborhoods: [
+      {
+        name: 'High Bar Harbor',
+        position: 'Northwest bayside — reached by a single road off Barnegat Light',
+        blurb:
+          "A secluded lagoon community on the bay at the island's north end, connected to the rest of LBI by one two-lane road. Built around a network of canals in the 1950s, nearly every home is on the water — a quiet, exclusive boater's enclave.",
+      },
+      {
+        name: 'Loveladies',
+        position: 'North end — between Barnegat Light and Harvey Cedars',
+        blurb:
+          'The most upscale stretch of LBI: large, architect-designed homes on wide lots with beaches that are nearly empty on weekdays. Home to the LBI Foundation of the Arts & Sciences. Almost entirely residential by design.',
+      },
+      {
+        name: 'North Beach',
+        position: 'North-central — between Harvey Cedars and Surf City',
+        blurb:
+          'A tiny, quiet residential strip with no commercial district at all. The appeal is exactly that — a calm beach week away from the boulevard noise.',
+      },
+      {
+        name: 'Brant Beach',
+        position: 'Central — just south of Ship Bottom',
+        blurb:
+          "The largest section of Long Beach Township and a family-rental favorite. Wide beaches, easy parking, the Long Beach Boulevard bike path, and Bayview Park's bayside swimming, courts, dog park, and summer concerts.",
+      },
+      {
+        name: 'Beach Haven Crest',
+        position: 'Central — between Brant Beach and Brighton Beach',
+        blurb:
+          'A compact section of roughly ten blocks. Quiet and residential, with an easy walk or bike to central-island shops and food.',
+      },
+      {
+        name: 'Brighton Beach',
+        position: 'Central — between Beach Haven Crest and Peahala Park',
+        blurb: 'A small residential pocket on the central island — mostly single-family rentals and second homes.',
+      },
+      {
+        name: 'Peahala Park',
+        position: 'Central — between Brighton Beach and Beach Haven Park',
+        blurb: 'A quiet mid-island section of family homes, a short hop from the boulevard.',
+      },
+      {
+        name: 'Beach Haven Park',
+        position: 'Central-south — between Peahala Park and Haven Beach',
+        blurb: 'A residential section of the township — part of Long Beach Township, not Beach Haven borough.',
+      },
+      {
+        name: 'Haven Beach',
+        position: 'Central-south — between Beach Haven Park and The Dunes',
+        blurb: 'A small, low-key residential section on the ocean side of the central island.',
+      },
+      {
+        name: 'The Dunes',
+        position: 'Central-south — between Haven Beach and Beach Haven Terrace',
+        blurb: 'A short, quiet residential stretch named for its protected dune line.',
+      },
+      {
+        name: 'Beach Haven Terrace',
+        position: 'South-central — between The Dunes and Beach Haven Gardens',
+        blurb:
+          'A walkable residential section with a handful of local shops and eateries along the boulevard. Long Beach Township, not Beach Haven borough.',
+      },
+      {
+        name: 'Beach Haven Gardens',
+        position: 'South-central — between Beach Haven Terrace and Spray Beach',
+        blurb: 'A residential section of family homes a few blocks from the ocean.',
+      },
+      {
+        name: 'Spray Beach',
+        position: 'South — between Beach Haven Gardens and North Beach Haven',
+        blurb: 'A quiet oceanside section long associated with the Spray Beach hotel and yacht club area.',
+      },
+      {
+        name: 'North Beach Haven',
+        position: 'South — between Spray Beach and Beach Haven borough',
+        blurb:
+          'The southernmost of the central-island township sections, bordering Beach Haven borough. Family homes within an easy walk of Beach Haven proper.',
+      },
+      {
+        name: 'Holgate, Beach Haven Heights & Beach Haven Inlet',
+        position: 'South tip — the peninsula south of Beach Haven borough',
+        blurb:
+          "The township's southern peninsula runs from Beach Haven borough down to the Edwin B. Forsythe National Wildlife Refuge at the island's tip. Wide, uncrowded beaches; the refuge end is closed April 1 – Aug 31 for piping plover nesting.",
       },
     ],
     bestFor: "Renters who want flexibility — you can choose your vibe by choosing your section. Holgate for quiet south-end, Brant Beach for family rentals, Loveladies for luxury and calm.",

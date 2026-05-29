@@ -1,0 +1,7 @@
+# onLBI — robots.txt
+# When you move to a custom domain, update the Sitemap URL below.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://onlbi-web.vercel.app/sitemap.xml
