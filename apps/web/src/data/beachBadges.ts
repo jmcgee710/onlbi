@@ -110,34 +110,34 @@ export const beachBadgeInfo: TownBadgeInfo[] = [
     townSlug: 'surf-city',
     townName: 'Surf City',
     badgeOffice: {
-      location: 'Pre-season online store available; check borough site for booth location',
-      phone: '(609) 494-3064',
-      preseasonHours: 'Pre-season badges available online',
-      seasonHours: '⚠️ Verify for 2026 season — check surfcitynj.org/beaches/',
+      location: 'Pre-season badges online; in-season badge booth — see surfcitynj.org/beaches/',
+      phone: '(609) 361-7655',
+      preseasonHours: 'Pre-season seasonal badges available online through May 31',
+      seasonHours: 'Lifeguards & badge checkers on duty daily 10:00am–5:00pm in season',
     },
     pricing: {
-      preseason: 0,     // ⚠️ price not confirmed from site — verify
-      preseasonDeadline: '⚠️ Verify',
-      seasonal: 0,      // ⚠️ price not confirmed from site — verify
-      weekly: 0,
-      daily: 0,
-      senior: 0,
+      preseason: 45,
+      preseasonDeadline: 'May 31, 2026',
+      seasonal: 55,
+      weekly: 25,
+      daily: 11,
+      senior: 'free',   // 65+ free; children 11 & under also free
       seniorType: 'annual',
       veteranDaily: null,
       veteranLifetime: null,
-      activeMilitary: '⚠️ Verify with borough',
-      ageRequired: 12,
-      digitalApp: false, // ⚠️ not confirmed
+      activeMilitary: 'Contact Surf City Beach Patrol for military/veteran badge policies',
+      ageRequired: 12,  // badges required ages 12–64
+      digitalApp: false,
       cashOnly: false,
-      notes: '⚠️ Badge prices were not retrievable from surfcitynj.org as of May 2026 — page returned no content. ' +
-             'Pre-season online store: https://boroughofsurfcity.company.site/ ' +
-             'Call (609) 494-3064 to confirm 2026 pricing before publishing.',
+      notes: 'Badges required for ages 12–64 when lifeguards/checkers are on duty (10am–5pm). ' +
+             'Children 11 & under and seniors 65+ are free. ' +
+             'Pre-season seasonal badge $45 through May 31; $55 in season. ' +
+             'Pre-season online store: https://boroughofsurfcity.company.site/. Badge booth (609) 361-7655 opens May 1.',
     },
-    purchaseOptions: ['online-preseason', 'in-person-booth'],
+    purchaseOptions: ['online-preseason', 'in-person-booth', 'on-beach-from-checker'],
     badgeScopeNote: 'Valid in Surf City only',
     sourceUrl: 'https://surfcitynj.org/beaches/',
-    verifiedDate: '2026-05-18',
-    needsVerification: true,
+    verifiedDate: '2026-05-29',
   },
 
   // ── SHIP BOTTOM ────────────────────────────────────────────────────────────
@@ -145,33 +145,35 @@ export const beachBadgeInfo: TownBadgeInfo[] = [
     townSlug: 'ship-bottom',
     townName: 'Ship Bottom',
     badgeOffice: {
-      location: '1621 Long Beach Boulevard, Ship Bottom — check beach patrol page for booth location',
+      location: 'Beach Badge Office, 1621 Long Beach Blvd (1st floor), Ship Bottom',
       phone: '(609) 494-2171',
-      seasonHours: '⚠️ Verify for 2026 season — check shipbottom.org/government/public-safety/beach-patrol/beach-badges/',
+      seasonHours: 'Badge office typically Mon–Fri 9:00am–4:30pm in season; also sold on-beach by checkers',
     },
     pricing: {
-      preseason: 0,     // ⚠️ badge price page was image-only — could not extract pricing
-      preseasonDeadline: '⚠️ Verify',
-      seasonal: 0,
-      weekly: 0,
-      daily: 0,
-      senior: 0,
+      preseason: 40,
+      preseasonDeadline: 'May 31, 2026',
+      seasonal: 50,
+      weekly: 25,       // Saturday through Friday
+      daily: 10,
+      senior: 12,       // 65+ with proof of age
       seniorType: 'annual',
       veteranDaily: null,
       veteranLifetime: null,
-      activeMilitary: '⚠️ Verify with borough',
+      activeMilitary: 'Contact Ship Bottom Beach Patrol for military/veteran badge policies',
       ageRequired: 12,
-      digitalApp: false, // ⚠️ not confirmed
+      digitalApp: true,  // MyBeachMobile — order online and pick up at the badge office
       cashOnly: false,
-      notes: '⚠️ Badge pricing page (shipbottom.org) displayed pricing as an image — ' +
-             'data could not be extracted. Call (609) 494-2171 to confirm 2026 pricing. ' +
+      notes: 'Pre-season seasonal badge $40 through May 31; $50 in season. ' +
+             'Weekly $25 (Sat–Fri), daily $10, senior (65+) $12. ' +
+             'Holiday gift-box badges $42 while supplies last. ' +
+             'Order via MyBeachMobile and pick up at the badge office. ' +
+             'Lifeguards 10am–6pm daily in season; post-Labor Day only 7th, 15th & 20th St beaches guarded. ' +
              'Beach Wheels & Beach Taxi available — see accessibility.ts.',
     },
-    purchaseOptions: ['in-person-booth'],
+    purchaseOptions: ['in-person-booth', 'app-my-beach-mobile', 'on-beach-from-checker'],
     badgeScopeNote: 'Valid in Ship Bottom only',
     sourceUrl: 'https://shipbottom.org/government/public-safety/beach-patrol/beach-badges/',
-    verifiedDate: '2026-05-18',
-    needsVerification: true,
+    verifiedDate: '2026-05-29',
   },
 
   // ── LONG BEACH TOWNSHIP ────────────────────────────────────────────────────
@@ -181,34 +183,35 @@ export const beachBadgeInfo: TownBadgeInfo[] = [
     townSlug: 'long-beach-township',
     townName: 'Long Beach Township',
     badgeOffice: {
-      location: 'LBTBP (Long Beach Township Beach Patrol) — see lbtbp.com for booth locations',
+      location: 'LBT Beach Badge Sales Office, 68th Street, Brant Beach',
       phone: '(609) 361-1000',
-      seasonHours: '⚠️ Verify for 2026 season at lbtbp.com/?page_id=48',
+      seasonHours: 'Badges required June 20–Sept 7, daily 10:00am–5:00pm',
     },
     pricing: {
-      preseason: 0,     // ⚠️ lbtbp.com was not directly accessible — verify
-      preseasonDeadline: '⚠️ Verify',
-      seasonal: 0,
-      weekly: 0,
-      daily: 0,
-      senior: 0,
+      preseason: 40,
+      preseasonDeadline: 'June 15, 2026',
+      seasonal: 50,
+      weekly: 20,
+      daily: 10,
+      senior: 5,        // 65+ with proof of age
       seniorType: 'annual',
       veteranDaily: null,
       veteranLifetime: null,
-      activeMilitary: '⚠️ Verify at lbtbp.com',
+      activeMilitary: 'Contact LBT Beach Patrol for military/veteran badge policies',
       ageRequired: 12,
-      digitalApp: true,  // LBT has My Beach Mobile — confirmed link on township site
+      digitalApp: true,  // MyBeachMobile app
       cashOnly: false,
-      notes: '⚠️ lbtbp.com was not directly accessible during data pull — ' +
-             'verify pricing at https://lbtbp.com/?page_id=48. ' +
-             'Township covers 7+ communities; badges valid within LBT boundaries. ' +
-             'Digital badges via My Beach Mobile app.',
+      notes: 'Pre-season seasonal badge $40 through June 15; $50 starting June 16. ' +
+             'Daily ($10) and weekly ($20) badges available starting June 20. ' +
+             'Senior (65+) seasonal $5 with proof of age. ' +
+             'Badges required for ages 12+ from June 20–Sept 7, 10am–5pm. ' +
+             'ONE LBT badge covers all township sections (Loveladies through Holgate) — one of the best deals on LBI. ' +
+             'Buy at the 68th St office in Brant Beach or via MyBeachMobile.',
     },
     purchaseOptions: ['in-person-booth', 'app-my-beach-mobile', 'mail-order'],
     badgeScopeNote: 'Valid within Long Beach Township boundaries (Loveladies through Holgate)',
-    sourceUrl: 'https://lbtbp.com/?page_id=48',
-    verifiedDate: '2026-05-18',
-    needsVerification: true,
+    sourceUrl: 'https://lbtbp.com/beach-badges/',
+    verifiedDate: '2026-05-29',
   },
 
   // ── BEACH HAVEN ────────────────────────────────────────────────────────────
@@ -256,5 +259,5 @@ export const myBeachMobileApp = {
   apple: 'https://apps.apple.com/us/app/my-beach-mobile/id1471520676',
   android: 'https://play.google.com/store/apps/details?id=com.beach.tag',
   notes: 'QR code stored on your mobile device. Non-transferable between devices. All sales final. Cannot be exchanged for physical badges.',
-  towns: ['beach-haven', 'harvey-cedars', 'long-beach-township'],
+  towns: ['beach-haven', 'harvey-cedars', 'long-beach-township', 'ship-bottom'],
 }

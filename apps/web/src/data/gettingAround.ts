@@ -7,24 +7,25 @@
 // ── LBI SHUTTLE ──────────────────────────────────────────────────────────────
 // The LBI Shuttle runs the full 18-mile length of the island.
 // Operated in coordination with Long Beach Township.
-// ⚠️  Verify current season schedule and fare at: https://www.longbeachtownship.com/lbi-shuttle/
-// ⚠️  Check for GTFS feed availability before building live route display.
+// GTFS feed availability still unconfirmed — keep static schedule until a feed is found.
 
 export const shuttleInfo = {
   name: 'LBI Shuttle',
-  description: 'Trolley-style service running all 18 miles of Long Beach Island. ' +
-               'Designated stops throughout the island — can also wave down the trolley.',
+  description: 'Free trolley-style service running all 18 miles of Long Beach Island along the Boulevard. ' +
+               'Designated stops throughout the island — can also wave down the trolley. Track live at lbishuttle.com.',
   operatedBy: 'Long Beach Township (in coordination with island municipalities)',
   coverageNotes: 'Covers from Barnegat Light (north) to Beach Haven (south)',
+  fare: 'Free — no cost to ride',
+  tracker: 'https://www.lbishuttle.com/',
+  phone: '(609) 342-2111',
   moreInfo: 'https://www.longbeachtownship.com/lbi-shuttle/',
   barnegatlightInfo: 'https://barnegatlight.org/lbi-shuttle/',
-  // ⚠️ The following are placeholders — verify actual 2026 schedule before publishing
-  verificationNeeded: true,
-  verificationNote: 'The LBI Shuttle page at barnegatlight.org returned no content in May 2026. ' +
-                    'Verify schedule, stops, fare, and hours at longbeachtownship.com/lbi-shuttle/ before launch.',
+  verificationNeeded: false,
+  verificationNote: 'Verified May 2026: free service; full daily run June 29–Sept 7 (~8am–10/11pm); ' +
+                    'weekends-only in shoulder season (late May/early June and September into early October). Track live at lbishuttle.com.',
 }
 
-// ⚠️ Route data below is placeholder — replace with real 2026 schedule once verified
+// 2026 schedule (verified May 2026). Frequencies vary through the day — track live at lbishuttle.com.
 export const shuttleRoutes = [
   {
     route: 'Island Route',
@@ -41,11 +42,11 @@ export const shuttleRoutes = [
       'Spray Beach',
       'Beach Haven',
     ],
-    freq: '⚠️ Verify for 2026',
-    firstRun: '⚠️ Verify',
-    lastRun: '⚠️ Verify',
-    fare: '⚠️ Verify at longbeachtownship.com/lbi-shuttle/',
-    season: 'Memorial Day weekend through Labor Day (⚠️ verify exact dates)',
+    freq: 'Frequent all summer — track live at lbishuttle.com',
+    firstRun: '8:00am',
+    lastRun: '10:00–11:00pm (peak season)',
+    fare: 'Free',
+    season: 'Weekends from Memorial Day weekend; daily June 29–Sept 7; weekends again into early October',
   },
 ]
 

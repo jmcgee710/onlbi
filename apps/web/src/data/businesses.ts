@@ -1015,14 +1015,14 @@ export const nightlife: Business[] = [
   },
   {
     id: 715, name: 'LBI Distilling Company', cat: 'Nightlife', subcat: 'Distillery / Tasting Room',
-    town: 'Beach Haven', address: '1305 Long Beach Blvd, Beach Haven, NJ 08008',
+    town: 'Long Beach Township', address: '1305 Long Beach Blvd, North Beach Haven, NJ 08008',
     phone: '(609) 661-7154', web: 'https://lbidistillingcompany.com', icon: '🥃',
     note: "The only craft distillery on Long Beach Island — spirits made on-site, tasting bar open Fri 5–9pm, Sat–Sun 12–9pm.",
   },
   // Bars — Round 3 additions
   {
     id: 709, name: 'Hudson House Bar', cat: 'Nightlife', subcat: 'Bar / Pub',
-    town: 'Beach Haven', address: '19 E 13th St, Beach Haven, NJ 08008',
+    town: 'Long Beach Township', address: '19 E 13th St, North Beach Haven, NJ 08008',
     icon: '🍹',
     note: 'Affectionately known as "The Hud." Hidden gem hole-in-the-wall pub with an expansive cocktail menu. Lively any night of the week.',
   },
@@ -1315,10 +1315,10 @@ export const lodging: Business[] = [
     note: 'Comfortable inn steps from Old Barney lighthouse.',
   },
   {
-    id: 510, name: "Mariner Motel", cat: 'Lodging', subcat: 'Motel',
-    town: 'Long Beach Township', address: '33rd Street & Long Beach Blvd, Beach Haven Gardens, NJ 08008',
-    phone: '(609) 492-1235', icon: '⚓',
-    note: 'Beach Haven Gardens motel. NOTE: may have been renamed "The Boulevard Hotel" — verify before listing.',
+    id: 510, name: 'The Boulevard Hotel', cat: 'Lodging', subcat: 'Boutique Hotel',
+    town: 'Long Beach Township', address: '13401 Long Beach Blvd, Beach Haven Gardens, NJ 08008',
+    phone: '(609) 492-1235', web: 'https://theboulevardhotelnj.com', icon: '🏨',
+    note: 'Renovated boutique hotel in Beach Haven Gardens, steps from the beach (formerly the Mariner Inn).',
   },
   {
     id: 511, name: 'Sea Horse Motel', cat: 'Lodging', subcat: 'Motel',
