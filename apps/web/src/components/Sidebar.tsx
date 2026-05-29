@@ -1,10 +1,11 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Sun, Umbrella, UtensilsCrossed, Anchor, Compass, Accessibility, Bell } from 'lucide-react'
+import { Sun, Umbrella, MapPinned, UtensilsCrossed, Anchor, Compass, Accessibility, Bell } from 'lucide-react'
 
 const nav = [
   { id: '/',               label: 'Today',          Icon: Sun,             meta: undefined,   dot: false, section: 'island' },
   { id: '/beaches',        label: 'Beaches',         Icon: Umbrella,        meta: '6 open',    dot: false, section: 'island' },
-  { id: '/eat',            label: 'Eat & Drink',     Icon: UtensilsCrossed, meta: 'Happy hr',  dot: false, section: 'island' },
+  { id: '/towns',          label: 'Town Guides',     Icon: MapPinned,       meta: '6 towns',   dot: false, section: 'island' },
+  { id: '/eat',            label: 'Eat & Drink',     Icon: UtensilsCrossed, meta: undefined,   dot: false, section: 'island' },
   { id: '/do',             label: 'Do & Shop',        Icon: Anchor,          meta: undefined,   dot: false, section: 'island' },
   { id: '/getting-around', label: 'Getting Around',  Icon: Compass,         meta: undefined,   dot: false, section: 'practical' },
   { id: '/accessibility',  label: 'Accessibility',   Icon: Accessibility,   meta: undefined,   dot: false, section: 'practical' },

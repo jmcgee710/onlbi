@@ -10,6 +10,7 @@ import DoPage from './pages/DoPage'
 import GettingAroundPage from './pages/GettingAroundPage'
 import AlertsPage from './pages/AlertsPage'
 import TownGuidePage from './pages/TownGuidePage'
+import TownsPage from './pages/TownsPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 const townSlugs = [
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="beaches" element={<BeachesPage />} />
           <Route path="beaches/:town" element={<BeachTownPage />} />
           <Route path="beaches/:town/:street" element={<BeachAccessPage />} />
+          <Route path="towns" element={<TownsPage />} />
           <Route path="accessibility" element={<AccessibilityPage />} />
           <Route path="accessibility/beach-access" element={<AccessibilityPage />} />
           <Route path="accessibility/:town" element={<AccessibilityPage />} />
