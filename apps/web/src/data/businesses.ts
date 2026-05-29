@@ -128,7 +128,7 @@ export const dining: Business[] = [
   },
   {
     id: 122, name: "Fratello's Market & Eatery", cat: 'Dining', subcat: 'Deli / Italian',
-    town: 'Long Beach Township', address: '2613 Long Beach Blvd, Long Beach Township, NJ 08008',
+    town: 'Long Beach Township', address: '2613 Long Beach Blvd, Spray Beach, NJ 08008',
     phone: '(609) 661-7291', web: 'http://fratellosmarketlbi.com', icon: '🥙',
     note: 'Italian market feel with fresh prepared foods.',
   },
@@ -281,7 +281,7 @@ export const dining: Business[] = [
   },
   {
     id: 153, name: "Howard's Seafood Restaurant", cat: 'Dining', subcat: 'Seafood',
-    town: 'Long Beach Township', address: '13500 Baltic Ave, Long Beach Twp, NJ 08008',
+    town: 'Long Beach Township', address: '13500 Baltic Ave, Beach Haven Gardens, NJ 08008',
     phone: '(609) 492-2319', web: 'https://howardsrestaurant.com', icon: '🦞',
     note: 'LBI institution since 1950. Famous for the Original French Fried Lobster and award-winning chowder. A must-stop for seafood lovers.',
   },
@@ -451,7 +451,7 @@ export const dining: Business[] = [
   },
   {
     id: 177, name: 'Blue Water Cafe', cat: 'Dining', subcat: 'Seafood / BYOB',
-    town: 'Long Beach Township', address: '11205 Long Beach Blvd, Long Beach Township, NJ 08008',
+    town: 'Long Beach Township', address: '11205 Long Beach Blvd, Haven Beach, NJ 08008',
     phone: '(609) 207-1300', web: 'https://bluewatercafelbi.com', icon: '🐠',
     note: 'BYOB seafood and American cuisine from the owners of Stefano\'s. Generous portions, loyal following.',
   },
@@ -999,7 +999,7 @@ export const nightlife: Business[] = [
     id: 706, name: 'Delaware Avenue Oyster House & Bar', cat: 'Nightlife', subcat: 'Oyster Bar',
     town: 'Long Beach Township', address: '13211 Long Beach Blvd, Long Beach Twp, NJ 08008',
     phone: '(609) 492-3352', icon: '🦪',
-    note: 'Raw bar, craft cocktails, and a lively bar scene in the north Beach Haven area.',
+    note: 'Raw bar, craft cocktails, and a lively bar scene in the Beach Haven Terrace area.',
   },
   {
     id: 707, name: 'The WooHoo', cat: 'Nightlife', subcat: 'Ice Cream / Event Venue',
@@ -1040,7 +1040,7 @@ export const nightlife: Business[] = [
   },
   {
     id: 712, name: 'Spray Beach Oceanfront Hotel & Bar', cat: 'Nightlife', subcat: 'Hotel Bar / Live Music',
-    town: 'Beach Haven', address: '200 E 24th St, Beach Haven, NJ 08008',
+    town: 'Long Beach Township', address: '200 E 24th St, Spray Beach, NJ 08008',
     web: 'https://spraybeachhotel.com', icon: '🌊',
     note: 'Oceanfront hotel with a standout bar scene. World-famous Bloody Marys, nightly live music, and a tiki bar pool party vibe. Great happy hour.',
   },
@@ -1328,7 +1328,7 @@ export const lodging: Business[] = [
   },
   {
     id: 512, name: 'Spray Beach Oceanfront Hotel', cat: 'Lodging', subcat: 'Oceanfront Hotel',
-    town: 'Beach Haven', address: '200 E 24th St, Beach Haven, NJ 08008',
+    town: 'Long Beach Township', address: '200 E 24th St, Spray Beach, NJ 08008',
     web: 'https://spraybeachhotel.com', icon: '🌊',
     note: 'Oceanfront hotel in Beach Haven. Famous for nightly live music and tiki bar. World-class Bloody Mary.',
   },

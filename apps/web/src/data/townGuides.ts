@@ -298,7 +298,7 @@ export const townGuides: TownGuide[] = [
       {
         title: 'Brant Beach (Central)',
         body:
-          "The largest section of Long Beach Township and a family rental favorite. Brant Beach has wide beaches, easy parking, and is home to Bayview Park — a popular bayside swimming area with a playground, basketball, volleyball, pickleball, a dedicated dog park, and free summer concerts. Daddy O's Restaurant & Hotel and Blue Water Cafe anchor the dining scene. The bike path on Long Beach Boulevard runs the length of Brant Beach and is one of the best ways to get around.",
+          "The largest section of Long Beach Township and a family rental favorite. Brant Beach has wide beaches, easy parking, and is home to Bayview Park — a popular bayside swimming area with a playground, basketball, volleyball, pickleball, a dedicated dog park, and free summer concerts. Daddy O's Restaurant & Hotel anchors the dining scene, with Blue Water Cafe a short hop south in Haven Beach. The bike path on Long Beach Boulevard runs the length of Brant Beach and is one of the best ways to get around.",
       },
       {
         title: 'North Beach (North-Central)',
@@ -318,7 +318,7 @@ export const townGuides: TownGuide[] = [
       {
         title: 'Where to Eat in Long Beach Township',
         body:
-          "Howard's Seafood Restaurant in the Brighton Beach section is an LBI institution since 1950, famous for the Original French Fried Lobster. Jersey Girl Grill is the casual mid-island American spot. The Beach House in Beach Haven Terrace serves seafood, steaks, and pasta. Bowker's in Holgate is the south-end staple. Bayview Park yacht club and Brant Beach Yacht Club host members-only dining; check schedules for summer events.",
+          "Howard's Seafood Restaurant in the Beach Haven Gardens section is an LBI institution since 1950, famous for the Original French Fried Lobster. Jersey Girl Grill is the casual mid-island American spot. The Beach House in Beach Haven Terrace serves seafood, steaks, and pasta. Bowker's in Holgate is the south-end staple. Bayview Park yacht club and Brant Beach Yacht Club host members-only dining; check schedules for summer events.",
       },
     ],
     neighborhoods: [
