@@ -41,7 +41,7 @@ export const townGuides: TownGuide[] = [
       {
         title: 'Beaches in Beach Haven',
         body:
-          "Beach Haven runs from roughly Nelson Avenue south to Holyoke Avenue, with public beach access at almost every numbered street. The beaches here are wide, lifeguarded in season, and tend to be the most populated on the island — expect a lively crowd in July and August. Beach badges are required from mid-June through Labor Day, sold daily, weekly, and seasonal. Badges are NOT required on Wednesdays. Buy online in advance through the Borough of Beach Haven for the best price.",
+          "Beach Haven runs from 12th Street south to Nelson Avenue, with public beach access at almost every numbered street and named avenue along the way. The beaches here are wide, lifeguarded in season, and tend to be the most populated on the island — expect a lively crowd in July and August. Beach badges are required from mid-June through Labor Day, sold daily, weekly, and seasonal. Badges are NOT required on Wednesdays. Buy online in advance through the Borough of Beach Haven for the best price.",
       },
       {
         title: 'Parking in Beach Haven',
