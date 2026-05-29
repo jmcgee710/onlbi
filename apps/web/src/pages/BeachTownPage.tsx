@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom'
 import { beaches, beachRules, lifeguardInfo } from '../data/beaches'
 import { beachBadgeInfo } from '../data/beachBadges'
 import { accessibleBeaches, beachTransportServices } from '../data/accessibility'
+import { findTownGuide } from '../data/townGuides'
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 
@@ -52,6 +53,7 @@ export default function BeachTownPage() {
   const transport  = beachTransportServices.filter(t => t.townSlug === townSlug)
 
   const displayName = beach?.town ?? townSlug?.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) ?? ''
+  const guide = townSlug ? findTownGuide(townSlug) : undefined
 
   if (!beach) {
     return (
@@ -369,6 +371,26 @@ export default function BeachTownPage() {
 
         {/* ── Sidebar ───────────────────────────────────────────────────────── */}
         <aside className="pg-aside">
+          {guide && (
+            <Link
+              to={`/${guide.slug}`}
+              style={{
+                background: 'var(--ink)', color: 'var(--shell)', borderRadius: 8,
+                padding: '18px 22px', display: 'flex', alignItems: 'center', gap: 16,
+                justifyContent: 'space-between', textDecoration: 'none',
+              }}
+            >
+              <div>
+                <div style={{ fontSize: 10.5, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--coral)', fontWeight: 700, marginBottom: 6 }}>
+                  Full Town Guide
+                </div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: 18 }}>
+                  {guide.name} — things to do, eat, &amp; see
+                </div>
+              </div>
+              <span style={{ color: 'var(--shell)', fontSize: 18, flexShrink: 0 }}>→</span>
+            </Link>
+          )}
           <div className="aside-card">
             <p className="aside-title">Quick Reference</p>
             <div className="aside-mini">

@@ -9,7 +9,17 @@ import EatPage from './pages/EatPage'
 import DoPage from './pages/DoPage'
 import GettingAroundPage from './pages/GettingAroundPage'
 import AlertsPage from './pages/AlertsPage'
+import TownGuidePage from './pages/TownGuidePage'
 import NotFoundPage from './pages/NotFoundPage'
+
+const townSlugs = [
+  'beach-haven',
+  'ship-bottom',
+  'surf-city',
+  'harvey-cedars',
+  'barnegat-light',
+  'long-beach-township',
+]
 
 export default function App() {
   return (
@@ -23,11 +33,17 @@ export default function App() {
           <Route path="accessibility" element={<AccessibilityPage />} />
           <Route path="accessibility/beach-access" element={<AccessibilityPage />} />
           <Route path="accessibility/:town" element={<AccessibilityPage />} />
-<Route path="eat/:category?" element={<EatPage />} />
+          <Route path="eat/:category?" element={<EatPage />} />
           <Route path="eat/:town/:slug" element={<EatPage />} />
           <Route path="do/:category?" element={<DoPage />} />
           <Route path="getting-around/*" element={<GettingAroundPage />} />
           <Route path="alerts" element={<AlertsPage />} />
+
+          {/* Top-level town guide routes (SEO landing pages) */}
+          {townSlugs.map(slug => (
+            <Route key={slug} path={slug} element={<TownGuidePage slug={slug} />} />
+          ))}
+
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
