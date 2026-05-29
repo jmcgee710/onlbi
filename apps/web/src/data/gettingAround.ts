@@ -147,17 +147,6 @@ export const parkingInfo = [
   },
 ]
 
-// Placeholder lot-level data for the Parking tab. No live sensors exist on LBI;
-// real data will come from parkingInfo above + future field research.
-// TODO: replace with real lot list and remove fake avail/cap values.
-export const parkingLots = [
-  { loc: 'Beach Haven — Centre St. Lot', avail: 18, cap: 60 },
-  { loc: 'Beach Haven — Taylor Ave.',    avail: 4,  cap: 40 },
-  { loc: 'Barnegat Lighthouse State Park', avail: 22, cap: 80 },
-  { loc: 'Ship Bottom — 9th St.',        avail: 0,  cap: 30 },
-  { loc: 'Surf City — N. 1st St.',       avail: 12, cap: 35 },
-]
-
 // ── TRAFFIC CAMERAS ───────────────────────────────────────────────────────────
 // All 5 LBT cams live on the same view page — clicking any opens the LBT
 // traffic-camera live view.

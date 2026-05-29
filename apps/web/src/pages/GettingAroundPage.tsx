@@ -1,14 +1,7 @@
 import { useState } from 'react'
-import { shuttleRoutes, cameras, parkingLots, trafficStatus } from '../data/gettingAround'
+import { shuttleRoutes, cameras, parkingInfo, trafficStatus } from '../data/gettingAround'
 
 type Tab = 'transit' | 'traffic' | 'parking' | 'cams'
-
-function parkingColor(avail: number, cap: number): { bar: string; text: string; label: string } {
-  const pct = avail / cap
-  if (avail === 0) return { bar: 'var(--coral)',      text: 'var(--coral)',      label: 'FULL' }
-  if (pct < 0.2)  return { bar: 'var(--sun)',         text: 'var(--sun)',         label: `${avail} left` }
-  return              { bar: 'var(--moss)',        text: 'var(--moss)',        label: `${avail} open` }
-}
 
 const liveCams = cameras.filter(c => c.status === 'live').length
 
@@ -27,14 +20,14 @@ export default function GettingAroundPage() {
         </div>
         <h1>Getting <em>Around</em></h1>
         <p className="pg-lede">
-          LBI Beach Shuttle routes, causeway traffic tips, parking availability
+          LBI Beach Shuttle routes, causeway traffic tips, parking rules
           &amp; live beach cameras — everything to move around the island.
         </p>
         <div className="pg-tabs">
           {([
             ['transit', 'Transit',  shuttleRoutes.length, 'routes'],
             ['traffic', 'Traffic',  'Rt', '72'],
-            ['parking', 'Parking',  parkingLots.length, 'lots'],
+            ['parking', 'Parking',  parkingInfo.length, 'towns'],
             ['cams',    'Cameras',  liveCams, 'live'],
           ] as [Tab, string, string | number, string][]).map(([t, lbl, val, em]) => (
             <button
@@ -196,28 +189,22 @@ export default function GettingAroundPage() {
           {tab === 'parking' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <p style={{ fontSize: 12, color: 'var(--slate-soft)', marginBottom: 4 }}>
-                Estimates updated every 30 min · No live sensors — based on historical patterns
+                Parking rules by town · LBI has no live parking sensors — arrive early in peak season or ride the free LBI Shuttle.
               </p>
-              {parkingLots.map((p, i) => {
-                const { bar, text, label } = parkingColor(p.avail, p.cap)
-                const pct = Math.round((1 - p.avail / p.cap) * 100)
-                return (
-                  <div key={i} className="lc">
-                    <div className="lc-head" style={{ marginBottom: 0 }}>
-                      <h3 className="lc-name" style={{ fontSize: 20 }}>{p.loc}</h3>
-                      <span style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 500, color: text }}>
-                        {label}
-                      </span>
-                    </div>
-                    <div style={{ marginTop: 16 }}>
-                      <div style={{ height: 6, background: 'var(--line-soft)', borderRadius: 99, overflow: 'hidden', marginBottom: 6 }}>
-                        <div style={{ height: '100%', width: `${pct}%`, background: bar, borderRadius: 99, transition: 'width 0.3s' }} />
-                      </div>
-                      <p style={{ fontSize: 11.5, color: 'var(--slate)' }}>{p.avail}/{p.cap} spots available</p>
-                    </div>
+              {parkingInfo.map((p, i) => (
+                <div key={i} className="lc">
+                  <div className="lc-head" style={{ marginBottom: 10 }}>
+                    <h3 className="lc-name" style={{ fontSize: 20 }}>{p.town}</h3>
+                    <span style={{ fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 500, color: 'var(--teal-deep)', textAlign: 'right' }}>
+                      {p.cost}
+                    </span>
                   </div>
-                )
-              })}
+                  <p style={{ fontSize: 13.5, lineHeight: 1.6, color: 'var(--ink-soft)' }}>{p.overview}</p>
+                  {p.notes && (
+                    <p style={{ fontSize: 12.5, lineHeight: 1.55, color: 'var(--slate)', marginTop: 8 }}>{p.notes}</p>
+                  )}
+                </div>
+              ))}
             </div>
           )}
 
