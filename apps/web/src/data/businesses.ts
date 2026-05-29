@@ -67,7 +67,7 @@ export const dining: Business[] = [
   },
   {
     id: 107, name: "Stefano's", cat: 'Dining', subcat: 'Italian',
-    town: 'Beach Haven', address: '1814 Long Beach Blvd, Beach Haven, NJ 08008',
+    town: 'Long Beach Township', address: '1814 Long Beach Blvd, North Beach Haven, NJ 08008',
     phone: '(609) 492-1100', web: 'https://stefanoslbi.com', icon: '🍝',
     note: 'BYOB Italian, reservations strongly advised. Consistently rated top on the island.',
   },
@@ -171,7 +171,7 @@ export const dining: Business[] = [
   },
   {
     id: 135, name: 'Skipper Dipper', cat: 'Dining', subcat: 'Ice Cream',
-    town: 'Long Beach Township', address: 'Long Beach Blvd, Long Beach Township, NJ 08008',
+    town: 'Long Beach Township', address: '9305 Long Beach Blvd, Beach Haven Park, NJ 08008',
     phone: '(609) 494-3733', web: 'https://www.skipperdipper.com', icon: '🍦',
     note: 'LBI institution since 1978. Famous for their creative ice cream flavors.',
   },
@@ -196,9 +196,9 @@ export const dining: Business[] = [
   },
   {
     id: 139, name: 'Isola Italian Trattoria', cat: 'Dining', subcat: 'Italian',
-    town: 'Beach Haven', address: '1901 Long Beach Blvd, Beach Haven, NJ 08008',
+    town: 'Long Beach Township', address: '1901 Long Beach Blvd, North Beach Haven, NJ 08008',
     phone: '(609) 496-5321', web: 'https://isolalbi.com', icon: '🫕',
-    note: 'Authentic Northern Italian BYOB. Verify status before visiting — reported closed as of 2026.',
+    note: 'PERMANENTLY CLOSED (confirmed 2026). Was an authentic Northern Italian BYOB in North Beach Haven.',
   },
   {
     id: 140, name: 'Daymark Bar & Restaurant', cat: 'Dining', subcat: 'Bar / American',
@@ -390,7 +390,7 @@ export const dining: Business[] = [
   // Round 4 additions — May 2026
   {
     id: 171, name: "Jack's NYC Bagels & Deli", cat: 'Dining', subcat: 'Bagels / Breakfast',
-    town: 'Beach Haven', address: '1211 Long Beach Blvd, Beach Haven, NJ 08008',
+    town: 'Long Beach Township', address: '1211 Long Beach Blvd, North Beach Haven, NJ 08008',
     phone: '(609) 492-7114', web: 'https://jacksnycbagels.com', icon: '🥯',
     note: 'New York-style water bagels, breakfast sandwiches, and deli on LBI.',
   },
@@ -768,7 +768,7 @@ export const shopping: Business[] = [
   },
   {
     id: 238, name: 'Wawa', cat: 'Shopping', subcat: 'Convenience Store',
-    town: 'Long Beach Township', address: '13115 Long Beach Blvd, Long Beach Twp, NJ 08008',
+    town: 'Long Beach Township', address: '13115 Long Beach Blvd, Beach Haven Terrace, NJ 08008',
     phone: '(609) 492-1960', icon: '☕',
     note: 'Open 24/7. Full Wawa with hoagies, coffee, gas, and all the essentials. Mid-island location.',
   },
@@ -792,7 +792,7 @@ export const shopping: Business[] = [
   },
   {
     id: 241, name: 'Stutz Candies', cat: 'Shopping', subcat: 'Candy / Gifts',
-    town: 'Long Beach Township', address: '8701 Long Beach Blvd, Long Beach Twp, NJ 08008',
+    town: 'Long Beach Township', address: '8701 Long Beach Blvd, Brighton Beach, NJ 08008',
     phone: '(609) 494-5303', web: 'https://www.stutzcandy.com', icon: '🍫',
     note: "LBI's beloved candy shop since 1938. Homemade chocolates, fudge, nonpareils, and nut confections. A shore tradition.",
   },
@@ -811,7 +811,7 @@ export const shopping: Business[] = [
   },
   {
     id: 246, name: 'Gifted by the Sea', cat: 'Shopping', subcat: 'Gift / Jewelry',
-    town: 'Long Beach Township', address: '6115 Long Beach Blvd, Long Beach Township, NJ 08008',
+    town: 'Long Beach Township', address: '6115 Long Beach Blvd, Brant Beach, NJ 08008',
     phone: '(609) 342-0219', web: 'https://giftedbythesea.com', icon: '💍',
     note: 'Coastal gift and jewelry shop carrying Pandora, Vera Bradley, Lilly Pulitzer, and unique LBI items.',
   },
@@ -950,7 +950,7 @@ export const waterSports: Business[] = [
   },
   {
     id: 313, name: 'Shore Brake Cyclery', cat: 'Water Sports & Rentals', subcat: 'Bike Shop / Rentals',
-    town: 'Long Beach Township', address: '3801 Long Beach Blvd, Long Beach Twp, NJ 08008',
+    town: 'Long Beach Township', address: '3801 Long Beach Blvd, Brant Beach, NJ 08008',
     phone: '(609) 342-0480', web: 'https://www.shorebrakecyclery.com', icon: '🚴',
     note: 'Full-service local bike shop — sales, rentals, and repair. Authorized Trek dealer. Voted best on LBI by NJ Monthly.',
   },
@@ -973,7 +973,7 @@ export const nightlife: Business[] = [
   },
   {
     id: 702, name: 'Terrace Tavern', cat: 'Nightlife', subcat: 'Bar / Seafood',
-    town: 'Beach Haven', address: '700 N Bay Ave, Beach Haven, NJ 08008',
+    town: 'Long Beach Township', address: '13201 Long Beach Blvd, Beach Haven Terrace, NJ 08008',
     phone: '(609) 492-9751', web: 'https://terracetavernlbi.com', icon: '🍺',
     note: 'Popular Beach Haven bar with outdoor deck, live music on weekends, and a solid seafood menu.',
   },
@@ -1286,7 +1286,7 @@ export const lodging: Business[] = [
   },
   {
     id: 505, name: "Hurley's at Holgate Motel", cat: 'Lodging', subcat: 'Motel',
-    town: 'Long Beach Township', address: '4804 S Long Beach Blvd, Long Beach Twp, NJ 08008',
+    town: 'Long Beach Township', address: '4804 S Long Beach Blvd, Holgate, NJ 08008',
     phone: '(609) 492-2266', icon: '🏠',
     note: 'Quiet south-end motel near the Holgate wildlife refuge.',
   },
@@ -1316,9 +1316,9 @@ export const lodging: Business[] = [
   },
   {
     id: 510, name: "Mariner Motel", cat: 'Lodging', subcat: 'Motel',
-    town: 'Long Beach Township', address: '33rd Street & Long Beach Blvd, Long Beach Twp, NJ 08008',
+    town: 'Long Beach Township', address: '33rd Street & Long Beach Blvd, Beach Haven Gardens, NJ 08008',
     phone: '(609) 492-1235', icon: '⚓',
-    note: 'Mid-island motel, convenient location.',
+    note: 'Beach Haven Gardens motel. NOTE: may have been renamed "The Boulevard Hotel" — verify before listing.',
   },
   {
     id: 511, name: 'Sea Horse Motel', cat: 'Lodging', subcat: 'Motel',
@@ -1435,7 +1435,7 @@ export const services: Business[] = [
   },
   {
     id: 644, name: 'Brennan Fuel', cat: 'Services', subcat: 'Gas / Fuel',
-    town: 'Long Beach Township', address: '13601 Long Beach Blvd, Long Beach Township, NJ 08008',
+    town: 'Long Beach Township', address: '13601 Long Beach Blvd, Beach Haven Gardens, NJ 08008',
     icon: '⛽',
     note: 'Gas station and fuel service. Mid-island location.',
   },
