@@ -118,8 +118,10 @@ export const accessibleBeaches = [
     hcParking: false,
     contact: '(609) 492-9193',
     notes: 'Mobi-mat to beach. HC parking near beach on Taylor Ave., Centre St., Engleside Ave., Amber St., Pearl St. ' +
-           'Beach wheelchairs: contact badge office (609-492-9193) or Public Works (609-492-2525). ' +
+           'Beach wheelchairs (free): in-season call the Beach Patrol office (609-492-9193, June 28–Labor Day); ' +
+           'off-season call Public Works (609-492-2525, Labor Day–June 23). ' +
            'One beach wheelchair always available at Centre St. Beach Patrol Building (first-come). ' +
+           'North 12th St. has enhanced access — both a ramp and a beach mat. ' +
            'Free Beach Taxi for physically challenged — picked up at address, driven to beach. ' +
            'Taxi beaches: 13th St., Taylor Ave., Centre St., Berkeley Ave., Holyoke Ave., Kentford Ave., Nelson Ave.',
     sourceUrl: 'https://beachhaven-nj.gov/departments/recreation/beach-information/',
@@ -227,8 +229,9 @@ export const beachTransportServices = [
     name: 'Beach Haven Beach Taxi',
     type: 'taxi',
     free: true,
-    description: 'Free taxi service for physically challenged individuals staying in Beach Haven. ' +
-                 'Picked up at your address and driven onto the beach.',
+    description: 'Free taxi service for physically challenged individuals staying in Beach Haven (12th St. to Nelson Ave.). ' +
+                 'Picked up at your address and driven onto the beach. ' +
+                 'Morning pickups run ~10:20am–1:20pm; afternoon beach pickups end ~4:30pm.',
     beachDropoffs: ['13th St.', 'Taylor Ave.', 'Centre St.', 'Berkeley Ave.', 'Holyoke Ave.', 'Kentford Ave.', 'Nelson Ave.'],
     season: 'During the season (when badge checkers are working)',
     contact: '(609) 492-0111',
