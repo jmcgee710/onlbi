@@ -8,6 +8,7 @@ import { useWeather } from '../hooks/useWeather'
 import { useWaterTemp } from '../hooks/useWaterTemp'
 import { useUV, classifyUV } from '../hooks/useUV'
 import { useBuoy } from '../hooks/useBuoy'
+import { useRipCurrent, ripRiskColor } from '../hooks/useRipCurrent'
 
 // NDBC offshore buoy nearest to LBI for wave/swell/sea-temp data.
 const BUOY_STATION = '44091' // Barnegat
@@ -270,6 +271,7 @@ export default function TodayPage() {
   const { uv: liveUV } = useUV(LBI_LAT, LBI_LON)
   // Live wave/swell from the Barnegat offshore buoy.
   const { reading: buoy } = useBuoy(BUOY_STATION)
+  const { rip } = useRipCurrent()
 
   // Find the next upcoming HIGH tide on the ocean side for the hero sub-line.
   const oceanEvents = oceanTides ?? tideKeyTimes
@@ -555,7 +557,11 @@ export default function TodayPage() {
               </div>
 
               <div className="rip-status">
-                <span>🌊 Rip current risk · <strong>Low across the island</strong></span>
+                <span>🌊 Rip current risk · {rip ? (
+                  <strong style={{ color: ripRiskColor(rip.risk) }}>{rip.risk} across the island</strong>
+                ) : (
+                  <strong style={{ color: 'var(--slate)' }}>see safebeachday.com</strong>
+                )}</span>
                 <span>🪰 Bugs · <strong>{heroBugLevel}</strong></span>
               </div>
             </div>

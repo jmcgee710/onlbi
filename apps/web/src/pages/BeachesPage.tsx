@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { beaches } from '../data/beaches'
 import { beachBadgeInfo } from '../data/beachBadges'
+import { townGuides } from '../data/townGuides'
+import { useRipCurrent } from '../hooks/useRipCurrent'
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 
@@ -37,6 +39,7 @@ export default function BeachesPage() {
   const [tab, setTab]               = useState<BadgeTab>('conditions')
   const [lifeguardOnly, setLifeguardOnly] = useState(false)
   const [accessibleOnly, setAccessibleOnly] = useState(false)
+  const { rip } = useRipCurrent()
 
   const filtered = beaches.filter(b => {
     if (lifeguardOnly && !b.lifeguarded) return false
@@ -306,8 +309,8 @@ export default function BeachesPage() {
                   </div>
                   <div className="st">
                     <div className="st-lbl">Rip Risk</div>
-                    <div className="st-val warn" style={{ fontSize: 16 }}>Moderate</div>
-                    <div className="st-note">swim near guards</div>
+                    <div className={`st-val${rip && rip.risk !== 'Low' ? ' warn' : ''}`} style={{ fontSize: 16 }}>{rip ? rip.risk : 'See live'}</div>
+                    <div className="st-note">{rip ? 'NWS · swim near guards' : 'safebeachday.com'}</div>
                   </div>
                 </div>
               </div>
