@@ -1,7 +1,7 @@
 # onLBI — robots.txt
-# When you move to a custom domain, update the Sitemap URL below.
+# Sitemap below lists all crawlable URLs.
 
 User-agent: *
 Allow: /
 
-Sitemap: https://onlbi-web.vercel.app/sitemap.xml
+Sitemap: https://onlongbeachisland.com/sitemap.xml
