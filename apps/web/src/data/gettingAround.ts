@@ -63,14 +63,10 @@ export const causewayInfo = {
   peakCongesteTimes: 'Fridays 2pm–8pm (inbound) and Sundays 2pm–7pm (outbound) Memorial Day–Labor Day',
   bridgeProjectInfo: 'https://www.state.nj.us/transportation/commuter/roads/rte72manahawkinbaybridges/',
   lbtTrafficCameras: 'http://lbtpublic.packetalk.net:5350/IVC/views/1-live-view.htm',
-  notes: 'Only road on/off the island. Real-time NJ511 feed should be the source for the Causeway widget. ' +
-         'Ship Bottom also has a flood advisory sensor: http://hudson.dl.stevens-tech.edu/sfas/d/index.shtml?station=U226',
-}
-
-// Placeholder — replace with live NJ511 data once Edge Function is built
-export const trafficStatus = {
-  causeway: { status: 'unknown', wait: '—', updated: '—' },
-  rt72: '⚠️ Connect to NJ511 Edge Function for live data',
+  floodSensorUrl: 'http://hudson.dl.stevens-tech.edu/sfas/d/index.shtml?station=U226',
+  // NJ does NOT offer a public 511 developer API, so there is no real-time
+  // wait-time feed to build. The UI points users to the live cameras + NJ511 map.
+  notes: 'Only road on/off the island. Ship Bottom also has a bay flood advisory sensor (see floodSensorUrl).',
 }
 
 // ── PARKING ───────────────────────────────────────────────────────────────────

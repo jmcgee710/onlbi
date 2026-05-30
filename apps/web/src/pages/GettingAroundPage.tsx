@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { shuttleRoutes, cameras, parkingInfo, trafficStatus } from '../data/gettingAround'
+import { shuttleRoutes, cameras, parkingInfo, causewayInfo } from '../data/gettingAround'
 
 type Tab = 'transit' | 'traffic' | 'parking' | 'cams'
 
@@ -116,25 +116,31 @@ export default function GettingAroundPage() {
                 <div className="lc-head" style={{ marginBottom: 0 }}>
                   <div>
                     <h3 className="lc-name">Route 72 Causeway</h3>
-                    <p className="lc-sub">Manahawkin Bay Bridge</p>
+                    <p className="lc-sub">Manahawkin Bay Bridge · the only road on/off LBI</p>
                   </div>
-                  <span style={{
-                    fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700,
-                    color: 'var(--sun)', background: 'rgba(212,162,78,0.1)', padding: '5px 12px', borderRadius: 4,
-                  }}>
-                    Moderate
-                  </span>
                 </div>
-                <div className="st-row c2" style={{ marginTop: 18 }}>
-                  <div className="st">
-                    <div className="st-lbl">Est. Wait</div>
-                    <div className="st-val warn">{trafficStatus.causeway.wait}</div>
-                    <div className="st-note">Updated {trafficStatus.causeway.updated}</div>
-                  </div>
-                  <div className="st">
-                    <div className="st-lbl">Conditions</div>
-                    <div className="st-val" style={{ fontSize: 16 }}>{trafficStatus.rt72}</div>
-                  </div>
+                <p style={{ fontSize: 13.5, lineHeight: 1.6, color: 'var(--ink-soft)', marginTop: 12 }}>
+                  There's no public real-time wait-time feed for the causeway. Check a live camera or the NJ511 map for current conditions, and plan around the peak times below.
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 14 }}>
+                  <button
+                    onClick={() => setTab('cams')}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 14px', background: 'var(--sand)', border: '1px solid var(--line)', borderRadius: 6, color: 'var(--ink)', fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-display)', cursor: 'pointer' }}
+                  >
+                    📹 Live cameras →
+                  </button>
+                  <a
+                    href={causewayInfo.nj511url} target="_blank" rel="noopener noreferrer"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 14px', background: 'var(--sand)', border: '1px solid var(--line)', borderRadius: 6, color: 'var(--ink)', textDecoration: 'none', fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-display)' }}
+                  >
+                    🚦 NJ511 traffic map ↗
+                  </a>
+                  <a
+                    href={causewayInfo.floodSensorUrl} target="_blank" rel="noopener noreferrer"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 14px', background: 'var(--sand)', border: '1px solid var(--line)', borderRadius: 6, color: 'var(--ink)', textDecoration: 'none', fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-display)' }}
+                  >
+                    🌊 Bay flood sensor ↗
+                  </a>
                 </div>
               </div>
 
