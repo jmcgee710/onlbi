@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import Layout from './components/Layout'
 import TodayPage from './pages/TodayPage'
 import BeachesPage from './pages/BeachesPage'
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
+      <Analytics />
     </BrowserRouter>
   )
 }
