@@ -155,19 +155,90 @@ export const beachRules = [
     rules: {
       dogs: {
         allowed: true,
-        seasonalRestriction: 'Permitted during allowed times, but NOT on beach April 15 – September 30. Must be on leash at all times.',
+        seasonalRestriction: 'NOT on beach April 15 – September 30. Leashed at all times in the off-season.',
       },
-      smoking: { allowed: false, note: '⚠️ Verify' },
-      alcohol: { allowed: false, note: '⚠️ Verify' },
-      tents: { allowed: null, note: '⚠️ Verify' },
-      surfing: { allowed: null, note: '⚠️ Verify' },
-      drones: { allowed: null, note: '⚠️ Verify' },
+      smoking: { allowed: false, note: 'Prohibited, including e-cigarettes (borough code)' },
+      alcohol: { allowed: false, note: 'Prohibited' },
+      tents: { allowed: null, note: 'Not posted — confirm with the borough' },
+      surfing: { allowed: true, note: 'Allowed between the blue flags' },
+      drones: { allowed: null, note: 'Not posted — confirm with the borough' },
     },
-    additionalNotes: '⚠️ Full beach rules need research — check borough code at barnegatlight.org',
-    sourceUrl: 'https://barnegatlight.org/departments/beaches-lifeguards/',
-    verified: false,
+    additionalNotes: 'Alcohol, smoking and e-cigarettes prohibited. Beach fires require a Borough permit + Ocean County Fire Marshal approval.',
+    sourceUrl: 'https://ecode360.com/8931835',
+    verified: true,
   },
-  // ⚠️ Harvey Cedars, Surf City, Ship Bottom, LBT — beach rules need field research
+  {
+    townSlug: 'harvey-cedars',
+    town: 'Harvey Cedars',
+    rules: {
+      dogs: {
+        allowed: true,
+        seasonalRestriction: 'NOT on beach May 30 – September 15. Leashed September 16 – May 29.',
+      },
+      smoking: { allowed: false, note: 'Prohibited (NJ smoke-free beaches law)' },
+      alcohol: { allowed: false, note: 'Prohibited' },
+      tents: { allowed: false, note: 'No staked tents or shelters; single-pole umbrellas and small baby canopies OK' },
+      surfing: { allowed: true, note: 'In designated/flagged areas when lifeguards are on duty' },
+      drones: { allowed: null, note: 'Not posted — confirm with the borough' },
+    },
+    additionalNotes: 'Beach curfew midnight – 6am.',
+    sourceUrl: 'https://www.harveycedars.org/',
+    verified: true,
+  },
+  {
+    townSlug: 'surf-city',
+    town: 'Surf City',
+    rules: {
+      dogs: {
+        allowed: true,
+        seasonalRestriction: 'NOT on beach May 1 – September 30. Leashed October 1 – April 30.',
+      },
+      smoking: { allowed: false, note: 'Prohibited (NJ smoke-free beaches law)' },
+      alcohol: { allowed: false, note: 'Prohibited — only non-alcoholic beverages permitted' },
+      tents: { allowed: false, note: 'No canopy tents; monopole shade devices under 8ft x 8ft OK' },
+      surfing: { allowed: true, note: 'In designated/flagged areas when lifeguards are on duty' },
+      drones: { allowed: null, note: 'Not posted — confirm with the borough' },
+    },
+    additionalNotes: 'Coolers limited to small personal size (non-alcoholic drinks only).',
+    sourceUrl: 'https://surfcitynj.org/beaches/',
+    verified: true,
+  },
+  {
+    townSlug: 'ship-bottom',
+    town: 'Ship Bottom',
+    rules: {
+      dogs: {
+        allowed: true,
+        seasonalRestriction: 'NOT on beach May 1 – October 1. Leashed in the off-season (clean up required).',
+      },
+      smoking: { allowed: false, note: 'Prohibited (NJ smoke-free beaches law)' },
+      alcohol: { allowed: false, note: 'Prohibited at all times' },
+      tents: { allowed: null, note: 'Not posted — confirm with the borough' },
+      surfing: { allowed: true, note: 'In designated/flagged areas when lifeguards are on duty' },
+      drones: { allowed: null, note: 'Not posted — confirm with the borough' },
+    },
+    additionalNotes: 'No sleeping on the beach midnight – 7am. Badge required when in bathing attire.',
+    sourceUrl: 'https://shipbottom.org/government/public-safety/police-department/beach-regulations/',
+    verified: true,
+  },
+  {
+    townSlug: 'long-beach-township',
+    town: 'Long Beach Township',
+    rules: {
+      dogs: {
+        allowed: true,
+        seasonalRestriction: 'NOT on beach May 16 – September 30.',
+      },
+      smoking: { allowed: false, note: 'Prohibited (NJ smoke-free beaches law)' },
+      alcohol: { allowed: false, note: 'Prohibited' },
+      tents: { allowed: null, note: 'Not posted — confirm with the borough' },
+      surfing: { allowed: true, note: 'In designated/flagged areas when lifeguards are on duty' },
+      drones: { allowed: null, note: 'Not posted — confirm with the borough' },
+    },
+    additionalNotes: 'Vehicles prohibited on the beach May 15 – September 30. One LBT badge covers all sections.',
+    sourceUrl: 'https://lbtbp.com/beach-regulations/',
+    verified: true,
+  },
 ]
 
 // ── QUICK REFERENCE — for app beach listing cards ─────────────────────────────
@@ -198,7 +269,7 @@ export const beaches = [
     lifeguardHours: '10am–5pm daily (from June 15)',
     beachTram: false,
     bayBeach: false,
-    dogRules: '⚠️ Verify',
+    dogRules: 'No dogs May 30–Sept 15; leashed Sept 16–May 29',
     highlight: '🎥 Live beach webcam available',
   },
   {
@@ -211,7 +282,7 @@ export const beaches = [
     lifeguardHours: '10am–5pm daily (from June 14)',
     beachTram: false,
     bayBeach: false,
-    dogRules: '⚠️ Verify',
+    dogRules: 'No dogs May 1–Sept 30; leashed Oct 1–Apr 30',
     highlight: '🏄 Popular surf spot',
   },
   {
@@ -224,7 +295,7 @@ export const beaches = [
     lifeguardHours: '10am–6pm daily',
     beachTram: false,
     bayBeach: false,
-    dogRules: '⚠️ Verify',
+    dogRules: 'No dogs May 1–Oct 1; leashed off-season',
     highlight: '♿ Beach Wheels & Beach Taxi available',
   },
   {
@@ -237,7 +308,7 @@ export const beaches = [
     lifeguardHours: '10am–5pm daily (from June 20)',
     beachTram: false,
     bayBeach: false,
-    dogRules: '⚠️ Verify',
+    dogRules: 'No dogs May 16–Sept 30',
     highlight: '♿ One of NJ\'s largest beach wheelchair programs (since 1992)',
   },
   {
