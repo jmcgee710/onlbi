@@ -1207,6 +1207,30 @@ export const entertainment: Business[] = [
     note: 'Bay beach with shallow swimming, lifeguards in season, playground, restrooms, and gazebo.',
   },
   {
+    id: 458, name: 'John J. Guld Jr. Recreation & Ball Field', cat: 'Entertainment', subcat: 'Park / Sports Courts',
+    town: 'Ship Bottom', address: 'W 5th & 6th St at Barnegat Ave, Ship Bottom, NJ 08008',
+    web: 'https://shipbottom.org/government/departments/parks-recreation/', icon: '🎾',
+    note: 'Ship Bottom\'s main recreation field — tennis courts, bocce ball, shuffleboard, horseshoes, and a baseball field.',
+  },
+  {
+    id: 459, name: '4th Street Remembrance Park', cat: 'Entertainment', subcat: 'Park / Recreation',
+    town: 'Ship Bottom', address: '4th St, Ship Bottom, NJ 08008',
+    web: 'https://shipbottom.org/government/departments/parks-recreation/', icon: '🌷',
+    note: 'Quiet bayside park with a scenic bay walk, gardens, and parking.',
+  },
+  {
+    id: 460, name: 'Bayside Fishing & Crabbing Pier (25th St)', cat: 'Entertainment', subcat: 'Fishing Pier / Park',
+    town: 'Ship Bottom', address: '25th St at the Bay, Ship Bottom, NJ 08008',
+    web: 'https://shipbottom.org/government/departments/parks-recreation/', icon: '🎣',
+    note: 'Boardwalk, pavilion, and benches with a dedicated crabbing area and fishing pier. A favorite sunset spot.',
+  },
+  {
+    id: 461, name: 'Bayside Pocket Parks (5th & 20th St)', cat: 'Entertainment', subcat: 'Park / Recreation',
+    town: 'Ship Bottom', address: '5th St & 20th St at the Bay, Ship Bottom, NJ 08008',
+    web: 'https://shipbottom.org/government/departments/parks-recreation/', icon: '🌅',
+    note: 'Small bayfront pocket parks with gazebos and benches — quiet spots for sunset views over Barnegat Bay.',
+  },
+  {
     id: 452, name: 'Veterans Bicentennial Park', cat: 'Entertainment', subcat: 'Park / Recreation',
     town: 'Beach Haven', address: 'Engleside Ave & Amber St, Beach Haven, NJ 08008',
     web: 'https://beachhaven-nj.gov/venue/veterans-park/', icon: '🎭',
