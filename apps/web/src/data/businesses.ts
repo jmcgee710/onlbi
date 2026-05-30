@@ -1157,6 +1157,30 @@ export const entertainment: Business[] = [
     phone: '(609) 361-1000', web: 'https://www.longbeachtownship.com/parks-recreation/', icon: '🌳',
     note: 'LBT flagship park — guarded bay beach, playground, basketball, volleyball, pickleball, kayak rentals, dog park, free concerts.',
   },
+  {
+    id: 462, name: 'Long Beach Township Tennis & Pickleball Courts', cat: 'Entertainment', subcat: 'Park / Sports Courts',
+    town: 'Long Beach Township', address: 'Township-wide — Holgate (West & W Osborn Ave), 68th St, North Beach & Loveladies',
+    web: 'https://www.longbeachtownship.com/parks-recreation/', icon: '🎾',
+    note: 'Tennis & pickleball courts on the north, mid, and south ends, plus bocce and basketball at the 68th St municipal complex. A recreation badge is required for court use May 23 – Sept 7.',
+  },
+  {
+    id: 463, name: 'Beach Haven Terrace Bay Beach', cat: 'Entertainment', subcat: 'Bay Beach / Recreation',
+    town: 'Long Beach Township', address: 'New Jersey Ave & 131st St, Beach Haven Terrace, NJ 08008',
+    web: 'https://www.longbeachtownship.com/parks-recreation/', icon: '🏖️',
+    note: "LBT's second bayside beach (along with Bayview Park) — calm, shallow bay water on the central island.",
+  },
+  {
+    id: 464, name: 'High Bar Harbor Dog Park', cat: 'Entertainment', subcat: 'Dog Park',
+    town: 'Long Beach Township', address: 'Arnold Blvd & Butler Blvd, High Bar Harbor, NJ 08006',
+    web: 'https://www.longbeachtownship.com/parks-recreation/', icon: '🐕',
+    note: 'Fenced dog park in the secluded High Bar Harbor section. A kayak/paddleboard launch is nearby at Arnold Blvd & Sunset Blvd.',
+  },
+  {
+    id: 465, name: 'Hideaway Nature Trail & Kayak Launches', cat: 'Entertainment', subcat: 'Nature Trail / Kayak',
+    town: 'Long Beach Township', address: 'W 105th St, Long Beach Township, NJ 08008',
+    web: 'https://www.longbeachtownship.com/parks-recreation/', icon: '🥾',
+    note: 'Bayside walking trail with kayak and paddleboard launches (Hideaway Bay at W 105th St, plus 93rd St near the Acme). Part of LBT\'s land-and-water trail network.',
+  },
   // Parks & Nature — May 2026
   {
     id: 444, name: 'Barnegat Lighthouse State Park', cat: 'Entertainment', subcat: 'State Park / Nature',
@@ -1180,7 +1204,7 @@ export const entertainment: Business[] = [
     id: 447, name: 'Sunset Park', cat: 'Entertainment', subcat: 'Park / Recreation',
     town: 'Harvey Cedars', address: 'W Salem Ave at 75th St, Harvey Cedars, NJ 08008',
     phone: '(609) 361-9733', web: 'https://www.harveycedars.org/', icon: '🌅',
-    note: 'Main bayside park — playground, tennis, basketball, fishing dock, kayak/SUP launch, restrooms. Free Wednesday evening concerts. Annual Arts Festival.',
+    note: 'Main bayside park (9+ acres) — playground, tennis, pickleball, basketball, fishing dock, kayak/SUP launch, restrooms. Free Wednesday evening concerts. Annual Arts Festival.',
   },
   {
     id: 448, name: 'Zachariae Recreational Area', cat: 'Entertainment', subcat: 'Park / Recreation',
