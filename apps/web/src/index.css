@@ -312,19 +312,30 @@ button { font-family: inherit; cursor: pointer; }
 .pg-hero h1 em { font-style: italic; color: var(--teal-deep); }
 .pg-lede { font-size: 15px; color: var(--ink-soft); max-width: 560px; margin: 0 0 28px; line-height: 1.5; }
 .pg-lede b { color: var(--ink); font-weight: 600; }
-.pg-tabs { display: flex; gap: 32px; border-top: 1px solid var(--line); padding-top: 18px; flex-wrap: wrap; }
+/* Filter/tab row — the border-top is the "small separation" divider that sits
+   below the hero intro on every page that has filters. */
+.pg-tabs { display: flex; gap: 10px; border-top: 1px solid var(--line); padding-top: 20px; flex-wrap: wrap; }
 .pg-tab {
-  display: flex; flex-direction: column; gap: 4px; padding-bottom: 14px;
-  position: relative; cursor: pointer; background: none; border: 0;
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 9px 15px;
+  cursor: pointer; background: transparent;
+  border: 1.5px solid transparent; border-radius: 10px;
   text-align: left; color: var(--slate); font-family: inherit;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
 }
+.pg-tab:hover { background: rgba(15,31,46,0.035); }
 .pg-tab .tab-lbl { font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600; }
 .pg-tab .tab-val { font-family: var(--font-display); font-size: 22px; font-weight: 500; color: var(--ink-soft); letter-spacing: -0.005em; line-height: 1.1; }
 .pg-tab .tab-val em { font-style: italic; color: var(--teal-deep); }
-.pg-tab.active { color: var(--ink); }
+/* Selected filter: full box + teal border + a touch larger, not just an underline. */
+.pg-tab.active {
+  color: var(--ink);
+  background: rgba(72,108,107,0.09);
+  border-color: var(--teal-deep);
+  transform: scale(1.05);
+  box-shadow: 0 1px 4px rgba(15,31,46,0.07);
+}
 .pg-tab.active .tab-val { color: var(--ink); }
-.pg-tab::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: transparent; }
-.pg-tab.active::after { background: var(--ink); }
 /* ─── PAGE GRID ─ */
 .pg-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
 .pg-aside { position: sticky; top: 88px; display: flex; flex-direction: column; gap: 16px; }
@@ -387,7 +398,7 @@ button { font-family: inherit; cursor: pointer; }
   .pg-hero h1 { font-size: 40px; }
   .st-row { grid-template-columns: 1fr 1fr; row-gap: 16px; }
   .st-row.c3 { grid-template-columns: 1fr 1fr; }
-  .pg-tabs { gap: 18px; }
+  .pg-tabs { gap: 8px; }
   .lc { padding: 18px 20px; }
 }
 
