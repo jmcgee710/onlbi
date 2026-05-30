@@ -322,7 +322,7 @@ export const beaches = [
     beachTram: false,
     bayBeach: false,
     dogRules: 'Allowed Sept 16–May 14 only; dog beach at Taylor Ave. bay year-round',
-    highlight: '🎡 Fantasy Island amusement park nearby; no badges on Wednesdays',
+    highlight: '🏖️ No beach badges required on Wednesdays',
     noFreeDay: 'Wednesday — badges not required',
     mobiMatStreets: ['Nelson Ave.', 'Merrivale Ave.', 'Leeward Ave.', 'Dolphin Ave.', 'Chatsworth Ave.', 'Belvoir Ave.', '7th St.', '10th St.', '12th St.'],
   },
