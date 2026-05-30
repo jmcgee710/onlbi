@@ -56,39 +56,39 @@ export const accessibleBeaches = [
   {
     town: 'Ship Bottom',
     townSlug: 'ship-bottom',
-    beach: '4th Street Ramp',
+    beach: '15th Street — MOBY-MAT dune walkover',
     mobiMat: true,
     wheelchairLoan: true,   // Beach Wheels — free, reservation required
     hcParking: true,
-    contact: '(609) 494-9481',  // in-season; (609) 494-2171 Ext. 116 off-season
-    notes: 'Beach ramps (hardened access) at 4th, 8th, 9th, 14th, 15th, 20th, 21st, and 25th Streets. ' +
-           'Beach Wheels free; reservation required in advance. Must be staying in Ship Bottom. ' +
-           'Beach Taxi (free) for physically challenged visitors to beaches 3rd–31st St — Father\'s Day weekend through Labor Day.',
-    sourceUrl: 'https://shipbottom.org/beach-wheels-beach-taxi/',
+    contact: '(609) 494-9481',  // in-season; (609) 494-2171 ext. 100 off-season
+    notes: 'Handicapped-accessible dune walkover with blue MOBY-MAT matting. ' +
+           'Beach Wheels free with advance reservation (in-season (609) 494-9481; off-season (609) 494-2171 ext. 100). ' +
+           'Beach Taxi (free) serves physically challenged visitors to beaches 3rd–31st St, Father\'s Day weekend through Labor Day.',
+    sourceUrl: 'https://shipbottom.org/government/departments/parks-recreation/',
   },
   {
     town: 'Ship Bottom',
     townSlug: 'ship-bottom',
-    beach: '8th Street Ramp',
+    beach: '20th Street — MOBY-MAT dune walkover',
     mobiMat: true,
     wheelchairLoan: true,
     hcParking: true,
     contact: '(609) 494-9481',
-    notes: 'See 4th Street entry for full program details.',
-    sourceUrl: 'https://shipbottom.org/beach-wheels-beach-taxi/',
+    notes: 'Second MOBY-MAT dune walkover. See the 15th Street entry for the full Beach Wheels / Beach Taxi program.',
+    sourceUrl: 'https://shipbottom.org/government/departments/parks-recreation/',
   },
   {
     town: 'Ship Bottom',
     townSlug: 'ship-bottom',
-    beach: '9th Street Ramp',
-    mobiMat: true,
+    beach: 'Accessible ramps — 4th, 8th, 9th, 14th, 19th, 21st & 25th Streets',
+    mobiMat: false,
     wheelchairLoan: true,
     hcParking: true,
     contact: '(609) 494-9481',
-    notes: 'See 4th Street entry for full program details.',
-    sourceUrl: 'https://shipbottom.org/beach-wheels-beach-taxi/',
+    notes: 'Hardened accessible ramps (not MOBY-MAT) at 4th, 8th, 9th, 14th, 19th, 21st, and 25th Streets. ' +
+           'The blue MOBY-MAT matting is at 15th & 20th St. Beach Wheels & Beach Taxi available by reservation.',
+    sourceUrl: 'https://shipbottom.org/government/departments/parks-recreation/',
   },
-  // Additional ramps (no individual page data — confirm each spring): 14th, 15th, 20th, 21st, 25th
 
   // ── LONG BEACH TOWNSHIP ────────────────────────────────────────────────────
   {
