@@ -52,7 +52,7 @@ export default function TownsPage() {
           <div className="pg-tab">
             <span className="tab-lbl">North to South</span>
             <span className="tab-val" style={{ fontSize: 17 }}>
-              <em>Barnegat</em>&nbsp;–&nbsp;Beach&nbsp;Haven
+              <em>Barnegat&nbsp;Light</em>&nbsp;–&nbsp;Holgate
             </span>
           </div>
           <div className="pg-tab">
