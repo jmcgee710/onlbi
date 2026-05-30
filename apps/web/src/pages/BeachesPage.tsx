@@ -69,7 +69,7 @@ export default function BeachesPage() {
         <div className="pg-tabs">
           {([
             ['conditions', 'Conditions',   '6', 'towns'],
-            ['badges',     'Badge Prices', `$${minPrice}–$${maxPrice}`, ''],
+            ['badges',     'Badge Prices', `$${minPrice}–$${maxPrice}`, 'daily'],
             ['weather',    'Weather',      'NOAA', ''],
           ] as [BadgeTab, string, string, string][]).map(([t, lbl, val, em]) => (
             <button
