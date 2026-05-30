@@ -19,7 +19,7 @@ export default function Layout() {
         <div className="mobile-topbar">
           <img src="/logo-dark.png" alt="On LBI" style={{ height: 40, objectFit: 'contain' }} />
           <span style={{ fontFamily: 'var(--font-display)', fontSize: 14, color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', letterSpacing: '0.01em' }}>
-            because your <span style={{ color: 'rgba(255,255,255,0.85)', fontStyle: 'normal', fontWeight: 500 }}>ON</span> the island not in it!
+            because you're <span style={{ color: 'rgba(255,255,255,0.85)', fontStyle: 'normal', fontWeight: 500 }}>ON</span> the island, not in it!
           </span>
           <Link to="/alerts" style={{ color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center' }}>
             <Bell size={18} strokeWidth={1.5} />
