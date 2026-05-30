@@ -336,6 +336,13 @@ button { font-family: inherit; cursor: pointer; }
   box-shadow: 0 1px 4px rgba(15,31,46,0.07);
 }
 .pg-tab.active .tab-val { color: var(--ink); }
+/* Static info strips (not clickable filters) — keep the emphasis, drop the box. */
+.pg-tabs-static .pg-tab { cursor: default; }
+.pg-tabs-static .pg-tab:hover { background: transparent; }
+.pg-tabs-static .pg-tab.active {
+  background: transparent; border-color: transparent;
+  transform: none; box-shadow: none;
+}
 /* ─── PAGE GRID ─ */
 .pg-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
 .pg-aside { position: sticky; top: 88px; display: flex; flex-direction: column; gap: 16px; }

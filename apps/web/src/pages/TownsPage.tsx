@@ -44,7 +44,7 @@ export default function TownsPage() {
           each with its own personality, beach badges, and pace. Pick the one that
           matches your trip.
         </p>
-        <div className="pg-tabs" style={{ pointerEvents: 'none' }}>
+        <div className="pg-tabs pg-tabs-static" style={{ pointerEvents: 'none' }}>
           <div className="pg-tab active">
             <span className="tab-lbl">Towns</span>
             <span className="tab-val">{townGuides.length}</span>

@@ -90,7 +90,7 @@ export default function BeachTownPage() {
         {beach.highlight && (
           <p className="pg-lede">{beach.highlight}</p>
         )}
-        <div className="pg-tabs" style={{ pointerEvents: 'none' }}>
+        <div className="pg-tabs pg-tabs-static" style={{ pointerEvents: 'none' }}>
           <div className="pg-tab active">
             <span className="tab-lbl">Daily Badge</span>
             <span className="tab-val">

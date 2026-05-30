@@ -74,7 +74,7 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
         <h1>{guide.name.split(' ').slice(0, -1).join(' ') || guide.name}{' '}<em>{guide.name.split(' ').slice(-1)[0]}</em></h1>
         <p className="pg-lede">{guide.intro}</p>
 
-        <div className="pg-tabs" style={{ pointerEvents: 'none' }}>
+        <div className="pg-tabs pg-tabs-static" style={{ pointerEvents: 'none' }}>
           <div className="pg-tab active">
             <span className="tab-lbl">Daily Badge</span>
             <span className="tab-val">
