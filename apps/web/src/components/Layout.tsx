@@ -1,13 +1,15 @@
 import { Outlet, NavLink, Link } from 'react-router-dom'
-import { Sun, Umbrella, UtensilsCrossed, Anchor, Accessibility, Bell } from 'lucide-react'
+import { Sun, Umbrella, MapPinned, UtensilsCrossed, Anchor, Compass, Accessibility, Bell } from 'lucide-react'
 import Sidebar from './Sidebar'
 
 const mobileNav = [
-  { to: '/',              Icon: Sun,             label: 'Today' },
-  { to: '/beaches',       Icon: Umbrella,        label: 'Beaches' },
-  { to: '/eat',           Icon: UtensilsCrossed, label: 'Eat' },
-  { to: '/do',            Icon: Anchor,          label: 'Do & Shop' },
-  { to: '/accessibility', Icon: Accessibility,   label: 'Access' },
+  { to: '/',               Icon: Sun,             label: 'Today' },
+  { to: '/beaches',        Icon: Umbrella,        label: 'Beaches' },
+  { to: '/towns',          Icon: MapPinned,       label: 'Towns' },
+  { to: '/eat',            Icon: UtensilsCrossed, label: 'Eat' },
+  { to: '/do',             Icon: Anchor,          label: 'Do' },
+  { to: '/getting-around', Icon: Compass,         label: 'Around' },
+  { to: '/accessibility',  Icon: Accessibility,   label: 'Access' },
 ]
 
 export default function Layout() {
@@ -51,12 +53,13 @@ export default function Layout() {
                 end={to === '/'}
                 style={({ isActive }) => ({
                   flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
-                  gap: 4, padding: '10px 0', fontSize: 10, fontWeight: 600, textDecoration: 'none',
+                  gap: 3, padding: '10px 2px', fontSize: 9.5, fontWeight: 600, textDecoration: 'none',
+                  whiteSpace: 'nowrap',
                   color: isActive ? '#B8CDC8' : 'rgba(255,255,255,0.4)',
                   fontFamily: 'var(--font-body)',
                 })}
               >
-                <Icon size={20} strokeWidth={1.5} />
+                <Icon size={19} strokeWidth={1.5} />
                 {label}
               </NavLink>
             ))}
