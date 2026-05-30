@@ -442,4 +442,5 @@ button { font-family: inherit; cursor: pointer; }
 @media (max-width: 760px) {
   .mobile-topbar { display: flex; }
   .mobile-bottom-nav { display: flex; }
+  .topbar { display: none; } /* desktop topbar is redundant on mobile (date now lives in the dark bar) */
 }

@@ -20,25 +20,26 @@ export default function Layout() {
         {/* Mobile top bar */}
         <div className="mobile-topbar">
           <img src="/logo-dark.png" alt="On LBI" style={{ height: 40, objectFit: 'contain' }} />
-          <span style={{ fontFamily: 'var(--font-display)', fontSize: 14, color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', letterSpacing: '0.01em' }}>
-            because you're <span style={{ color: 'rgba(255,255,255,0.85)', fontStyle: 'normal', fontWeight: 500 }}>ON</span> the island, not in it!
-          </span>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1, flex: 1, minWidth: 0, margin: '0 12px' }}>
+            <span style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.01em' }}>
+              {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+            </span>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: 13, color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', letterSpacing: '0.01em' }}>
+              because you're <span style={{ color: 'rgba(255,255,255,0.85)', fontStyle: 'normal', fontWeight: 500 }}>ON</span> the island, not in it!
+            </span>
+          </div>
           <Link to="/alerts" style={{ color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center' }}>
             <Bell size={18} strokeWidth={1.5} />
           </Link>
         </div>
 
         {/* Desktop top bar */}
-        <div className="topbar" style={{ display: 'flex' } as React.CSSProperties}>
+        <div className="topbar">
           <div className="crumbs">
             <strong>Today</strong> · {new Date().toLocaleDateString('en-US', {
               weekday: 'long', month: 'long', day: 'numeric',
             })}
           </div>
-          <span className="spacer" />
-          <Link to="/alerts" className="icon-btn primary" style={{ textDecoration: 'none' }}>
-            <Bell size={14} strokeWidth={1.75} /> Alerts
-          </Link>
         </div>
 
         <Outlet />
@@ -69,6 +70,3 @@ export default function Layout() {
     </div>
   )
 }
-
-// needed for inline style cast
-import type React from 'react'
