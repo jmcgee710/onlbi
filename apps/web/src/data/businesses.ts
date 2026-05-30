@@ -1201,6 +1201,18 @@ export const entertainment: Business[] = [
     note: 'Fenced off-leash dog park. Paw Pass required — $30/yr or $15/wk non-residents. Open Apr–Oct. Proof of rabies vaccination required.',
   },
   {
+    id: 466, name: 'Barnegat Light Skate Park', cat: 'Entertainment', subcat: 'Skate Park',
+    town: 'Barnegat Light', address: 'W 10th St, Barnegat Light, NJ 08006',
+    web: 'https://barnegatlight.org/departments/recreation-department/', icon: '🛹',
+    note: 'Skateboard and inline-skate park, open 9am–dusk. Helmet, knee pads, and elbow pads required.',
+  },
+  {
+    id: 467, name: 'Barnegat Light Tennis & Pickleball Courts', cat: 'Entertainment', subcat: 'Park / Sports Courts',
+    town: 'Barnegat Light', address: 'W 11th St, Barnegat Light, NJ 08006',
+    web: 'https://barnegatlight.org/departments/recreation-department/', icon: '🎾',
+    note: 'Public tennis courts by the Beach Badge Booth (beach badge or hourly fee), open 8am–6pm daily in season. Pickleball courts require a pass — free for Barnegat Light homeowners, paid for non-homeowners.',
+  },
+  {
     id: 447, name: 'Sunset Park', cat: 'Entertainment', subcat: 'Park / Recreation',
     town: 'Harvey Cedars', address: 'W Salem Ave at 75th St, Harvey Cedars, NJ 08008',
     phone: '(609) 361-9733', web: 'https://www.harveycedars.org/', icon: '🌅',
@@ -1217,6 +1229,12 @@ export const entertainment: Business[] = [
     town: 'Surf City', address: 'Division St at the Bay, Surf City, NJ 08008',
     web: 'https://surfcitynj.org/beaches/', icon: '🚤',
     note: 'Public boat ramp with floating dock. Adjacent 16th St Bay Beach has lifeguards, pavilion, shallow swimming. Daily $20 launch fee.',
+  },
+  {
+    id: 468, name: 'Earl G. & Inez Batts Recreation Complex', cat: 'Entertainment', subcat: 'Park / Recreation',
+    town: 'Surf City', address: 'By the Surf City Community Center & Athletic Complex, Surf City, NJ 08008',
+    web: 'https://surfcity.recdesk.com/Community/Facility', icon: '🏞️',
+    note: 'New ~45-acre recreation complex (Phase 1): skatepark, inclusive playground, two sand volleyball courts, picnic shelter, restrooms, parking, and walking paths.',
   },
   {
     id: 450, name: 'Robert W. Nissen Park', cat: 'Entertainment', subcat: 'Park / Recreation',
