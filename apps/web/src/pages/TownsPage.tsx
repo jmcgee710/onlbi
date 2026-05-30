@@ -117,12 +117,12 @@ export default function TownsPage() {
           <div className="aside-card">
             <p className="aside-title">How to choose</p>
             <ul className="aside-list">
-              <li><strong>Beach Haven</strong> — walkable, lively, family-friendly</li>
-              <li><strong>Ship Bottom</strong> — central, easy access, Ron Jon</li>
-              <li><strong>Surf City</strong> — middle of the island, mix of shops &amp; quiet</li>
-              <li><strong>Harvey Cedars</strong> — narrow, peaceful, big sunsets</li>
-              <li><strong>Barnegat Light</strong> — north tip, lighthouse, fishing port</li>
-              <li><strong>LBT</strong> — patchwork of communities; choose by section</li>
+              <li><span><strong>Beach Haven</strong> — walkable, lively, family-friendly</span></li>
+              <li><span><strong>Ship Bottom</strong> — central, easy access, Ron Jon</span></li>
+              <li><span><strong>Surf City</strong> — middle of the island, mix of shops &amp; quiet</span></li>
+              <li><span><strong>Harvey Cedars</strong> — narrow, peaceful, big sunsets</span></li>
+              <li><span><strong>Barnegat Light</strong> — north tip, lighthouse, fishing port</span></li>
+              <li><span><strong>LBT</strong> — patchwork of communities; choose by section</span></li>
             </ul>
           </div>
 

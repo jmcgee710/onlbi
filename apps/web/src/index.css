@@ -396,7 +396,10 @@ button { font-family: inherit; cursor: pointer; }
 .aside-mini .st-val { font-size: 18px; }
 /* ─── PG RESPONSIVE ─ */
 @media (max-width: 1100px) {
-  .pg-grid { grid-template-columns: 1fr; }
+  /* minmax(0,1fr) caps the column at the viewport so horizontal-scroll rows
+     (e.g. the shuttle stops on Getting Around) scroll internally instead of
+     stretching the whole page to a desktop-wide layout on mobile. */
+  .pg-grid { grid-template-columns: minmax(0, 1fr); }
   .pg-aside { position: static; }
 }
 @media (max-width: 760px) {
