@@ -1,4 +1,5 @@
-import { Outlet, NavLink, Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
 import { Sun, Umbrella, MapPinned, UtensilsCrossed, Anchor, Compass, Accessibility, Bell } from 'lucide-react'
 import Sidebar from './Sidebar'
 
@@ -13,6 +14,14 @@ const mobileNav = [
 ]
 
 export default function Layout() {
+  const { pathname } = useLocation()
+
+  // Reset scroll to the top of the page on every route change. Without this,
+  // navigating from the bottom of one page lands you at the bottom of the next.
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 })
+  }, [pathname])
+
   return (
     <div className="app">
       <Sidebar />
