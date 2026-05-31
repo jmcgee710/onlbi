@@ -1,20 +1,13 @@
 import { useState } from 'react'
 
-interface BizLogoProps {
+interface BizThumbProps {
+  id: number
   name: string
-  web?: string
   size?: number
 }
 
-// Deterministic color per business name — keeps lettermarks visually distinct
-const PALETTE = [
-  '#486C6B', // teal-deep
-  '#6B8E5C', // moss
-  '#1B3654', // navy
-  '#C45A3E', // coral
-  '#5F7388', // slate
-  '#D4A24E', // sun
-]
+// Deterministic color per business name — keeps lettermark fallbacks distinct.
+const PALETTE = ['#486C6B', '#6B8E5C', '#1B3654', '#C45A3E', '#5F7388', '#D4A24E']
 
 function pickColor(name: string): string {
   let h = 0
@@ -22,21 +15,15 @@ function pickColor(name: string): string {
   return PALETTE[Math.abs(h) % PALETTE.length]
 }
 
-function toDomain(web: string): string | null {
-  try {
-    return new URL(web).hostname.replace(/^www\./, '')
-  } catch {
-    return null
-  }
-}
-
-export default function BizLogo({ name, web, size = 44 }: BizLogoProps) {
-  const domain = web ? toDomain(web) : null
+/**
+ * Business thumbnail: a Google Places photo served via the /api/biz-photo edge
+ * function, with a colored letter-mark fallback when the business has no photo
+ * (or the request fails). Lazy-loaded so a long list doesn't fetch all at once.
+ */
+export default function BizThumb({ id, name, size = 44 }: BizThumbProps) {
   const [failed, setFailed] = useState(false)
-
-  const showImg = !!domain && !failed
-  const letter  = name.charAt(0).toUpperCase()
-  const color   = pickColor(name)
+  const letter = name.charAt(0).toUpperCase()
+  const color = pickColor(name)
 
   return (
     <div
@@ -47,14 +34,14 @@ export default function BizLogo({ name, web, size = 44 }: BizLogoProps) {
         overflow: 'hidden',
       }}
     >
-      {showImg ? (
+      {!failed ? (
         <img
-          src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`}
+          src={`/api/biz-photo?id=${id}`}
           alt=""
           loading="lazy"
-          width={Math.round(size * 0.62)}
-          height={Math.round(size * 0.62)}
-          style={{ objectFit: 'contain', display: 'block' }}
+          width={size}
+          height={size}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           onError={() => setFailed(true)}
         />
       ) : (

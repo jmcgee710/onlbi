@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { dining, nightlife } from '../data/businesses'
-import BizLogo from '../components/BizLogo'
+import BizThumb from '../components/BizThumb'
 
 // ─── FILTERS ─────────────────────────────────────────────────────────────────
 type CatFilter = { label: string; test: (subcat: string) => boolean }
@@ -121,7 +121,7 @@ export default function EatPage() {
                     <div key={b.id} className="lc">
                       <div className="lc-head" style={{ marginBottom: 0 }}>
                         <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                          <BizLogo name={b.name} web={b.web} />
+                          <BizThumb id={b.id} name={b.name} />
                           <div>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{b.name}</h3>
                             <p className="lc-sub">{b.town} · {b.subcat}</p>
@@ -197,7 +197,7 @@ export default function EatPage() {
                     <div key={n.id} className="lc">
                       <div className="lc-head" style={{ marginBottom: 0 }}>
                         <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                          <BizLogo name={n.name} web={n.web} />
+                          <BizThumb id={n.id} name={n.name} />
                           <div>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{n.name}</h3>
                             <p className="lc-sub">{n.town} · {n.subcat}</p>
@@ -274,6 +274,9 @@ export default function EatPage() {
               </div>
             </div>
           </div>
+          <p style={{ fontSize: 11, color: 'var(--slate-soft)', marginTop: 4, lineHeight: 1.5 }}>
+            Business photos provided by Google.
+          </p>
         </aside>
 
       </div>

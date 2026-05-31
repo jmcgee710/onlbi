@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { waterSports, entertainment, shopping, type Business } from '../data/businesses'
-import BizLogo from '../components/BizLogo'
+import BizThumb from '../components/BizThumb'
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
 type MainTab = 'do' | 'shop'
@@ -154,7 +154,7 @@ export default function DoPage() {
                     <div key={a.id} className="lc">
                       <div className="lc-head" style={{ marginBottom: 0 }}>
                         <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                          <BizLogo name={a.name} web={a.web} />
+                          <BizThumb id={a.id} name={a.name} />
                           <div>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{a.name}</h3>
                             <p className="lc-sub">{a.town} · {a.subcat}</p>
@@ -224,7 +224,7 @@ export default function DoPage() {
                   <div key={s.id} className="lc">
                     <div className="lc-head" style={{ marginBottom: 0 }}>
                       <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                        <BizLogo name={s.name} web={s.web} />
+                        <BizThumb id={s.id} name={s.name} />
                         <div>
                           <h3 className="lc-name" style={{ fontSize: 20 }}>{s.name}</h3>
                           <p className="lc-sub">{s.town} · {s.subcat}</p>
@@ -304,6 +304,9 @@ export default function DoPage() {
               </div>
             </>
           )}
+          <p style={{ fontSize: 11, color: 'var(--slate-soft)', marginTop: 4, lineHeight: 1.5 }}>
+            Business photos provided by Google.
+          </p>
         </aside>
 
       </div>
