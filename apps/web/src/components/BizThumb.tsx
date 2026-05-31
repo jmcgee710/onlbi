@@ -20,7 +20,7 @@ function pickColor(name: string): string {
  * function, with a colored letter-mark fallback when the business has no photo
  * (or the request fails). Lazy-loaded so a long list doesn't fetch all at once.
  */
-export default function BizThumb({ id, name, size = 44 }: BizThumbProps) {
+export default function BizThumb({ id, name, size = 88 }: BizThumbProps) {
   const [failed, setFailed] = useState(false)
   const letter = name.charAt(0).toUpperCase()
   const color = pickColor(name)
