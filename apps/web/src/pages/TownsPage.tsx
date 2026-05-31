@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { townGuides } from '../data/townGuides'
 import { beachBadgeInfo } from '../data/beachBadges'
-import { useDocumentMeta } from '../hooks/useDocumentMeta'
 
 const badgeByTown = Object.fromEntries(
   beachBadgeInfo.map(b => [b.townSlug, b.pricing.daily])
@@ -18,12 +17,6 @@ const ORDER = [
 ]
 
 export default function TownsPage() {
-  useDocumentMeta({
-    title: 'LBI Town Guides: 6 Long Beach Island Towns Compared',
-    description:
-      'Compare all six Long Beach Island towns — Barnegat Light, Harvey Cedars, Surf City, Ship Bottom, Long Beach Township, and Beach Haven. Pick the right one for your visit.',
-  })
-
   const ordered = ORDER
     .map(slug => townGuides.find(t => t.slug === slug))
     .filter((t): t is NonNullable<typeof t> => Boolean(t))

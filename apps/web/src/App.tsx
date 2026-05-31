@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Analytics } from '@vercel/analytics/react'
+import { useRoutes, type RouteObject } from 'react-router-dom'
 import Layout from './components/Layout'
 import TodayPage from './pages/TodayPage'
 import BeachesPage from './pages/BeachesPage'
@@ -14,7 +13,7 @@ import TownGuidePage from './pages/TownGuidePage'
 import TownsPage from './pages/TownsPage'
 import NotFoundPage from './pages/NotFoundPage'
 
-const townSlugs = [
+export const townSlugs = [
   'beach-haven',
   'ship-bottom',
   'surf-city',
@@ -23,34 +22,39 @@ const townSlugs = [
   'long-beach-township',
 ]
 
-export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route index element={<TodayPage />} />
-          <Route path="beaches" element={<BeachesPage />} />
-          <Route path="beaches/:town" element={<BeachTownPage />} />
-          <Route path="beaches/:town/:street" element={<BeachAccessPage />} />
-          <Route path="towns" element={<TownsPage />} />
-          <Route path="accessibility" element={<AccessibilityPage />} />
-          <Route path="accessibility/beach-access" element={<AccessibilityPage />} />
-          <Route path="accessibility/:town" element={<AccessibilityPage />} />
-          <Route path="eat/:category?" element={<EatPage />} />
-          <Route path="eat/:town/:slug" element={<EatPage />} />
-          <Route path="do/:category?" element={<DoPage />} />
-          <Route path="getting-around/*" element={<GettingAroundPage />} />
-          <Route path="alerts" element={<AlertsPage />} />
+// Routes as a data array so the same definition drives client hydration
+// (BrowserRouter) and static prerendering (StaticRouter) without duplication.
+export const routes: RouteObject[] = [
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      { index: true, element: <TodayPage /> },
+      { path: 'beaches', element: <BeachesPage /> },
+      { path: 'beaches/:town', element: <BeachTownPage /> },
+      { path: 'beaches/:town/:street', element: <BeachAccessPage /> },
+      { path: 'towns', element: <TownsPage /> },
+      { path: 'accessibility', element: <AccessibilityPage /> },
+      { path: 'accessibility/beach-access', element: <AccessibilityPage /> },
+      { path: 'accessibility/:town', element: <AccessibilityPage /> },
+      { path: 'eat/:category?', element: <EatPage /> },
+      { path: 'eat/:town/:slug', element: <EatPage /> },
+      { path: 'do/:category?', element: <DoPage /> },
+      { path: 'getting-around/*', element: <GettingAroundPage /> },
+      { path: 'alerts', element: <AlertsPage /> },
 
-          {/* Top-level town guide routes (SEO landing pages) */}
-          {townSlugs.map(slug => (
-            <Route key={slug} path={slug} element={<TownGuidePage slug={slug} />} />
-          ))}
+      // Top-level town guide routes (SEO landing pages)
+      ...townSlugs.map(slug => ({
+        path: slug,
+        element: <TownGuidePage slug={slug} />,
+      })),
 
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-      <Analytics />
-    </BrowserRouter>
-  )
+      { path: '*', element: <NotFoundPage /> },
+    ],
+  },
+]
+
+// Shared between client + server entries; must be rendered inside a Router.
+export function AppRoutes() {
+  return useRoutes(routes)
 }

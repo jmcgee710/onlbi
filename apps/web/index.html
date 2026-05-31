@@ -4,36 +4,20 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/logo-light.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>On LBI — Long Beach Island Beach Guide</title>
-
-    <!-- Primary SEO -->
-    <meta
-      name="description"
-      content="Your live guide to Long Beach Island, NJ — beach badges and prices, parking tips, tides and surf conditions, wheelchair-accessible beaches, restaurants, and things to do in every LBI town."
-    />
     <meta name="theme-color" content="#0e7c86" />
-    <!-- Canonical — primary domain -->
-    <link rel="canonical" href="https://onlongbeachisland.com/" />
 
-    <!-- Open Graph (Facebook, iMessage, LinkedIn) -->
+    <!-- Invariant social tags. Per-page title, description, canonical, and
+         OG/Twitter tags are injected at build time by prerender.mjs at the
+         placeholder below (source: src/lib/seo.ts). -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="On LBI" />
-    <meta property="og:title" content="On LBI — Long Beach Island Beach Guide" />
-    <meta
-      property="og:description"
-      content="Live LBI conditions, beach badge prices, parking, accessible beaches, dining, and things to do — your go-to guide for Long Beach Island, NJ."
-    />
-    <meta property="og:url" content="https://onlongbeachisland.com/" />
-    <meta property="og:image" content="https://onlongbeachisland.com/logo-light.png" />
-
-    <!-- Twitter / X card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="On LBI — Long Beach Island Beach Guide" />
-    <meta
-      name="twitter:description"
-      content="Live LBI conditions, beach badge prices, parking, accessible beaches, dining, and things to do — your go-to guide for Long Beach Island, NJ."
-    />
-    <meta name="twitter:image" content="https://onlongbeachisland.com/logo-light.png" />
+
+    <!-- Site-wide structured data (town pages add their own TouristDestination) -->
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"WebSite","name":"On LBI","alternateName":"On Long Beach Island","url":"https://onlongbeachisland.com/","about":"Visitor guide to Long Beach Island, New Jersey — beaches, badges, dining, accessibility, and getting around."}
+    </script>
+    <!--app-head-->
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
 import { Sun, Umbrella, MapPinned, UtensilsCrossed, Anchor, Compass, Accessibility, Bell } from 'lucide-react'
+import { Analytics } from '@vercel/analytics/react'
 import Sidebar from './Sidebar'
+import { getPageSeo } from '../lib/seo'
 
 const mobileNav = [
   { to: '/',               Icon: Sun,             label: 'Today' },
@@ -20,6 +22,20 @@ export default function Layout() {
   // navigating from the bottom of one page lands you at the bottom of the next.
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 })
+  }, [pathname])
+
+  // Keep <title> + meta description correct during client-side (SPA) navigation.
+  // Crawlers get the right tags from the prerendered HTML; this is for in-app nav.
+  useEffect(() => {
+    const { title, description } = getPageSeo(pathname)
+    document.title = title
+    let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]')
+    if (!meta) {
+      meta = document.createElement('meta')
+      meta.name = 'description'
+      document.head.appendChild(meta)
+    }
+    meta.content = description
   }, [pathname])
 
   return (
@@ -76,6 +92,7 @@ export default function Layout() {
           </div>
         </nav>
       </main>
+      <Analytics />
     </div>
   )
 }

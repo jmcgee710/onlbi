@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import { findTownGuide, townGuides } from '../data/townGuides'
 import { beachBadgeInfo } from '../data/beachBadges'
 import { lifeguardInfo } from '../data/beaches'
-import { useDocumentMeta } from '../hooks/useDocumentMeta'
 
 interface TownGuidePageProps {
   slug: string
@@ -12,11 +11,6 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
   const guide = findTownGuide(slug)
   const badge  = beachBadgeInfo.find(b => b.townSlug === slug)
   const guards = lifeguardInfo.find(l => l.townSlug === slug)
-
-  useDocumentMeta({
-    title: guide?.metaTitle ?? 'LBI Town Guide',
-    description: guide?.metaDescription,
-  })
 
   if (!guide) {
     return (
