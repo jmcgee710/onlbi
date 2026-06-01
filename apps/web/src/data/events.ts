@@ -14,48 +14,58 @@ export type LBIEvent = {
   price: string
   web?: string
   recurring?: string // e.g. "Every Monday in season"
+  cta?: string // optional link cue shown under the price, e.g. "View calendar ↗"
+  // Season window for THIS year, as ISO 'YYYY-MM-DD'. Leave blank ('') if
+  // unknown — the card just won't show a season badge. seasonCloses is
+  // optional (omit/blank for venues that stay open year-round).
+  // ⚠️  Fill these in each spring alongside the rest of this list.
+  seasonOpens?: string
+  seasonCloses?: string
 }
 
 export const todayEvents: LBIEvent[] = [
   {
     title: 'Fantasy Island Amusement Park',
     venue: 'Beach Haven',
-    time: '6 PM – 11 PM',
+    time: '5 PM – 9 PM',
     cat: 'Family',
     free: false,
-    price: 'Ride tickets',
+    price: 'Varies',
     web: 'https://fantasyislandlbi.com',
-    recurring: 'Nightly in season',
+    recurring: 'Rides Fri–Sun now · full season daily from Jun 12',
+    // PRE-SEASON now: rides Fri/Sat/Sun 5–9pm, arcade daily noon–7pm.
+    // FULL SEASON from Fri Jun 12 (Guest Appreciation Day — $15 unlimited
+    //   rides): arcade daily noon–midnight, rides 4–11pm. Last ride day Sat
+    //   Oct 3. → On Jun 12, set time → '4 PM – 11 PM' and
+    //   recurring → 'Daily · arcade noon–midnight'.
+    // Season badge intentionally left off — the recurring line already states
+    //   the schedule. Set seasonOpens/seasonCloses to re-enable it.
+    seasonOpens: '',
+    seasonCloses: '',
   },
   {
     title: 'Thundering Surf Water Park',
     venue: 'Beach Haven',
-    time: '10 AM – 6 PM',
+    time: '', // hours not posted yet for the season
     cat: 'Family',
     free: false,
-    price: 'Admission fee',
+    price: 'Varies',
     web: 'https://thunderingsurf.com',
-    recurring: 'Daily Memorial – Labor Day',
-  },
-  {
-    title: 'Viking Village Fish Market',
-    venue: 'Barnegat Light',
-    time: '6 AM – 2 PM',
-    cat: 'Market',
-    free: true,
-    price: 'Free entry',
-    web: 'https://vikingvillage.net',
-    recurring: 'Daily in season',
+    recurring: '',
+    seasonOpens: '2026-06-13',
+    seasonCloses: '',
   },
   {
     title: 'Surflight Theatre',
     venue: 'Beach Haven',
-    time: '8 PM',
+    time: 'Show times & dates vary',
     cat: 'Arts',
     free: false,
-    price: 'Tickets from $35',
-    web: 'https://surflight.org',
-    recurring: 'Nightly Tue–Sun, June–Sept',
+    price: '$14–$49.50',
+    web: 'https://surflight.org/calendar',
+    cta: 'View calendar ↗',
+    seasonOpens: '',
+    seasonCloses: '',
   },
   {
     title: 'Bay Breeze Park Summer Concerts',
@@ -65,6 +75,8 @@ export const todayEvents: LBIEvent[] = [
     free: true,
     price: 'Free',
     recurring: 'Mondays in season',
+    seasonOpens: '',
+    seasonCloses: '',
   },
   {
     title: 'Sunset Park Wednesday Concerts',
@@ -74,5 +86,7 @@ export const todayEvents: LBIEvent[] = [
     free: true,
     price: 'Free',
     recurring: 'Wednesdays in season',
+    seasonOpens: '',
+    seasonCloses: '',
   },
 ]

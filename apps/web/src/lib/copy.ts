@@ -81,3 +81,42 @@ export function tideContext(eventTime: string, now: Date): string {
   }
   return `at ${eventTime}`
 }
+
+/**
+ * Season status for a "Happening today" venue, computed against `now`.
+ *   before seasonOpens          → { kind: 'upcoming', label: 'Opens Jun 21' }
+ *   open, with a close date      → { kind: 'open',     label: 'Open · through Sep 7' }
+ *   open, no close date          → { kind: 'open',     label: 'Open for the season' }
+ *   after seasonCloses           → { kind: 'closed',   label: 'Closed for the season' }
+ * Returns null when no open date is set, so the card simply omits the badge.
+ * ISO dates are parsed as LOCAL midnight to avoid UTC off-by-one shifts.
+ */
+export type SeasonStatus = { kind: 'upcoming' | 'open' | 'closed'; label: string }
+
+function parseLocalDate(iso: string): Date | null {
+  const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (!m) return null
+  return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))
+}
+
+function fmtMonthDay(d: Date): string {
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
+export function seasonStatus(
+  seasonOpens: string | undefined,
+  seasonCloses: string | undefined,
+  now: Date,
+): SeasonStatus | null {
+  const opens = seasonOpens ? parseLocalDate(seasonOpens) : null
+  if (!opens) return null
+  const closes = seasonCloses ? parseLocalDate(seasonCloses) : null
+
+  // Compare on calendar day, not time of day.
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+  if (today < opens) return { kind: 'upcoming', label: `Opens ${fmtMonthDay(opens)}` }
+  if (closes && today > closes) return { kind: 'closed', label: 'Closed for the season' }
+  if (closes) return { kind: 'open', label: `Open · through ${fmtMonthDay(closes)}` }
+  return { kind: 'open', label: 'Open for the season' }
+}

@@ -153,16 +153,16 @@ export default function DoPage() {
                   return (
                     <div key={a.id} className="lc">
                       <div className="lc-head" style={{ marginBottom: 0 }}>
-                        <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                        <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start', minWidth: 0 }}>
                           <BizThumb id={a.id} name={a.name} />
-                          <div>
+                          <div style={{ minWidth: 0 }}>
+                            <span style={{ display: 'inline-block', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700, color: cc.color, background: cc.bg, padding: '4px 10px', borderRadius: 4, marginBottom: 8 }}>
+                              {a.cat}
+                            </span>
                             <h3 className="lc-name" style={{ fontSize: 20 }}>{a.name}</h3>
                             <p className="lc-sub">{a.town} · {a.subcat}</p>
                           </div>
                         </div>
-                        <span style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700, color: cc.color, background: cc.bg, padding: '4px 10px', borderRadius: 4, flexShrink: 0 }}>
-                          {a.cat}
-                        </span>
                       </div>
                       {a.note && (
                         <p style={{ fontSize: 12.5, color: 'var(--ink-soft)', lineHeight: 1.45, marginTop: 12 }}>{a.note}</p>
@@ -223,9 +223,9 @@ export default function DoPage() {
                 {filteredShop.map(s => (
                   <div key={s.id} className="lc">
                     <div className="lc-head" style={{ marginBottom: 0 }}>
-                      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start', minWidth: 0 }}>
                         <BizThumb id={s.id} name={s.name} />
-                        <div>
+                        <div style={{ minWidth: 0 }}>
                           <h3 className="lc-name" style={{ fontSize: 20 }}>{s.name}</h3>
                           <p className="lc-sub">{s.town} · {s.subcat}</p>
                         </div>

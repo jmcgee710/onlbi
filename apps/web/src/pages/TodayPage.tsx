@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { tideKeyTimes, forecast } from '../data/conditions'
+import { tideKeyTimes } from '../data/conditions'
 import { todayEvents } from '../data/events'
 import { useTides, type TideEvent } from '../hooks/useTides'
 import { useNow } from '../hooks/useNow'
@@ -22,7 +22,7 @@ import {
   scoreShortLabel,
   windDirCategory,
 } from '../lib/scoring'
-import { friendlyShortForecast, tideContext } from '../lib/copy'
+import { friendlyShortForecast, tideContext, seasonStatus, type SeasonStatus } from '../lib/copy'
 
 // Water temp comes from a Tides & Currents station that has a temp sensor.
 // AC is the closest reliable one to LBI.
@@ -38,6 +38,18 @@ const OCEAN_NAME = 'Atlantic City (Ocean)'
 // Weather is essentially uniform across 18-mi LBI, so one point is fine.
 const LBI_LAT = 39.5604
 const LBI_LON = -74.2429
+
+// "Happening today" is hidden for now — it's hand-maintained (not live) and
+// risks going stale. Flip to true to restore the section as-is; revisit when
+// it's backed by a live source (Google Calendar embed / Ticketmaster feed).
+const SHOW_HAPPENING_TODAY = false
+
+// Color treatment for the season badge on each "Happening today" event.
+const SEASON_COLOR: Record<SeasonStatus['kind'], { color: string; bg: string }> = {
+  upcoming: { color: '#9a5a24', bg: 'rgba(196,90,62,0.12)' }, // amber — not open yet
+  open:     { color: 'var(--teal-deep)', bg: 'rgba(72,108,107,0.1)' },
+  closed:   { color: 'var(--slate)', bg: 'rgba(15,31,46,0.05)' },
+}
 
 // ─── TIME HELPERS ─────────────────────────────────────────────────────────────
 // Convert "4:22 AM" to fraction of day (0=midnight, 0.5=noon, 1=next midnight)
@@ -248,7 +260,6 @@ function WeatherIcon({ type }: { type: string }) {
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function TodayPage() {
   const [activeDay, setActiveDay] = useState(0)
-  const today = forecast[0]
 
   // Two independent NOAA fetches — bay tides and ocean tides differ in both
   // timing and amplitude, so they get their own charts.
@@ -746,7 +757,8 @@ export default function TodayPage() {
           })}
         </div>
 
-        {/* Events */}
+        {/* Events — "Happening today" (hidden via SHOW_HAPPENING_TODAY) */}
+        {SHOW_HAPPENING_TODAY && (
         <div className="card">
           <div className="card-head">
             <h2 className="card-title">Happening today</h2>
@@ -761,26 +773,51 @@ export default function TodayPage() {
           </div>
           <div className="events">
             {todayEvents.map((e, i) => {
+              const hasTime = /\d/.test(e.time)
               const hour = e.time.match(/^(\d+)/)?.[1] ?? '?'
               const ap = e.time.toLowerCase().includes('pm') ? 'pm' : 'am'
+              const season = seasonStatus(e.seasonOpens, e.seasonCloses, now)
               const inner = (
                 <div className="event" key={i}>
                   <div className="event-time">
-                    <span className="h">{hour}</span>
-                    <span className="ap">{ap}</span>
+                    {hasTime ? (
+                      <>
+                        <span className="h">{hour}</span>
+                        <span className="ap">{ap}</span>
+                      </>
+                    ) : (
+                      <span className="h" style={{ fontSize: 18 }}>🗓</span>
+                    )}
                   </div>
                   <div>
                     <div className="event-title">{e.title}</div>
-                    <div className="event-meta">
-                      {e.venue} · {e.time}
-                      {e.recurring && (
-                        <span style={{ marginLeft: 6, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--teal-deep)', background: 'rgba(72,108,107,0.08)', padding: '2px 7px', borderRadius: 3 }}>
-                          {e.recurring}
+                    <div className="event-meta">{e.venue}{e.time ? ` · ${e.time}` : ''}</div>
+                    {season && (
+                      <div style={{ marginTop: 6 }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 600, color: SEASON_COLOR[season.kind].color, background: SEASON_COLOR[season.kind].bg, padding: '2px 8px', borderRadius: 3 }}>
+                          <span style={{ fontSize: 10 }}>🗓</span>{season.label}
                         </span>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
-                  <span className={`event-price ${e.free ? 'free' : ''}`}>{e.free ? 'Free' : e.price}</span>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 7, textAlign: 'right' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+                      {!e.free && (
+                        <span style={{ fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--slate-soft)', fontWeight: 700 }}>Tickets</span>
+                      )}
+                      <span className={`event-price ${e.free ? 'free' : ''}`}>{e.free ? 'Free' : e.price}</span>
+                    </div>
+                    {e.recurring && (
+                      <span style={{ fontSize: 11, color: 'var(--slate)', lineHeight: 1.4, maxWidth: 150 }}>
+                        {e.recurring}
+                      </span>
+                    )}
+                    {e.cta && (
+                      <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--teal-deep)', lineHeight: 1.4 }}>
+                        {e.cta}
+                      </span>
+                    )}
+                  </div>
                 </div>
               )
               return e.web
@@ -789,6 +826,7 @@ export default function TodayPage() {
             })}
           </div>
         </div>
+        )}
 
       </div>
     </div>
