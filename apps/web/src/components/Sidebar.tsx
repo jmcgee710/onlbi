@@ -23,7 +23,13 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar">
-      <div className="brand">
+      <button
+        type="button"
+        className="brand"
+        onClick={() => navigate('/')}
+        aria-label="On LBI — go to Today"
+        style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left', font: 'inherit', color: 'inherit' }}
+      >
         <div className="brand-mark">
           <img src="/logo-light.png" alt="ON LBI" />
         </div>
@@ -31,7 +37,7 @@ export default function Sidebar() {
           <span className="wordmark">on lbi</span>
           <span className="tagline">Long Beach Island</span>
         </div>
-      </div>
+      </button>
 
       <div>
         <div className="nav-section-label">The Island</div>

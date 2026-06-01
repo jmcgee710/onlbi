@@ -44,7 +44,9 @@ export default function Layout() {
       <main className="main">
         {/* Mobile top bar */}
         <div className="mobile-topbar">
-          <img src="/logo-dark.png" alt="On LBI" style={{ height: 40, objectFit: 'contain' }} />
+          <Link to="/" aria-label="On LBI — go to Today" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+            <img src="/logo-dark.png" alt="On LBI" style={{ height: 40, objectFit: 'contain' }} />
+          </Link>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1, flex: 1, minWidth: 0, margin: '0 12px' }}>
             <span style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.01em' }}>
               {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
