@@ -194,7 +194,7 @@ export const bikingInfo = {
     sourceUrl: 'https://beachhaven-nj.gov/',
   },
   islandWide: {
-    notes: 'No single continuous island-wide bike path. Brant Beach has a dedicated bike path along Long Beach Blvd, and Beach Haven has green-painted bike lanes; elsewhere cyclists use the Boulevard\'s wide shoulder. The island runs ~18 miles north–south — flat and straight, good for cruising.',
+    notes: 'You can bike the length of LBI (~18 miles, flat and straight). The route follows Long Beach Boulevard from Holgate to Beach Haven, runs oceanside from Beach Haven to Ship Bottom, switches to the bay side from Ship Bottom to Surf City, then rejoins Long Beach Boulevard north to Barnegat Light. Beach Haven also has green-painted bike lanes through town.',
     chamberUrl: 'https://welcometolbi.com',
   },
 }

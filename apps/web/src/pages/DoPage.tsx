@@ -260,10 +260,12 @@ export default function DoPage() {
           {tab === 'do' ? (
             <>
               <div className="aside-card">
-                <p className="aside-title">🚲 18-Mile Bike Path</p>
+                <p className="aside-title">🚲 Island Bike Route</p>
                 <p className="aside-body">
-                  Runs end-to-end from Barnegat Light to Holgate along the bay side.
-                  Rent a cruiser and ride the whole island — a bucket-list LBI experience.
+                  You can ride the length of LBI — the route follows Long Beach Boulevard
+                  from Holgate to Beach Haven, hugs the oceanside from Beach Haven to Ship
+                  Bottom, runs the bay side from Ship Bottom to Surf City, then rejoins
+                  Long Beach Boulevard up to Barnegat Light. Rent a cruiser and explore.
                 </p>
               </div>
               <div className="aside-card">

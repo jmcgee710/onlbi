@@ -97,13 +97,15 @@ export default function GettingAroundPage() {
               <div className="lc">
                 <div className="lc-head" style={{ marginBottom: 0 }}>
                   <div>
-                    <h3 className="lc-name" style={{ fontSize: 22 }}>🚲 18-Mile Bike Path</h3>
-                    <p className="lc-sub">Barnegat Light → Holgate · Bay side</p>
+                    <h3 className="lc-name" style={{ fontSize: 22 }}>🚲 Island Bike Route</h3>
+                    <p className="lc-sub">Holgate → Barnegat Light · ~18 miles</p>
                   </div>
                 </div>
                 <p style={{ fontSize: 13, color: 'var(--ink-soft)', lineHeight: 1.5, marginTop: 14 }}>
-                  Runs the full length of LBI along the bay side. Open year-round.
-                  Bike rentals available at multiple shops across the island.
+                  Ride the length of LBI: Long Beach Boulevard from Holgate to Beach Haven,
+                  oceanside from Beach Haven to Ship Bottom, the bay side from Ship Bottom to
+                  Surf City, then back on Long Beach Boulevard up to Barnegat Light. Flat and
+                  straight the whole way. Bike rentals at multiple shops across the island.
                 </p>
               </div>
             </div>
