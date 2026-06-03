@@ -581,6 +581,48 @@ export const dining: Business[] = [
     phone: '(609) 492-4544', web: 'https://holidaysnackbar.com', icon: '🥧',
     note: "Open every summer since the 1950s. Famous for their pies — People Magazine's Best Pie in NJ, 2019. A quirky LBI classic.",
   },
+  {
+    id: 204, name: 'Terrace Tavern', cat: 'Dining', subcat: 'Bar / Seafood',
+    town: 'Long Beach Township', address: '13201 Long Beach Blvd, Beach Haven Terrace, NJ 08008',
+    phone: '(609) 492-9751', web: 'https://terracetavernlbi.com', icon: '🍺',
+    note: 'Popular bar-and-grill with an outdoor deck, live music on weekends, and a solid seafood menu. Also listed under Bars & Nightlife.',
+  },
+  {
+    id: 205, name: 'Delaware Avenue Oyster House & Bar', cat: 'Dining', subcat: 'Oyster Bar',
+    town: 'Long Beach Township', address: '13211 Long Beach Blvd, Long Beach Twp, NJ 08008',
+    phone: '(609) 492-3352', icon: '🦪',
+    note: 'Raw bar, oysters, craft cocktails, and a lively scene in the Beach Haven Terrace area. Also listed under Bars & Nightlife.',
+  },
+  {
+    id: 206, name: "Black-Eyed Susans", cat: 'Dining', subcat: 'Upscale / New American',
+    town: 'Harvey Cedars', address: '7908 Long Beach Blvd, Harvey Cedars, NJ 08008',
+    phone: '(609) 494-4990', web: 'https://www.blackeyedsusanslbi.com', icon: '🍽️',
+    note: 'Beach-casual upscale spot from chefs Ashley Pellagrino & Christopher Sanchez — rotating artisan pizzas, house-made pastas, and fresh seafood. Reservations recommended.',
+  },
+  {
+    id: 207, name: 'Tucker\'s Tavern', cat: 'Dining', subcat: 'Gastropub / Seafood',
+    town: 'Beach Haven', address: '101 S West Ave, Beach Haven, NJ 08008',
+    phone: '(609) 492-2300', web: 'https://www.tuckerstavern-lbi.com', icon: '🦞',
+    note: 'Fearless Restaurants gastropub — creative hearty food, local seafood, and a raw bar. $1 oysters at happy hour. Rooftop Buoy Bar upstairs (see Nightlife).',
+  },
+  {
+    id: 208, name: 'Dock & Claw Clam Bar', cat: 'Dining', subcat: 'Clam Bar / Seafood',
+    town: 'Beach Haven', address: '506 Centre St, Beach Haven, NJ 08008',
+    phone: '(609) 342-0863', web: 'https://dockandclaw.com', icon: '🦪',
+    note: 'Newer Beach Haven clam bar — raw bar, steamers, and a casual outdoor scene.',
+  },
+  {
+    id: 209, name: "Russo's Italian Restaurant", cat: 'Dining', subcat: 'Italian',
+    town: 'Ship Bottom', address: '1415 Long Beach Blvd, Ship Bottom, NJ 08008',
+    phone: '(609) 342-1506', web: 'https://russoslbi.com', icon: '🍝',
+    note: 'Small family-owned Italian in the center of the island — everything made in small batches. Also scoops house ice cream.',
+  },
+  {
+    id: 210, name: 'Flour Child', cat: 'Dining', subcat: 'Pizza',
+    town: 'Long Beach Township', address: '8201 Long Beach Blvd, Brant Beach, NJ 08008',
+    phone: '(609) 991-3777', web: 'https://flourchildlbi.com', icon: '🍕',
+    note: 'Handcrafted brick-oven pizza in the Brant Beach area. Casual, order online or call ahead. 4.9★ on Google.',
+  },
 ]
 
 // ─────────────────────────────────────────────
