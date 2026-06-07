@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Bike, Video, Map, Waves } from 'lucide-react'
 import { shuttleRoutes, cameras, parkingInfo, causewayInfo } from '../data/gettingAround'
 
 type Tab = 'transit' | 'traffic' | 'parking' | 'cams'
@@ -97,7 +98,7 @@ export default function GettingAroundPage() {
               <div className="lc">
                 <div className="lc-head" style={{ marginBottom: 0 }}>
                   <div>
-                    <h3 className="lc-name" style={{ fontSize: 22 }}>🚲 Island Bike Route</h3>
+                    <h3 className="lc-name" style={{ fontSize: 22, display: 'flex', alignItems: 'center', gap: 8 }}><Bike size={20} strokeWidth={1.5} /> Island Bike Route</h3>
                     <p className="lc-sub">Holgate → Barnegat Light · ~18 miles</p>
                   </div>
                 </div>
@@ -129,19 +130,19 @@ export default function GettingAroundPage() {
                     onClick={() => setTab('cams')}
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 14px', background: 'var(--sand)', border: '1px solid var(--line)', borderRadius: 6, color: 'var(--ink)', fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-display)', cursor: 'pointer' }}
                   >
-                    📹 Live cameras →
+                    <Video size={15} strokeWidth={1.5} /> Live cameras →
                   </button>
                   <a
                     href={causewayInfo.nj511url} target="_blank" rel="noopener noreferrer"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 14px', background: 'var(--sand)', border: '1px solid var(--line)', borderRadius: 6, color: 'var(--ink)', textDecoration: 'none', fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-display)' }}
                   >
-                    🚦 NJ511 traffic map ↗
+                    <Map size={15} strokeWidth={1.5} /> NJ511 traffic map ↗
                   </a>
                   <a
                     href={causewayInfo.floodSensorUrl} target="_blank" rel="noopener noreferrer"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 14px', background: 'var(--sand)', border: '1px solid var(--line)', borderRadius: 6, color: 'var(--ink)', textDecoration: 'none', fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-display)' }}
                   >
-                    🌊 Bay flood sensor ↗
+                    <Waves size={15} strokeWidth={1.5} /> Bay flood sensor ↗
                   </a>
                 </div>
               </div>

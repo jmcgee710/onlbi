@@ -108,6 +108,12 @@ button { font-family: inherit; cursor: pointer; }
   0%,100% { box-shadow: 0 0 0 3px rgba(79,163,138,0.18); }
   50% { box-shadow: 0 0 0 6px rgba(79,163,138,0.06); }
 }
+/* Small inline "live" dot — replaces the 🟢 emoji in card subtitles. */
+.live-pip {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  background: #4FA38A; margin-right: 6px; vertical-align: middle;
+  flex-shrink: 0;
+}
 
 /* ─── TOPBAR ─────────────────────────────────── */
 .main { background: var(--shell); min-width: 0; }

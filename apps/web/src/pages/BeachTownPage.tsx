@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
+import { Check, Baby, Banknote, Waves, AlertTriangle } from 'lucide-react'
 import { beaches, beachRules, lifeguardInfo } from '../data/beaches'
 import { beachBadgeInfo } from '../data/beachBadges'
 import { accessibleBeaches, beachTransportServices } from '../data/accessibility'
@@ -7,7 +8,7 @@ import { findTownGuide } from '../data/townGuides'
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 
 function fmtPrice(n: number | 'free' | undefined): string {
-  if (!n || n === 0) return '⚠️ call'
+  if (!n || n === 0) return 'Call'
   if (n === 'free') return 'Free'
   return `$${n}`
 }
@@ -112,7 +113,7 @@ export default function BeachTownPage() {
           <div className="pg-tab">
             <span className="tab-lbl">Rules</span>
             <span className="tab-val" style={{ fontSize: 17 }}>
-              {rules?.verified ? <><em>✓</em>&nbsp;Verified</> : <em>Partial</em>}
+              {rules?.verified ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Check size={14} strokeWidth={2} />Verified</span> : <em>Partial</em>}
             </span>
           </div>
         </div>
@@ -158,7 +159,7 @@ export default function BeachTownPage() {
                   </div>
 
                   <div className="lc-feats">
-                    <span className="lc-feat">👶 Under 12 always free</span>
+                    <span className="lc-feat"><Baby size={14} strokeWidth={1.5} /> Under 12 always free</span>
                     {badge.pricing.senior !== 0 && (
                       <span className="lc-feat">65+ — {fmtPrice(badge.pricing.senior)} ({badge.pricing.seniorType})</span>
                     )}
@@ -172,7 +173,7 @@ export default function BeachTownPage() {
                       <span className="lc-feat">My Beach Mobile app accepted</span>
                     )}
                     {badge.pricing.cashOnly && (
-                      <span className="lc-feat dim">💵 Cash/check only at booth</span>
+                      <span className="lc-feat dim"><Banknote size={14} strokeWidth={1.5} /> Cash/check only at booth</span>
                     )}
                   </div>
 
@@ -397,7 +398,7 @@ export default function BeachTownPage() {
               <div>
                 <div className="st-lbl">Daily Badge</div>
                 <div className="st-val" style={{ fontSize: 22, marginTop: 4 }}>
-                  {badge && badge.pricing.daily > 0 ? `$${badge.pricing.daily}` : '⚠️'}
+                  {badge && badge.pricing.daily > 0 ? `$${badge.pricing.daily}` : <AlertTriangle size={20} strokeWidth={1.5} />}
                 </div>
               </div>
               <div>
@@ -418,7 +419,7 @@ export default function BeachTownPage() {
           </div>
 
           <div className="aside-card advisory">
-            <p className="aside-title">🌊 Swim Safety</p>
+            <p className="aside-title" style={{ display: 'flex', alignItems: 'center', gap: 7 }}><Waves size={15} strokeWidth={1.5} /> Swim Safety</p>
             <p className="aside-body">
               Always swim near a lifeguard. If caught in a rip current, swim <strong>parallel to shore</strong> — never fight it straight in.
             </p>

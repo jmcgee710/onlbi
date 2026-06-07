@@ -180,7 +180,7 @@ export default function TideCard({
           {loading
             ? 'Loading…'
             : liveTides
-              ? `🟢 Live · ${stationName}`
+              ? <><span className="live-pip" />Live · {stationName}</>
               : `Sample · ${stationName}`}
         </span>
       </div>

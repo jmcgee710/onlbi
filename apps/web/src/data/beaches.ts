@@ -257,7 +257,7 @@ export const beaches = [
     beachTram: true,     // 4th–9th St. ocean beach tram
     bayBeach: true,      // Bay Beach at 25th St. — guarded, family-friendly
     dogRules: 'No dogs April 15–Sept 30',
-    highlight: '🏛️ Barnegat Lighthouse State Park',
+    highlight: 'Barnegat Lighthouse State Park',
   },
   {
     townSlug: 'harvey-cedars',
@@ -270,7 +270,7 @@ export const beaches = [
     beachTram: false,
     bayBeach: false,
     dogRules: 'No dogs May 30–Sept 15; leashed Sept 16–May 29',
-    highlight: '🎥 Live beach webcam available',
+    highlight: 'Live beach webcam available',
   },
   {
     townSlug: 'surf-city',
@@ -283,7 +283,7 @@ export const beaches = [
     beachTram: false,
     bayBeach: false,
     dogRules: 'No dogs May 1–Sept 30; leashed Oct 1–Apr 30',
-    highlight: '🏄 Popular surf spot',
+    highlight: 'Popular surf spot',
   },
   {
     townSlug: 'ship-bottom',
@@ -296,7 +296,7 @@ export const beaches = [
     beachTram: false,
     bayBeach: false,
     dogRules: 'No dogs May 1–Oct 1; leashed off-season',
-    highlight: '♿ Beach Wheels & Beach Taxi available',
+    highlight: 'Beach Wheels & Beach Taxi available',
   },
   {
     townSlug: 'long-beach-township',
@@ -309,7 +309,7 @@ export const beaches = [
     beachTram: false,
     bayBeach: false,
     dogRules: 'No dogs May 16–Sept 30',
-    highlight: '♿ One of NJ\'s largest beach wheelchair programs (since 1992)',
+    highlight: 'One of NJ\'s largest beach wheelchair programs (since 1992)',
   },
   {
     townSlug: 'beach-haven',
@@ -322,7 +322,7 @@ export const beaches = [
     beachTram: false,
     bayBeach: false,
     dogRules: 'Allowed Sept 16–May 14 only; dog beach at Taylor Ave. bay year-round',
-    highlight: '🏖️ No beach badges required on Wednesdays',
+    highlight: 'No beach badges required on Wednesdays',
     noFreeDay: 'Wednesday — badges not required',
     mobiMatStreets: ['Nelson Ave.', 'Merrivale Ave.', 'Leeward Ave.', 'Dolphin Ave.', 'Chatsworth Ave.', 'Belvoir Ave.', '7th St.', '10th St.', '12th St.'],
   },

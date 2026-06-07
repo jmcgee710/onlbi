@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Waves } from 'lucide-react'
 import { findTownGuide, townGuides } from '../data/townGuides'
 import { beachBadgeInfo } from '../data/beachBadges'
 import { lifeguardInfo } from '../data/beaches'
@@ -210,7 +211,7 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
           </div>
 
           <div className="aside-card advisory">
-            <p className="aside-title">🌊 Beach Day Tips</p>
+            <p className="aside-title" style={{ display: 'flex', alignItems: 'center', gap: 7 }}><Waves size={15} strokeWidth={1.5} /> Beach Day Tips</p>
             <ul className="aside-list">
               <li>Always swim near a lifeguard stand</li>
               <li>If caught in a rip, swim parallel to shore</li>

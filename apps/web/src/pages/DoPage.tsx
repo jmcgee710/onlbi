@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Bike } from 'lucide-react'
 import { waterSports, entertainment, shopping, type Business } from '../data/businesses'
 import BizThumb from '../components/BizThumb'
 
@@ -260,7 +261,7 @@ export default function DoPage() {
           {tab === 'do' ? (
             <>
               <div className="aside-card">
-                <p className="aside-title">🚲 Island Bike Route</p>
+                <p className="aside-title" style={{ display: 'flex', alignItems: 'center', gap: 7 }}><Bike size={15} strokeWidth={1.5} /> Island Bike Route</p>
                 <p className="aside-body">
                   You can ride the length of LBI — the route follows Long Beach Boulevard
                   from Holgate to Beach Haven, hugs the oceanside from Beach Haven to Ship

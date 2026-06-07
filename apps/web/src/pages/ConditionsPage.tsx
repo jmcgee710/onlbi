@@ -142,7 +142,7 @@ export default function ConditionsPage() {
             <div className="card">
               <div className="card-head">
                 <h2 className="card-title">Surf &amp; Sea Temp</h2>
-                <span className="card-sub">🟢 Live · Barnegat Buoy 44091</span>
+                <span className="card-sub"><span className="live-pip" />Live · Barnegat Buoy 44091</span>
               </div>
               <div className="tide-events">
                 <div className="tide-event">
@@ -263,7 +263,7 @@ export default function ConditionsPage() {
           </div>
 
           <div className="aside-card advisory">
-            <p className="aside-title">🌊 Before you go</p>
+            <p className="aside-title" style={{ display: 'flex', alignItems: 'center', gap: 7 }}><Waves size={15} strokeWidth={1.5} /> Before you go</p>
             <p className="aside-body">
               Always swim near a lifeguard. If you&apos;re caught in a rip current, don&apos;t fight
               it — swim parallel to shore until you&apos;re free, then back in. Rip risk above is the

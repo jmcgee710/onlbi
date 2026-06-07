@@ -1,13 +1,17 @@
 import { useState } from 'react'
+import {
+  Footprints, Accessibility as AccessibilityIcon, Bus, Car, Tractor, Truck,
+  AlertTriangle, BadgeCheck, Check, Minus, type LucideIcon,
+} from 'lucide-react'
 import { accessibleBeaches, beachTransportServices, restrooms } from '../data/accessibility'
 
 type Tab = 'access' | 'transport' | 'restrooms'
 
-const TRANSPORT_ICONS: Record<string, string> = {
-  taxi:  '🚐',
-  tram:  '🚌',
-  gator: '🚜',
-  utv:   '🏍️',
+const TRANSPORT_ICONS: Record<string, LucideIcon> = {
+  taxi:  Car,
+  tram:  Bus,
+  gator: Tractor,
+  utv:   Truck,
 }
 
 const byTown = accessibleBeaches.reduce<Record<string, typeof accessibleBeaches>>((acc, b) => {
@@ -87,14 +91,14 @@ export default function AccessibilityPage() {
                   className={`pg-chip${filterMat ? ' on' : ''}`}
                   onClick={() => setFilterMat(v => !v)}
                 >
-                  🛤️ Mobi-Mat
+                  <Footprints size={14} strokeWidth={1.5} /> Mobi-Mat
                   <span className="ct">{accessibleBeaches.filter(b => b.mobiMat).length}</span>
                 </button>
                 <button
                   className={`pg-chip${filterWC ? ' on' : ''}`}
                   onClick={() => setFilterWC(v => !v)}
                 >
-                  ♿ Wheelchair Loan
+                  <AccessibilityIcon size={14} strokeWidth={1.5} /> Wheelchair Loan
                   <span className="ct">{accessibleBeaches.filter(b => b.wheelchairLoan).length}</span>
                 </button>
               </div>
@@ -117,13 +121,13 @@ export default function AccessibilityPage() {
                         </div>
                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 12 }}>
                           {b.mobiMat && (
-                            <span style={{ fontSize: 11, fontWeight: 600, background: 'rgba(107,142,92,0.1)', color: 'var(--moss)', padding: '4px 10px', borderRadius: 4 }}>
-                              🛤️ Mobi-Mat
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11, fontWeight: 600, background: 'rgba(107,142,92,0.1)', color: 'var(--moss)', padding: '4px 10px', borderRadius: 4 }}>
+                              <Footprints size={13} strokeWidth={1.5} /> Mobi-Mat
                             </span>
                           )}
                           {b.wheelchairLoan && (
-                            <span style={{ fontSize: 11, fontWeight: 600, background: 'rgba(72,108,107,0.08)', color: 'var(--teal-deep)', padding: '4px 10px', borderRadius: 4 }}>
-                              ♿ Wheelchair Loan
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11, fontWeight: 600, background: 'rgba(72,108,107,0.08)', color: 'var(--teal-deep)', padding: '4px 10px', borderRadius: 4 }}>
+                              <AccessibilityIcon size={13} strokeWidth={1.5} /> Wheelchair Loan
                             </span>
                           )}
                         </div>
@@ -157,8 +161,8 @@ export default function AccessibilityPage() {
           {tab === 'transport' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div className="aside-card" style={{ background: 'rgba(107,142,92,0.07)', borderColor: 'rgba(107,142,92,0.3)', padding: '16px 20px', marginBottom: 4 }}>
-                <p className="aside-body" style={{ fontWeight: 600, color: 'var(--moss)' }}>
-                  🎉 All transport services listed here are FREE
+                <p className="aside-body" style={{ display: 'flex', alignItems: 'center', gap: 7, fontWeight: 600, color: 'var(--moss)' }}>
+                  <BadgeCheck size={16} strokeWidth={1.5} /> All transport services listed here are FREE
                 </p>
                 <p className="aside-body" style={{ marginTop: 6 }}>
                   LBI towns operate free accessible transport programs so visitors who can't walk to the beach
@@ -170,7 +174,7 @@ export default function AccessibilityPage() {
                 <div key={i} className="lc">
                   <div className="lc-head" style={{ marginBottom: 0 }}>
                     <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                      <span style={{ fontSize: 28, lineHeight: 1, marginTop: 2 }}>{TRANSPORT_ICONS[t.type] ?? '🚐'}</span>
+                      {(() => { const TIcon = TRANSPORT_ICONS[t.type] ?? Car; return <TIcon size={26} strokeWidth={1.5} color="var(--teal-deep)" style={{ marginTop: 2, flexShrink: 0 }} /> })()}
                       <div>
                         <h3 className="lc-name" style={{ fontSize: 22 }}>{t.name}</h3>
                         <p className="lc-sub">{t.town}</p>
@@ -219,7 +223,7 @@ export default function AccessibilityPage() {
           {tab === 'restrooms' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div className="aside-card advisory" style={{ marginBottom: 4 }}>
-                <p className="aside-title" style={{ fontSize: 15, marginBottom: 6 }}>⚠️ Limited Data</p>
+                <p className="aside-title" style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 15, marginBottom: 6 }}><AlertTriangle size={15} strokeWidth={1.5} /> Limited Data</p>
                 <p className="aside-body">
                   Only Beach Haven restrooms are verified as of May 2026. Other towns need
                   field research. Know a public restroom we're missing? <strong>We want to add it.</strong>
@@ -257,17 +261,18 @@ export default function AccessibilityPage() {
                   </div>
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 14 }}>
                     {([
-                      ['♿ Accessible', r.accessible],
-                      ['🚿 Showers',    r.showers],
-                      ['👶 Changing',   r.changing],
-                      ['🏠 Enclosed',   r.enclosed],
+                      ['Accessible', r.accessible],
+                      ['Showers',    r.showers],
+                      ['Changing',   r.changing],
+                      ['Enclosed',   r.enclosed],
                     ] as [string, boolean][]).map(([label, val], j) => (
                       <span key={j} style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 5,
                         fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 4,
                         background: val ? 'rgba(107,142,92,0.1)' : 'var(--sand)',
                         color: val ? 'var(--moss)' : 'var(--slate-soft)',
                       }}>
-                        {val ? '✓' : '–'} {label}
+                        {val ? <Check size={12} strokeWidth={2} /> : <Minus size={12} strokeWidth={2} />} {label}
                       </span>
                     ))}
                   </div>

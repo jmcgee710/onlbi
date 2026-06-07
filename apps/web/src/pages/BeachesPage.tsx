@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import {
+  LifeBuoy, Accessibility as AccessibilityIcon, Bus, Waves, Footprints,
+  Ticket, Flag, Banknote, Check, AlertTriangle,
+} from 'lucide-react'
 import { beaches } from '../data/beaches'
 import { beachBadgeInfo } from '../data/beachBadges'
 import { townGuides } from '../data/townGuides'
@@ -12,7 +16,7 @@ const badgeByTown = Object.fromEntries(
 )
 
 function fmtPrice(n: number | 'free' | undefined): string {
-  if (!n || n === 0) return '⚠️ call'
+  if (!n || n === 0) return 'Call'
   if (n === 'free') return 'Free'
   return `$${n}`
 }
@@ -98,14 +102,14 @@ export default function BeachesPage() {
                   className={`pg-chip${lifeguardOnly ? ' on' : ''}`}
                   onClick={() => setLifeguardOnly(v => !v)}
                 >
-                  🛟 Lifeguarded
+                  <LifeBuoy size={14} strokeWidth={1.5} /> Lifeguarded
                   <span className="ct">{beaches.filter(b => b.lifeguarded).length}</span>
                 </button>
                 <button
                   className={`pg-chip${accessibleOnly ? ' on' : ''}`}
                   onClick={() => setAccessibleOnly(v => !v)}
                 >
-                  ♿ Accessible
+                  <AccessibilityIcon size={14} strokeWidth={1.5} /> Accessible
                   <span className="ct">{beaches.filter(b => b.mobiMatStreets?.length).length}</span>
                 </button>
               </div>
@@ -135,7 +139,7 @@ export default function BeachesPage() {
                           </div>
                           <div className="st">
                             <div className="st-lbl">Badge</div>
-                            <div className="st-val">{daily ? `$${daily}` : '⚠️'}</div>
+                            <div className="st-val">{daily ? `$${daily}` : <AlertTriangle size={18} strokeWidth={1.5} />}</div>
                             <div className="st-note">12+ · daily</div>
                           </div>
                           <div className="st">
@@ -153,16 +157,16 @@ export default function BeachesPage() {
                         {(b.beachTram || b.bayBeach || b.mobiMatStreets?.length || b.noFreeDay) && (
                           <div className="lc-feats">
                             {b.beachTram && (
-                              <span className="lc-feat">🚌 Beach tram available</span>
+                              <span className="lc-feat"><Bus size={14} strokeWidth={1.5} /> Beach tram available</span>
                             )}
                             {b.bayBeach && (
-                              <span className="lc-feat">🌊 Bay beach</span>
+                              <span className="lc-feat"><Waves size={14} strokeWidth={1.5} /> Bay beach</span>
                             )}
                             {!!b.mobiMatStreets?.length && (
-                              <span className="lc-feat">♿ Mobi-Mat · {b.mobiMatStreets.length} access streets</span>
+                              <span className="lc-feat"><Footprints size={14} strokeWidth={1.5} /> Mobi-Mat · {b.mobiMatStreets.length} access streets</span>
                             )}
                             {b.noFreeDay && (
-                              <span className="lc-feat">🎫 {b.noFreeDay}</span>
+                              <span className="lc-feat"><Ticket size={14} strokeWidth={1.5} /> {b.noFreeDay}</span>
                             )}
                           </div>
                         )}
@@ -199,7 +203,7 @@ export default function BeachesPage() {
                       <p className="lc-sub">{b.badgeOffice.location}</p>
                     </div>
                     {b.pricing.digitalApp && (
-                      <span className="lc-cta" style={{ fontSize: 11, color: 'var(--teal-deep)' }}>App ✓</span>
+                      <span className="lc-cta" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--teal-deep)' }}>App <Check size={12} strokeWidth={2} /></span>
                     )}
                   </div>
                   <div className="st-row">
@@ -224,13 +228,13 @@ export default function BeachesPage() {
                   </div>
                   <div className="lc-feats">
                     {b.pricing.veteranDaily === 'free' && (
-                      <span className="lc-feat">🇺🇸 Veterans — free daily</span>
+                      <span className="lc-feat"><Flag size={14} strokeWidth={1.5} /> Veterans — free daily</span>
                     )}
                     {b.pricing.veteranLifetime === 'free' && (
-                      <span className="lc-feat">🇺🇸 Veterans — free lifetime</span>
+                      <span className="lc-feat"><Flag size={14} strokeWidth={1.5} /> Veterans — free lifetime</span>
                     )}
                     {b.pricing.cashOnly && (
-                      <span className="lc-feat dim">💵 Cash/check only on beach</span>
+                      <span className="lc-feat dim"><Banknote size={14} strokeWidth={1.5} /> Cash/check only on beach</span>
                     )}
                     <a
                       href={b.sourceUrl}
@@ -322,7 +326,7 @@ export default function BeachesPage() {
         {/* ── Sidebar ───────────────────────────────────────────────────────── */}
         <aside className="pg-aside">
           <div className="aside-card advisory">
-            <p className="aside-title">🌊 Rip Current Safety</p>
+            <p className="aside-title" style={{ display: 'flex', alignItems: 'center', gap: 7 }}><Waves size={15} strokeWidth={1.5} /> Rip Current Safety</p>
             <p className="aside-body">
               Always swim near a lifeguard stand. If caught in a rip, swim <strong>parallel</strong> to
               shore — never fight it straight toward shore. Check{' '}

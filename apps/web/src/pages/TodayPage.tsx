@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Sun, CloudSun, CloudRain, Cloud, Umbrella, Droplets, Waves, Bug, Thermometer, Car, Calendar, type LucideIcon } from 'lucide-react'
 import { tideKeyTimes } from '../data/conditions'
 import { todayEvents } from '../data/events'
 import { useTides } from '../hooks/useTides'
@@ -55,10 +55,9 @@ const SEASON_COLOR: Record<SeasonStatus['kind'], { color: string; bg: string }> 
 
 // ─── FORECAST ICONS ───────────────────────────────────────────────────────────
 function WeatherIcon({ type }: { type: string }) {
-  if (type === 'Sun') return <span style={{ fontSize: 28 }}>☀️</span>
-  if (type === 'CloudSun') return <span style={{ fontSize: 28 }}>⛅</span>
-  if (type === 'Rain') return <span style={{ fontSize: 28 }}>🌧️</span>
-  return <span style={{ fontSize: 28 }}>☁️</span>
+  const map: Record<string, LucideIcon> = { Sun, CloudSun, Rain: CloudRain, Cloud }
+  const Icon = map[type] ?? Cloud
+  return <Icon size={26} strokeWidth={1.5} color="var(--teal-deep)" />
 }
 
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
@@ -279,10 +278,10 @@ export default function TodayPage() {
               })
             : 50
 
-          const pillars: Array<{ emoji: string; label: string; score: number }> = [
-            { emoji: '🏖️', label: 'Lounge', score: loungeScore },
-            { emoji: '🏊', label: 'Swim', score: swimScore },
-            { emoji: '🏄', label: 'Surf', score: surfScore },
+          const pillars: Array<{ Icon: LucideIcon; label: string; score: number }> = [
+            { Icon: Umbrella, label: 'Lounge', score: loungeScore },
+            { Icon: Droplets, label: 'Swim', score: swimScore },
+            { Icon: Waves, label: 'Surf', score: surfScore },
           ]
 
           return (
@@ -307,7 +306,9 @@ export default function TodayPage() {
               >
                 {pillars.map((p) => (
                   <div key={p.label} style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: 30, lineHeight: 1 }}>{p.emoji}</div>
+                    <div style={{ lineHeight: 1, display: 'flex', justifyContent: 'center' }}>
+                      <p.Icon size={28} strokeWidth={1.5} color="var(--teal-deep)" />
+                    </div>
                     <div
                       style={{
                         fontFamily: 'var(--font-display)',
@@ -372,12 +373,15 @@ export default function TodayPage() {
               </div>
 
               <div className="rip-status">
-                <span>🌊 Rip current risk · {rip ? (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                  <Waves size={14} strokeWidth={1.5} /> Rip current risk · {rip ? (
                   <strong style={{ color: ripRiskColor(rip.risk) }}>{rip.risk} across the island</strong>
                 ) : (
                   <strong style={{ color: 'var(--slate)' }}>see safebeachday.com</strong>
                 )}</span>
-                <span>🪰 Bugs · <strong>{heroBugLevel}</strong></span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                  <Bug size={14} strokeWidth={1.5} /> Bugs · <strong>{heroBugLevel}</strong>
+                </span>
               </div>
             </div>
           )
@@ -416,7 +420,7 @@ export default function TodayPage() {
           <div className="card">
             <div className="card-head">
               <h2 className="card-title">Waves</h2>
-              <span className="card-sub">🟢 Live · Barnegat Buoy 44091</span>
+              <span className="card-sub"><span className="live-pip" />Live · Barnegat Buoy 44091</span>
             </div>
             <div className="tide-events">
               <div className="tide-event">
@@ -485,7 +489,7 @@ export default function TodayPage() {
               {weatherLoading
                 ? 'Loading…'
                 : liveForecast
-                  ? '🟢 Live · NWS forecast'
+                  ? <><span className="live-pip" />Live · NWS forecast</>
                   : 'Sample data'}
             </span>
           </div>
@@ -512,21 +516,21 @@ export default function TodayPage() {
         <div className="metrics">
           {[
             {
-              ico: '🌊',
+              Icon: Thermometer,
               val: liveWaterTemp != null ? String(Math.round(liveWaterTemp)) : '72',
               suf: '°',
               lab: 'Water temp',
               href: null as string | null,
             },
             {
-              ico: '☀️',
+              Icon: Sun,
               val: liveUV != null ? String(Math.round(liveUV)) : '8',
               suf: '',
               lab: liveUV != null ? `UV · ${classifyUV(liveUV)}` : 'UV index · high',
               href: null,
             },
             {
-              ico: '🚦',
+              Icon: Car,
               val: '→',
               suf: '',
               lab: 'Traffic & cams',
@@ -536,7 +540,7 @@ export default function TodayPage() {
             const inner = (
               <>
                 <div className="metric-ico">
-                  <span style={{ fontSize: 18 }}>{m.ico}</span>
+                  <m.Icon size={18} strokeWidth={1.5} />
                 </div>
                 <div>
                   <div className="metric-val">
@@ -596,7 +600,7 @@ export default function TodayPage() {
                         <span className="ap">{ap}</span>
                       </>
                     ) : (
-                      <span className="h" style={{ fontSize: 18 }}>🗓</span>
+                      <span className="h"><Calendar size={18} strokeWidth={1.5} /></span>
                     )}
                   </div>
                   <div>
@@ -605,7 +609,7 @@ export default function TodayPage() {
                     {season && (
                       <div style={{ marginTop: 6 }}>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 600, color: SEASON_COLOR[season.kind].color, background: SEASON_COLOR[season.kind].bg, padding: '2px 8px', borderRadius: 3 }}>
-                          <span style={{ fontSize: 10 }}>🗓</span>{season.label}
+                          <Calendar size={11} strokeWidth={1.5} />{season.label}
                         </span>
                       </div>
                     )}
