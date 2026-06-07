@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Thermometer, Sun, Waves } from 'lucide-react'
 import { tideKeyTimes } from '../data/conditions'
 import { useTides } from '../hooks/useTides'
 import { useNow } from '../hooks/useNow'
@@ -87,7 +88,7 @@ export default function ConditionsPage() {
           {/* Live ocean temp + UV + rip — hydrates over the static loading state */}
           <div className="metrics">
             <div className="metric">
-              <div className="metric-ico"><span style={{ fontSize: 18 }}>🌊</span></div>
+              <div className="metric-ico"><Thermometer size={18} strokeWidth={1.5} /></div>
               <div>
                 <div className="metric-val">
                   {waterTemp != null ? Math.round(waterTemp) : '—'}
@@ -97,7 +98,7 @@ export default function ConditionsPage() {
               </div>
             </div>
             <div className="metric">
-              <div className="metric-ico"><span style={{ fontSize: 18 }}>☀️</span></div>
+              <div className="metric-ico"><Sun size={18} strokeWidth={1.5} /></div>
               <div>
                 <div className="metric-val">
                   {uv != null ? Math.round(uv) : '—'}
@@ -106,7 +107,7 @@ export default function ConditionsPage() {
               </div>
             </div>
             <div className="metric">
-              <div className="metric-ico"><span style={{ fontSize: 18 }}>🏊</span></div>
+              <div className="metric-ico"><Waves size={18} strokeWidth={1.5} /></div>
               <div>
                 <div className="metric-val" style={{ fontSize: 22, color: ripRiskColor(rip?.risk) }}>
                   {rip ? rip.risk : '—'}
