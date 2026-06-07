@@ -22,6 +22,11 @@ const STATIC_SEO: Record<string, PageSeo> = {
     description:
       'Compare all six Long Beach Island towns — Barnegat Light, Harvey Cedars, Surf City, Ship Bottom, Long Beach Township, and Beach Haven. Pick the right one for your visit.',
   },
+  '/lbi-conditions': {
+    title: 'LBI Ocean Temperature, Tides & Live Beach Conditions Today | On LBI',
+    description:
+      'Live Long Beach Island ocean temperature, high and low tide times from Barnegat Light through Holgate, surf, UV, rip-current risk, and beach cameras — plus how LBI tides and back-bay flooding work.',
+  },
   '/accessibility': {
     title: 'Wheelchair-Accessible Beaches on LBI — Mobi-Mats & Beach Wheelchairs | On LBI',
     description:

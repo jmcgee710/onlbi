@@ -11,6 +11,7 @@ import GettingAroundPage from './pages/GettingAroundPage'
 import AlertsPage from './pages/AlertsPage'
 import TownGuidePage from './pages/TownGuidePage'
 import TownsPage from './pages/TownsPage'
+import ConditionsPage from './pages/ConditionsPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 export const townSlugs = [
@@ -34,6 +35,7 @@ export const routes: RouteObject[] = [
       { path: 'beaches/:town', element: <BeachTownPage /> },
       { path: 'beaches/:town/:street', element: <BeachAccessPage /> },
       { path: 'towns', element: <TownsPage /> },
+      { path: 'lbi-conditions', element: <ConditionsPage /> },
       { path: 'accessibility', element: <AccessibilityPage /> },
       { path: 'accessibility/beach-access', element: <AccessibilityPage /> },
       { path: 'accessibility/:town', element: <AccessibilityPage /> },

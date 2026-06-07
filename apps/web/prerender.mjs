@@ -16,9 +16,9 @@ const towns = [
   'harvey-cedars', 'barnegat-light', 'long-beach-township',
 ]
 
-// The 19 sitemap URLs.
+// The 20 sitemap URLs.
 const routesToPrerender = [
-  '/', '/beaches', '/towns', '/accessibility', '/eat', '/do', '/getting-around',
+  '/', '/beaches', '/towns', '/lbi-conditions', '/accessibility', '/eat', '/do', '/getting-around',
   ...towns.map(t => `/${t}`),
   ...towns.map(t => `/beaches/${t}`),
 ]
