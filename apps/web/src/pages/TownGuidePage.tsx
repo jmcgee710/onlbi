@@ -3,6 +3,8 @@ import { Waves } from 'lucide-react'
 import { findTownGuide, townGuides } from '../data/townGuides'
 import { beachBadgeInfo } from '../data/beachBadges'
 import { lifeguardInfo } from '../data/beaches'
+import { towns } from '../data/towns'
+import FaqSection from '../components/FaqSection'
 
 interface TownGuidePageProps {
   slug: string
@@ -12,6 +14,7 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
   const guide = findTownGuide(slug)
   const badge  = beachBadgeInfo.find(b => b.townSlug === slug)
   const guards = lifeguardInfo.find(l => l.townSlug === slug)
+  const town   = towns.find(t => t.slug === slug)
 
   if (!guide) {
     return (
@@ -141,6 +144,11 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
             </article>
           )}
 
+          {/* FAQ — renders visible Q/A + FAQPage JSON-LD (schema.org) */}
+          {guide.faqs && guide.faqs.length > 0 && (
+            <FaqSection faqs={guide.faqs} title={`${guide.shortName} FAQ`} />
+          )}
+
           {/* Who it's best for */}
           <article className="lc" style={{ background: 'var(--paper)', borderLeft: '3px solid var(--teal-deep)' }}>
             <h2 className="lc-name" style={{ fontSize: 22, marginBottom: 10 }}>
@@ -207,6 +215,18 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
                 <div className="st-lbl">Guarded</div>
                 <div className="st-val" style={{ fontSize: 13, marginTop: 4, lineHeight: 1.2 }}>10am – 5pm</div>
               </div>
+              {town && (
+                <>
+                  <div>
+                    <div className="st-lbl">Zip Code</div>
+                    <div className="st-val" style={{ fontSize: 15, marginTop: 4 }}>{town.zip}</div>
+                  </div>
+                  <div>
+                    <div className="st-lbl">Area Code</div>
+                    <div className="st-val" style={{ fontSize: 15, marginTop: 4 }}>609</div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -223,6 +243,11 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
           <div className="aside-card">
             <p className="aside-title">More for {guide.shortName}</p>
             <ul className="aside-list">
+              <li>
+                <Link to="/lbi-conditions" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
+                  Today&apos;s {guide.shortName} water temp &amp; tides →
+                </Link>
+              </li>
               <li>
                 <Link to={`/beaches/${guide.slug}`} style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
                   Beach details &amp; badge prices →

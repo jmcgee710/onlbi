@@ -8,6 +8,7 @@ import { useUV, classifyUV } from '../hooks/useUV'
 import { useBuoy } from '../hooks/useBuoy'
 import { useRipCurrent, ripRiskColor } from '../hooks/useRipCurrent'
 import TideCard, { dateToFrac, fmtNowLabel } from '../components/TideCard'
+import FaqSection from '../components/FaqSection'
 
 // Same NOAA / NDBC reference stations TodayPage uses, so the two pages agree.
 const BAY_STATION = '8534208' // Beach Haven Coast Guard Station (bay side)
@@ -85,6 +86,20 @@ export default function ConditionsPage() {
         {/* ── Main column ───────────────────────────────────────────────────── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
+          {/* Water temp heading — crawlable text so the page ranks for
+              "lbi water temp" / "ocean temp lbi"; the live number hydrates below. */}
+          <article className="lc" id="water-temp">
+            <h2 className="lc-name" style={{ fontSize: 24, marginBottom: 10 }}>
+              LBI Water Temperature Today
+            </h2>
+            <p style={{ fontSize: 14, lineHeight: 1.65, color: 'var(--ink-soft)' }}>
+              Today&apos;s Long Beach Island ocean temperature is shown live below, read from the
+              nearest NOAA water-temperature sensor (Atlantic City). Water temps on LBI climb through
+              the summer — typically low-to-mid 60s°F in June, up to the low 70s°F in July and August,
+              and often warmest after a stretch of south wind.
+            </p>
+          </article>
+
           {/* Live ocean temp + UV + rip — hydrates over the static loading state */}
           <div className="metrics">
             <div className="metric">
@@ -118,24 +133,48 @@ export default function ConditionsPage() {
           </div>
 
           {/* Tides — bay and ocean differ in timing and amplitude */}
-          <TideCard
-            title="Ocean Tide"
-            stationName={OCEAN_NAME}
-            liveTides={oceanTides}
-            loading={oceanLoading}
-            fallbackEvents={tideKeyTimes}
-            nowT={nowT}
-            nowLabel={nowLabel}
-          />
-          <TideCard
-            title="Bay Tide"
-            stationName={BAY_NAME}
-            liveTides={bayTides}
-            loading={bayLoading}
-            fallbackEvents={tideKeyTimes}
-            nowT={nowT}
-            nowLabel={nowLabel}
-          />
+          <div id="tides" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <article className="lc">
+              <h2 className="lc-name" style={{ fontSize: 24, marginBottom: 10 }}>
+                LBI Tide Times Today
+              </h2>
+              <p style={{ fontSize: 14, lineHeight: 1.65, color: 'var(--ink-soft)' }}>
+                Today&apos;s high tide and low tide times for Long Beach Island are charted below —
+                the ocean (oceanfront) tide first, then the back-bay tide, which runs on a different
+                schedule. Tide times shift about 50 minutes later each day.
+              </p>
+            </article>
+            <TideCard
+              title="Ocean Tide"
+              stationName={OCEAN_NAME}
+              liveTides={oceanTides}
+              loading={oceanLoading}
+              fallbackEvents={tideKeyTimes}
+              nowT={nowT}
+              nowLabel={nowLabel}
+            />
+            <TideCard
+              title="Bay Tide"
+              stationName={BAY_NAME}
+              liveTides={bayTides}
+              loading={bayLoading}
+              fallbackEvents={tideKeyTimes}
+              nowT={nowT}
+              nowLabel={nowLabel}
+            />
+          </div>
+
+          {/* Surf — heading is always crawlable; the live buoy card renders when data returns */}
+          <article className="lc" id="surf">
+            <h2 className="lc-name" style={{ fontSize: 24, marginBottom: 10 }}>
+              LBI Surf Report
+            </h2>
+            <p style={{ fontSize: 14, lineHeight: 1.65, color: 'var(--ink-soft)' }}>
+              Live wave height, period, and direction for Long Beach Island come from the offshore
+              NDBC Barnegat buoy (44091). When the buoy is reporting, the current reading appears
+              below; check rip-current risk above before you get in.
+            </p>
+          </article>
 
           {/* Waves — only when the buoy actually returned a reading */}
           {buoy && (
@@ -213,6 +252,25 @@ export default function ConditionsPage() {
               <Link to="/alerts" style={{ color: 'var(--teal-deep)' }}>LBI alerts page</Link>.
             </p>
           </article>
+
+          {/* FAQ — visible Q/A + FAQPage JSON-LD for utility-query snippets */}
+          <FaqSection
+            title="LBI Conditions FAQ"
+            faqs={[
+              {
+                q: 'What is the water temperature at LBI today?',
+                a: "Today's Long Beach Island ocean temperature is shown live at the top of this page, read from the nearest NOAA sensor (Atlantic City). LBI water temps are typically in the low-to-mid 60s°F in June and reach the low 70s°F in July and August.",
+              },
+              {
+                q: 'When is high tide and low tide on LBI today?',
+                a: "Today's high and low tide times are in the tide charts above — the ocean tide and the back-bay tide run on different schedules. Tide times shift roughly 50 minutes later each day, so check the current day's chart.",
+              },
+              {
+                q: 'Is there a surf report for LBI?',
+                a: 'Yes — live wave height, period, and direction from the offshore NDBC Barnegat buoy (44091) appear in the surf section above when the buoy is reporting, alongside the island-wide NWS rip-current risk.',
+              },
+            ]}
+          />
 
           {/* Internal links — distribute equity to the hub + town guides */}
           <article className="lc">

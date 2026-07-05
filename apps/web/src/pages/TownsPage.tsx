@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
 import { townGuides } from '../data/townGuides'
 import { beachBadgeInfo } from '../data/beachBadges'
+import { SITE_URL } from '../lib/seo'
+import LbiTownsMap from '../components/LbiTownsMap'
+import FaqSection from '../components/FaqSection'
 
 const badgeByTown = Object.fromEntries(
   beachBadgeInfo.map(b => [b.townSlug, b.pricing.daily])
@@ -21,8 +24,28 @@ export default function TownsPage() {
     .map(slug => townGuides.find(t => t.slug === slug))
     .filter((t): t is NonNullable<typeof t> => Boolean(t))
 
+  // JSON-LD: ordered ItemList of the six municipalities for SEO.
+  const itemListData = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Towns of Long Beach Island, New Jersey',
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
+    numberOfItems: ordered.length,
+    itemListElement: ordered.map((t, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: t.name,
+      url: `${SITE_URL}/${t.slug}`,
+    })),
+  }
+
   return (
     <div className="pg-wrap">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListData) }}
+      />
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <div className="pg-hero">
@@ -59,6 +82,19 @@ export default function TownsPage() {
 
         {/* ── Main column ────────────────────────────────────────────────────── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Visual island map — targets "map of LBI towns" intent */}
+          <article className="lc">
+            <h2 className="lc-name" style={{ fontSize: 24, marginBottom: 6 }}>Map of LBI Towns</h2>
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginBottom: 16 }}>
+              Long Beach Island runs 18 miles north to south. Tap a town to open its guide —
+              Barnegat Light sits at the north tip, Holgate at the south. The shaded bands are all
+              Long Beach Township: it isn&apos;t one continuous town but a patchwork of sections
+              woven between the boroughs — Loveladies actually sits north of Harvey Cedars, and High
+              Bar Harbor is a bayside enclave off Barnegat Light.
+            </p>
+            <LbiTownsMap />
+          </article>
+
           {ordered.map((t, i) => {
             const daily = badgeByTown[t.slug]
             return (
@@ -103,6 +139,42 @@ export default function TownsPage() {
               </Link>
             )
           })}
+
+          {/* Towns near LBI — mainland gateways people search alongside the island */}
+          <article className="lc">
+            <h2 className="lc-name" style={{ fontSize: 22, marginBottom: 10 }}>Towns near LBI (on the mainland)</h2>
+            <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)', marginBottom: 12 }}>
+              Long Beach Island itself has six towns, but a few mainland towns are part of most LBI
+              trips — you pass through them on the way in, and many visitors stay or stock up there:
+            </p>
+            <ul className="aside-list" style={{ fontSize: 14 }}>
+              <li><span><strong>Manahawkin / Stafford Township</strong> — the mainland gateway just west of the Route 72 Causeway, with the big supermarkets, big-box stores, and the last chain restaurants before the bridge.</span></li>
+              <li><span><strong>Tuckerton</strong> — a historic bayshore town south of the causeway, home to the Tuckerton Seaport &amp; Baymen&apos;s Museum.</span></li>
+              <li><span><strong>Barnegat</strong> — the mainland township across the bay to the northwest, sharing its name with Barnegat Light and Barnegat Inlet but a separate town on Route 9.</span></li>
+            </ul>
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 12 }}>
+              None of these are on the island — to reach any LBI beach you cross the Causeway into Ship Bottom first.
+            </p>
+          </article>
+
+          {/* What is LBI — cheap featured-snippet targets */}
+          <FaqSection
+            title="Long Beach Island FAQ"
+            faqs={[
+              {
+                q: 'What does LBI stand for?',
+                a: 'LBI stands for Long Beach Island, a barrier island on the Jersey Shore in Ocean County, New Jersey.',
+              },
+              {
+                q: 'What county is LBI in?',
+                a: 'Long Beach Island is in Ocean County, New Jersey. It is reached from the mainland via the Route 72 Causeway into Ship Bottom.',
+              },
+              {
+                q: 'How long is Long Beach Island?',
+                a: 'Long Beach Island is about 18 miles long and quite narrow — in places you can see the ocean and Barnegat Bay from the same block. It is divided into six municipalities from Barnegat Light in the north to Beach Haven and Holgate in the south.',
+              },
+            ]}
+          />
         </div>
 
         {/* ── Sidebar ───────────────────────────────────────────────────────── */}

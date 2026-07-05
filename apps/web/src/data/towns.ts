@@ -8,6 +8,7 @@ export interface Town {
   slug: string
   name: string
   address: string
+  zip: string
   phone: string
   email?: string
   hallHours: string
@@ -26,6 +27,7 @@ export const towns: Town[] = [
     slug: 'barnegat-light',
     name: 'Barnegat Light',
     address: '10 East 7th Street, P.O. Box 576, Barnegat Light, NJ 08006',
+    zip: '08006',
     phone: '(609) 494-9196',
     hallHours: 'Monday–Friday 8:00am–3:30pm',
     website: 'https://barnegatlight.org',
@@ -39,6 +41,7 @@ export const towns: Town[] = [
     slug: 'harvey-cedars',
     name: 'Harvey Cedars',
     address: '7606 Long Beach Boulevard, P.O. Box 3185, Harvey Cedars, NJ 08008',
+    zip: '08008',
     phone: '(609) 361-6000',
     hallHours: 'Monday–Friday 8:30am–4:00pm',
     website: 'https://www.harveycedars.org',
@@ -54,6 +57,7 @@ export const towns: Town[] = [
     slug: 'surf-city',
     name: 'Surf City',
     address: '813 Long Beach Boulevard, Surf City, NJ 08008',
+    zip: '08008',
     phone: '(609) 494-3064',
     email: 'frontdesk@surfcitynj.org',
     hallHours: 'Contact for hours', // not listed on site as of May 2026
@@ -69,6 +73,7 @@ export const towns: Town[] = [
     slug: 'ship-bottom',
     name: 'Ship Bottom',
     address: '1621 Long Beach Boulevard, Ship Bottom, NJ 08008',
+    zip: '08008',
     phone: '(609) 494-2171',
     hallHours: 'Monday–Friday 9:00am–4:30pm',
     website: 'https://shipbottom.org',
@@ -85,6 +90,7 @@ export const towns: Town[] = [
     slug: 'long-beach-township',
     name: 'Long Beach Township',
     address: '6805 Long Beach Boulevard, Brant Beach, NJ 08008',
+    zip: '08008',
     phone: '(609) 361-1000',
     email: 'concierge@longbeachtownship.com',
     hallHours: 'Contact for hours',
@@ -103,6 +109,7 @@ export const towns: Town[] = [
     slug: 'beach-haven',
     name: 'Beach Haven',
     address: '300 Engleside Avenue, Beach Haven, NJ 08008',
+    zip: '08008',
     phone: '(609) 492-0111',
     hallHours: 'Monday–Friday 9:00am–4:00pm',
     website: 'https://beachhaven-nj.gov',

@@ -32,6 +32,7 @@ export type TownGuide = {
   intro: string
   sections: TownSection[]
   neighborhoods?: Neighborhood[]
+  faqs?: { q: string; a: string }[]
   bestFor: string
   related: { slug: string; name: string }[]
 }
@@ -72,14 +73,52 @@ export const townGuides: TownGuide[] = [
         ],
       },
       {
+        title: 'Beach Haven Public Dock & Wharf',
+        body:
+          "Beach Haven's bayfront is its second waterfront. The public docks and the historic Schooner's Wharf / Bay Village area sit along the bay on the west side of town, roughly around Centre Street and 9th Street, and this is where you'll find the bay tour boats, parasail and jet-ski operators, and small-boat access. Kids crab off the bulkheads with a chicken-neck and a drop line all summer, and it's the calmest place in town to watch the sun set over Barnegat Bay. There's no single grand \"wharf\" building — it's a walkable district of bayfront shops, docks, and eateries rather than one pier.",
+      },
+      {
+        title: 'Parks in Beach Haven',
+        body:
+          "Beach Haven packs a lot of public space into a small borough. Veterans Bicentennial Park (Bicentennial Park) on the bayfront hosts summer events and gives you open lawn and bay views; the borough also maintains a boat ramp, pickleball and tennis courts, playgrounds, and a public library. Green bike-lane striping runs through town, so a beach cruiser is the easiest way to move between the ocean beaches, the bayfront parks, and the food.",
+      },
+      {
         title: 'Where to Eat in Beach Haven',
         body:
           "Beach Haven has the densest restaurant scene on LBI. Classic picks include Black Whale Bar & Fish House for bayfront drinks, The Gables Historic Inn for fine dining in a Victorian setting, Buckalew's for casual pub fare, The Chicken or the Egg (CHEGG) for famous late-night breakfast, Parker's Garage & Oyster Saloon for elevated seafood, Stefano's for BYOB Italian, and Country Kettle Chowda for award-winning clam chowder in Bay Village. Reservations are essential on summer weekends.",
       },
       {
+        title: 'Landmarks & the "Beach Haven boardwalk"',
+        body:
+          "First-timers often search for the \"Beach Haven boardwalk\" — but LBI famously has no traditional oceanfront boardwalk like Seaside or Wildwood. The closest thing is the walkable bayfront at Schooner's Wharf and Bay Village, where a plank walkway threads between shops and the docks. On the ocean side you simply walk on and off the sand at the numbered-street access points. The town's signature landmark is The Gables, a restored 1892 Victorian inn and restaurant on Centre Street, and the whole historic district around it is a National Register neighborhood worth a stroll.",
+      },
+      {
+        title: 'Beach Haven Inlet & the Holgate boundary',
+        body:
+          "Beach Haven borough ends at Nelson Avenue on its south side. Everything below that — the long, narrow peninsula running down to Beach Haven Inlet and the Edwin B. Forsythe National Wildlife Refuge at the island's very tip — is Holgate, which is part of Long Beach Township, not Beach Haven borough. The refuge end is closed April 1 through August 31 for piping plover nesting. So when a map or listing says \"Beach Haven Inlet,\" it's pointing at the southern tip past Holgate, a short drive south of downtown Beach Haven.",
+      },
+      {
         title: 'Beach Haven vs. the "Beach Haven" sections',
         body:
           "One quirk that trips up first-time visitors: Beach Haven borough is its own municipality, but several nearby sections — Beach Haven Terrace, Beach Haven Park, Beach Haven Crest, Beach Haven Gardens, and North Beach Haven — are actually part of Long Beach Township, not Beach Haven borough. They sit north of the borough along the central island. If your rental address is one of those, you'll buy Long Beach Township beach badges, not Beach Haven ones.",
+      },
+    ],
+    faqs: [
+      {
+        q: 'Does Beach Haven have a boardwalk?',
+        a: "Not a traditional oceanfront boardwalk — LBI doesn't have one like Seaside or Wildwood. The closest thing in Beach Haven is the walkable bayfront plank walkway at Schooner's Wharf and Bay Village, lined with shops and docks. Ocean beaches are reached directly from the numbered-street access points.",
+      },
+      {
+        q: 'Where can I park in Beach Haven?',
+        a: 'Public parking in Beach Haven is free with no meters, but the streets closest to the beach fill by 10 AM in peak season. Free street parking is available a few blocks inland, and the LBI Shuttle can save you the hunt. No vehicle may stay in a Borough lot more than 48 hours within any 7-day period.',
+      },
+      {
+        q: 'Is there a water park in Beach Haven?',
+        a: 'Yes. Thundering Surf Waterpark has water slides and a lazy river, with adventure mini-golf next door, and Fantasy Island Amusement Park is right beside it — the two together are the center of family activity in Beach Haven.',
+      },
+      {
+        q: 'Where is the Beach Haven public dock?',
+        a: "The public docks sit on the bay side of town around the Schooner's Wharf and Bay Village area, near Centre Street and 9th Street. It's where the bay tour boats, parasail and jet-ski operators launch, and a popular spot for crabbing off the bulkheads and watching the sunset over Barnegat Bay.",
       },
     ],
     bestFor: "Families with kids, first-time LBI visitors, groups who want walkable food and nightlife, and anyone who values activity over solitude.",
@@ -240,6 +279,11 @@ export const townGuides: TownGuide[] = [
       "Barnegat Light is the small, scenic town at the very northern tip of Long Beach Island. It's anchored by \"Old Barney\" — the 172-foot lighthouse that's the island's most recognizable landmark — and by Viking Village, LBI's working commercial fishing port. The beaches here are the widest on the island, the pace is the slowest, and the seafood is the freshest you'll find.",
     sections: [
       {
+        title: 'Barnegat Lighthouse (Old Barney)',
+        body:
+          "\"Old Barney\" is the 172-foot red-and-white lighthouse at the northern tip of LBI and the island's most recognizable landmark. First lit in 1859 and designed by George Meade (later the Union general at Gettysburg), it guided ships past the treacherous Barnegat Inlet shoals for nearly a century. Today it's the centerpiece of Barnegat Lighthouse State Park: you can climb all 217 steps to the watch gallery for a sweeping view of the inlet, the bay, and the Atlantic. The park also has a short interpretive trail through one of the last bits of maritime forest on the island, plus inlet-front benches that are a favorite for sunrise. There's a modest admission to climb; the grounds are free. Arrive early on summer weekends — the lot fills by mid-morning.",
+      },
+      {
         title: 'Beaches in Barnegat Light',
         body:
           "Barnegat Light's beaches are notably wide thanks to natural sand accretion at the inlet. The northern end opens into Barnegat Lighthouse State Park, where the beach meets the inlet jetty — a favorite for fishermen and sunrise walkers. Beach badges are required in season for the borough beaches; the state park beach has its own access rules. There's also a guarded Bay Beach at 25th Street & Bayview Ave., great for young children.",
@@ -253,7 +297,7 @@ export const townGuides: TownGuide[] = [
         title: 'Things to Do in Barnegat Light',
         body: '',
         bullets: [
-          "Barnegat Lighthouse State Park — climb all 172 steps to the top of Old Barney for the best view on the island.",
+          "Barnegat Lighthouse State Park — climb all 217 steps to the top of Old Barney for the best view on the island.",
           "Viking Village — working fishing docks, dockside seafood markets, art galleries, and weekly summer artisan markets.",
           "Beach Tram — runs the 4th–9th Street ocean beaches in season, free with a beach badge.",
           "Inlet jetty fishing — bluefish, fluke, and striped bass for surf casters in season.",
@@ -291,9 +335,14 @@ export const townGuides: TownGuide[] = [
       "Long Beach Township is the largest municipality on LBI, but it's unusual: it's not one contiguous town. Instead, it's a string of distinct communities stitched together up and down the island — Holgate at the southern tip, Brant Beach in the middle, Loveladies and North Beach on the northern end. Each section has its own personality, so where you stay in Long Beach Township really matters.",
     sections: [
       {
-        title: 'Holgate (South End)',
+        title: 'Loveladies (North End)',
         body:
-          "The southernmost point of LBI, ending at the Edwin B. Forsythe National Wildlife Refuge. Quieter than Beach Haven, with wide, less-crowded beaches and access to the protected refuge for birding and shell-hunting (closed April 1 – August 31 for piping plover nesting). Bowker's South Beach Deli & Grill is the local favorite for breakfast, bagels, and cheesesteaks. Great for families who want Beach Haven's amenities a short drive away without being in the middle of them.",
+          "The most upscale section of LBI. Large modern homes, wide lots, and beaches that are nearly empty on weekdays. The Long Beach Island Foundation of the Arts & Sciences sits in Loveladies and hosts year-round classes, exhibits, and summer lectures. Few commercial businesses — by design.",
+      },
+      {
+        title: 'North Beach (North-Central)',
+        body:
+          "A tiny, quiet residential strip between Harvey Cedars and Surf City. Almost entirely homes — no commercial district — which is the appeal. Renters here want a quiet beach week without the boulevard noise.",
       },
       {
         title: 'Brant Beach (Central)',
@@ -301,14 +350,9 @@ export const townGuides: TownGuide[] = [
           "The largest section of Long Beach Township and a family rental favorite. Brant Beach has wide beaches, easy parking, and is home to Bayview Park — a popular bayside swimming area with a playground, basketball, volleyball, pickleball, a dedicated dog park, and free summer concerts. Daddy O's Restaurant & Hotel anchors the dining scene, with Blue Water Cafe a short hop south in Haven Beach. The bike path on Long Beach Boulevard runs the length of Brant Beach and is one of the best ways to get around.",
       },
       {
-        title: 'North Beach (North-Central)',
+        title: 'Holgate (South End)',
         body:
-          "A tiny, quiet residential strip between Surf City and Loveladies. Almost entirely homes — no commercial district — which is the appeal. Renters here want a quiet beach week without the boulevard noise.",
-      },
-      {
-        title: 'Loveladies (North End)',
-        body:
-          "The most upscale section of LBI. Large modern homes, wide lots, and beaches that are nearly empty on weekdays. The Long Beach Island Foundation of the Arts & Sciences sits in Loveladies and hosts year-round classes, exhibits, and summer lectures. Few commercial businesses — by design.",
+          "The southernmost point of LBI, ending at the Edwin B. Forsythe National Wildlife Refuge. Quieter than Beach Haven, with wide, less-crowded beaches and access to the protected refuge for birding and shell-hunting (closed April 1 – August 31 for piping plover nesting). Bowker's South Beach Deli & Grill is the local favorite for breakfast, bagels, and cheesesteaks. Great for families who want Beach Haven's amenities a short drive away without being in the middle of them.",
       },
       {
         title: 'Beach Badges & Parking',

@@ -18,9 +18,9 @@ const STATIC_SEO: Record<string, PageSeo> = {
       'Compare 2026 beach badge prices, lifeguard hours, and beach rules for all six Long Beach Island towns, plus live beach conditions.',
   },
   '/towns': {
-    title: 'LBI Town Guides: 6 Long Beach Island Towns Compared | On LBI',
+    title: 'LBI Town Map & Guide — All 6 Long Beach Island Towns Compared | On LBI',
     description:
-      'Compare all six Long Beach Island towns — Barnegat Light, Harvey Cedars, Surf City, Ship Bottom, Long Beach Township, and Beach Haven. Pick the right one for your visit.',
+      'Map and guide to all six Long Beach Island towns — Barnegat Light, Harvey Cedars, Surf City, Ship Bottom, Long Beach Township, and Beach Haven. See where each sits and which is right for your trip.',
   },
   '/lbi-conditions': {
     title: 'LBI Ocean Temperature, Tides & Live Beach Conditions Today | On LBI',
