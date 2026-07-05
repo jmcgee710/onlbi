@@ -164,7 +164,7 @@ export const townGuides: TownGuide[] = [
       {
         title: 'Where to Eat in Ship Bottom',
         body:
-          "Ship Bottom punches above its weight on food. Ship Bottom Shellfish for raw bar and lobster rolls, Raimondo's for classic red-sauce Italian (BYOB), Dune 18 for upscale-casual dining, Speakeasy Pizzeria for some of the best pizza on the island, Bageleddi's for chewy bagels (50+ years), Country Kettle Fudge for the obligatory LBI sweet stop, and The Local Market & Kitchen for specialty coffee and grab-and-go.",
+          "Ship Bottom punches above its weight on food. Ship Bottom Shellfish for raw bar and lobster rolls, Raimondo's for classic red-sauce Italian (BYOB), Dune 18 for upscale-casual dining, Speakeasy Pizzeria for some of the best pizza on the island, Bageleddi's for chewy bagels (50+ years), Ship Bottom Ice Cream Co. for homemade ice cream and Italian ice, and The Local Market & Kitchen for specialty coffee and grab-and-go.",
       },
     ],
     bestFor: "Day-trippers, central-island lovers, surfers, and families who want quick access to the boulevard's shopping and food without Beach Haven's crowds.",
