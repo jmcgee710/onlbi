@@ -112,7 +112,7 @@ export default function TownsPage() {
                       <h2 className="lc-name" style={{ fontSize: 28 }}>{t.name}</h2>
                       <p className="lc-sub" style={{ fontSize: 14 }}>{t.eyebrow}</p>
                     </div>
-                    <span className="lc-cta">Read guide →</span>
+                    <span className="lc-cta-btn">Read guide <span className="arw">→</span></span>
                   </div>
                   <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)', marginBottom: 16 }}>
                     {t.intro}

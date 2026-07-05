@@ -390,6 +390,18 @@ button { font-family: inherit; cursor: pointer; }
 .lc-name { font-family: var(--font-display); font-size: clamp(22px, 2.5vw, 28px); font-weight: 500; letter-spacing: -0.005em; color: var(--ink); margin: 0 0 4px; line-height: 1.1; }
 .lc-sub { font-size: 13px; color: var(--slate); }
 .lc-cta { font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--slate); font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+/* Prominent pill CTA for whole-card links (e.g. town guides) */
+.lc-cta-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 15px; border-radius: 999px;
+  background: var(--teal-deep); color: #fff;
+  font-family: var(--font-display); font-size: 13px; font-weight: 600;
+  letter-spacing: 0.01em; white-space: nowrap; flex-shrink: 0;
+  transition: box-shadow 0.15s ease, transform 0.15s ease, background 0.15s ease;
+}
+.lc-cta-btn .arw { transition: transform 0.15s ease; }
+.lc:hover .lc-cta-btn { box-shadow: 0 3px 12px rgba(15,31,46,0.18); transform: translateY(-1px); }
+.lc:hover .lc-cta-btn .arw { transform: translateX(3px); }
 /* ─── STAT ROW ─ */
 .st-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line-soft); padding-top: 16px; column-gap: 20px; }
 .st-row.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
