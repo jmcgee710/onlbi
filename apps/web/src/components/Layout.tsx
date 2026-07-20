@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
 import { Sun, Umbrella, MapPinned, UtensilsCrossed, Anchor, Compass, Accessibility, Bell } from 'lucide-react'
 import { Analytics } from '@vercel/analytics/react'
@@ -69,7 +69,14 @@ export default function Layout() {
           </div>
         </div>
 
-        <Outlet />
+        {/* Suspense boundary for the lazy per-page chunks (App.tsx). During
+            hydration React keeps the prerendered HTML inside this boundary
+            visible until the page's chunk loads — do not remove it, or every
+            prerendered page breaks. Server render passes static components,
+            so the fallback is never emitted into prerendered HTML. */}
+        <Suspense fallback={null}>
+          <Outlet />
+        </Suspense>
 
         {/* Mobile bottom nav */}
         <nav className="mobile-bottom-nav">
