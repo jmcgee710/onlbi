@@ -242,6 +242,38 @@ export default function TodayPage() {
           </div>
         </div>
 
+        {/* Static hub copy + links — crawlable homepage text naming the island
+            and pushing equity to the core landing pages. Literal JSX only. */}
+        <div className="card">
+          <p style={{ fontSize: 14, lineHeight: 1.65, color: 'var(--ink-soft)', margin: 0 }}>
+            On LBI is the local guide to <b>Long Beach Island, New Jersey</b> — an 18-mile
+            barrier island on the Jersey Shore with six beach towns from Barnegat Light to
+            Beach Haven and Holgate. Live ocean temperature, tides, and surf above; guides
+            to every town, beach badges, and things to do below.
+          </p>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 14 }}>
+            {[
+              ['/towns', 'LBI Towns & Map'],
+              ['/lbi-conditions', 'Water Temp & Tides'],
+              ['/beaches', 'Beach Badges 2026'],
+              ['/eat', 'Where to Eat'],
+              ['/do', 'Things to Do'],
+              ['/getting-around', 'Getting Around'],
+            ].map(([href, label]) => (
+              <Link
+                key={href}
+                to={href}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px',
+                  background: 'var(--sand)', border: '1px solid var(--line)', borderRadius: 6,
+                  color: 'var(--ink)', textDecoration: 'none', fontSize: 13, fontWeight: 600,
+                }}
+              >
+                {label} <ArrowRight size={14} strokeWidth={2} color="var(--teal-deep)" />
+              </Link>
+            ))}
+          </div>
+        </div>
 
         {/* Three activity scores — same day can rate differently for lounging
             vs swimming vs surfing (e.g. perfect sun + 55°F water + 9ft surf

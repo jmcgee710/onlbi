@@ -29,12 +29,13 @@ type Band = {
 // boroughs rather than grouped, because that is how the island actually runs.
 const BANDS: Band[] = [
   { slug: 'barnegat-light', name: 'Barnegat Light', sub: 'North tip · Old Barney', y0: 24, y1: 86 },
-  { slug: 'long-beach-township', name: 'Loveladies', sub: 'Long Beach Twp.', y0: 86, y1: 128, lbt: true },
+  { slug: 'loveladies', name: 'Loveladies', sub: 'Long Beach Twp.', y0: 86, y1: 128, lbt: true },
   { slug: 'harvey-cedars', name: 'Harvey Cedars', sub: 'Quiet · sunsets', y0: 128, y1: 186 },
-  { slug: 'long-beach-township', name: 'North Beach', sub: 'Long Beach Twp.', y0: 186, y1: 214, lbt: true },
+  { slug: 'north-beach', name: 'North Beach', sub: 'Long Beach Twp.', y0: 186, y1: 214, lbt: true },
   { slug: 'surf-city', name: 'Surf City', sub: 'Central hub', y0: 214, y1: 272 },
   { slug: 'ship-bottom', name: 'Ship Bottom', sub: 'Gateway · Causeway', y0: 272, y1: 320 },
-  { slug: 'long-beach-township', name: 'Long Beach Twp.', sub: 'Brant Beach · central', y0: 320, y1: 452, lbt: true },
+  { slug: 'brant-beach', name: 'Brant Beach', sub: 'Long Beach Twp.', y0: 320, y1: 376, lbt: true },
+  { slug: 'long-beach-township', name: 'Long Beach Twp.', sub: 'central sections', y0: 376, y1: 452, lbt: true },
   { slug: 'beach-haven', name: 'Beach Haven', sub: 'Walkable · lively', y0: 452, y1: 528 },
 ]
 
@@ -133,18 +134,19 @@ export default function LbiTownsMap() {
 
       {/* Holgate south tip — part of Long Beach Township, tapered to a point */}
       <a
-        href="/long-beach-township"
+        href="/holgate"
         className="twn-seg"
-        onClick={e => go(e, 'long-beach-township')}
+        onClick={e => go(e, 'holgate')}
         aria-label="Holgate, part of Long Beach Township"
       >
         <path d={`M${X0} 528 L${X1} 528 L155 600 L145 600 Z`} fill={LBT_FILL} fillOpacity={LBT_OPACITY} stroke="var(--line, #d8cfbe)" />
         <text x={150} y={552} textAnchor="middle" className="twn-sub">Holgate · LBT</text>
       </a>
 
-      {/* Legend — the shaded sections are all one municipality */}
-      <rect x={116} y={616} width={14} height={10} fill={LBT_FILL} fillOpacity={LBT_OPACITY} stroke="var(--line, #d8cfbe)" />
-      <text x={135} y={625} className="twn-key">Shaded = Long Beach Township (one town, many sections)</text>
+      {/* Legend — the shaded sections are all one municipality.
+          Keep the label short: text past x≈290 clips at the viewBox edge. */}
+      <rect x={62} y={616} width={14} height={10} fill={LBT_FILL} fillOpacity={LBT_OPACITY} stroke="var(--line, #d8cfbe)" />
+      <text x={81} y={625} className="twn-key">Shaded = Long Beach Township sections</text>
     </svg>
   )
 }

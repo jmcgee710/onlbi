@@ -8,6 +8,7 @@ import { useUV, classifyUV } from '../hooks/useUV'
 import { useBuoy } from '../hooks/useBuoy'
 import { useRipCurrent, ripRiskColor } from '../hooks/useRipCurrent'
 import TideCard, { dateToFrac, fmtNowLabel } from '../components/TideCard'
+import { buildBreadcrumbSchema } from '../lib/breadcrumbSchema'
 import FaqSection from '../components/FaqSection'
 
 // Same NOAA / NDBC reference stations TodayPage uses, so the two pages agree.
@@ -63,6 +64,16 @@ export default function ConditionsPage() {
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildBreadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'LBI Conditions', path: '/lbi-conditions' },
+          ])),
+        }}
       />
 
       {/* ── Hero (static, indexable copy) ───────────────────────────────────── */}
@@ -131,6 +142,48 @@ export default function ConditionsPage() {
               </div>
             </div>
           </div>
+
+          {/* ── Static prose: monthly water-temp averages (evergreen, crawlable).
+               Long-term NOAA/NODC Coastal Water Temperature Guide averages for the
+               Atlantic City ocean sensor — never stale, unlike the live reading. ── */}
+          <article className="lc" id="water-temp-by-month">
+            <h2 className="lc-name" style={{ fontSize: 24, marginBottom: 10 }}>
+              LBI Water Temperature by Month
+            </h2>
+            <p style={{ fontSize: 14, lineHeight: 1.65, color: 'var(--ink-soft)', marginBottom: 14 }}>
+              Long-term NOAA averages for the ocean off Long Beach Island (Atlantic City sensor,
+              the closest to LBI). Today&apos;s live reading is in the tile above. The ocean is
+              warmest in <b>August</b> and swimmable for most people from <b>late June through
+              September</b>; early summer often runs colder than visitors expect.
+            </p>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: 'left', padding: '8px 10px', borderBottom: '2px solid var(--line)', color: 'var(--ink)' }}>Month</th>
+                    <th style={{ textAlign: 'right', padding: '8px 10px', borderBottom: '2px solid var(--line)', color: 'var(--ink)' }}>Avg ocean temp</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ['January', 37], ['February', 35], ['March', 42], ['April', 48],
+                    ['May', 56], ['June', 63], ['July', 70], ['August', 73],
+                    ['September', 70], ['October', 61], ['November', 53], ['December', 44],
+                  ].map(([month, temp]) => (
+                    <tr key={month}>
+                      <td style={{ padding: '7px 10px', borderBottom: '1px solid var(--line)', color: 'var(--ink-soft)' }}>{month}</td>
+                      <td style={{ padding: '7px 10px', borderBottom: '1px solid var(--line)', color: 'var(--ink)', textAlign: 'right', fontWeight: 600 }}>{temp}°F</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p style={{ fontSize: 12, color: 'var(--ink-soft)', marginTop: 10 }}>
+              Source: NOAA National Oceanographic Data Center, Coastal Water Temperature Guide —
+              Atlantic City, NJ. Individual days vary several degrees with wind: sustained south
+              wind can upwell cold bottom water even in July.
+            </p>
+          </article>
 
           {/* Tides — bay and ocean differ in timing and amplitude */}
           <div id="tides" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -262,8 +315,16 @@ export default function ConditionsPage() {
                 a: "Today's Long Beach Island ocean temperature is shown live at the top of this page, read from the nearest NOAA sensor (Atlantic City). LBI water temps are typically in the low-to-mid 60s°F in June and reach the low 70s°F in July and August.",
               },
               {
-                q: 'When is high tide and low tide on LBI today?',
-                a: "Today's high and low tide times are in the tide charts above — the ocean tide and the back-bay tide run on different schedules. Tide times shift roughly 50 minutes later each day, so check the current day's chart.",
+                q: 'When is high tide on LBI today?',
+                a: "Today's high tide times are in the ocean and bay tide charts above, from NOAA stations. LBI gets two high tides roughly every 24 hours and 50 minutes, so high tide arrives about 50 minutes later each day than the day before.",
+              },
+              {
+                q: 'When is low tide on LBI?',
+                a: "Today's low tide times are charted above. Low tide comes about 6 hours and 12 minutes after each high tide — two lows per day — and the whole cycle shifts roughly 50 minutes later each day. The back-bay low lags the ocean low, so check the chart for the side you care about.",
+              },
+              {
+                q: 'What is the average LBI water temperature by month?',
+                a: 'Long-term NOAA averages for the ocean off LBI: about 63°F in June, 70°F in July, 73°F in August (the warmest month), and 70°F in September, dropping to the mid 30s°F in late winter. The full month-by-month table is above.',
               },
               {
                 q: 'Is there a surf report for LBI?',
@@ -289,6 +350,10 @@ export default function ConditionsPage() {
                 ['ship-bottom', 'Ship Bottom'],
                 ['long-beach-township', 'Long Beach Township'],
                 ['beach-haven', 'Beach Haven'],
+                ['holgate', 'Holgate'],
+                ['brant-beach', 'Brant Beach'],
+                ['loveladies', 'Loveladies'],
+                ['north-beach', 'North Beach'],
               ].map(([slug, name]) => (
                 <Link
                   key={slug}

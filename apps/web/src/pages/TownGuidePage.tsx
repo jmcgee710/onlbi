@@ -4,6 +4,7 @@ import { findTownGuide, townGuides } from '../data/townGuides'
 import { beachBadgeInfo } from '../data/beachBadges'
 import { lifeguardInfo } from '../data/beaches'
 import { towns } from '../data/towns'
+import { buildBreadcrumbSchema } from '../lib/breadcrumbSchema'
 import FaqSection from '../components/FaqSection'
 
 interface TownGuidePageProps {
@@ -12,9 +13,12 @@ interface TownGuidePageProps {
 
 export default function TownGuidePage({ slug }: TownGuidePageProps) {
   const guide = findTownGuide(slug)
-  const badge  = beachBadgeInfo.find(b => b.townSlug === slug)
-  const guards = lifeguardInfo.find(l => l.townSlug === slug)
-  const town   = towns.find(t => t.slug === slug)
+  // Section guides (Holgate, Loveladies, …) carry partOf — badge, lifeguard,
+  // and town-hall data all belong to the parent municipality (LBT).
+  const dataSlug = guide?.partOf?.slug ?? slug
+  const badge  = beachBadgeInfo.find(b => b.townSlug === dataSlug)
+  const guards = lifeguardInfo.find(l => l.townSlug === dataSlug)
+  const town   = towns.find(t => t.slug === dataSlug)
 
   if (!guide) {
     return (
@@ -39,10 +43,15 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
       addressRegion: 'NJ',
       addressCountry: 'US',
     },
-    containedInPlace: {
-      '@type': 'Place',
-      name: 'Long Beach Island, New Jersey',
-    },
+    containedInPlace: guide.partOf
+      ? {
+          '@type': 'Place',
+          name: `${guide.partOf.name}, Long Beach Island, New Jersey`,
+        }
+      : {
+          '@type': 'Place',
+          name: 'Long Beach Island, New Jersey',
+        },
     ...(guide.neighborhoods && guide.neighborhoods.length > 0
       ? {
           containsPlace: guide.neighborhoods.map(n => ({
@@ -54,12 +63,24 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
       : {}),
   }
 
+  const breadcrumbData = buildBreadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'LBI Towns', path: '/towns' },
+    ...(guide.partOf ? [{ name: guide.partOf.name, path: `/${guide.partOf.slug}` }] : []),
+    { name: guide.name, path: `/${guide.slug}` },
+  ])
+
   return (
     <div className="pg-wrap">
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
@@ -69,8 +90,21 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
           <span className="rule" />
           <span>{guide.eyebrow}</span>
         </div>
-        <h1>{guide.name.split(' ').slice(0, -1).join(' ') || guide.name}{' '}<em>{guide.name.split(' ').slice(-1)[0]}</em></h1>
+        <h1>
+          {guide.name.includes(' ')
+            ? <>{guide.name.split(' ').slice(0, -1).join(' ')}{' '}<em>{guide.name.split(' ').slice(-1)[0]}</em></>
+            : <em>{guide.name}</em>}
+        </h1>
         <p className="pg-lede">{guide.intro}</p>
+        {guide.partOf && (
+          <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 10 }}>
+            {guide.name} is a section of{' '}
+            <Link to={`/${guide.partOf.slug}`} style={{ color: 'var(--teal-deep)', fontWeight: 600 }}>
+              {guide.partOf.name}
+            </Link>
+            {' '}— township beach badges, parking rules, and services apply here.
+          </p>
+        )}
 
         <div className="pg-tabs pg-tabs-static" style={{ pointerEvents: 'none' }}>
           <div className="pg-tab active">
@@ -133,7 +167,15 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 14 }}>
                 {guide.neighborhoods.map((n, i) => (
                   <li key={i} style={{ paddingLeft: 14, borderLeft: '2px solid var(--line)' }}>
-                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, margin: 0 }}>{n.name}</h3>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, margin: 0 }}>
+                      {n.slug ? (
+                        <Link to={`/${n.slug}`} style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
+                          {n.name} →
+                        </Link>
+                      ) : (
+                        n.name
+                      )}
+                    </h3>
                     <div style={{ fontSize: 12, color: 'var(--teal-deep)', fontWeight: 600, margin: '2px 0 6px' }}>
                       {n.position}
                     </div>
@@ -249,7 +291,7 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
                 </Link>
               </li>
               <li>
-                <Link to={`/beaches/${guide.slug}`} style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
+                <Link to={`/beaches/${dataSlug}`} style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
                   Beach details &amp; badge prices →
                 </Link>
               </li>
@@ -275,7 +317,19 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
             <p className="aside-title">All LBI Towns</p>
             <ul className="aside-list">
               {townGuides
-                .filter(t => t.slug !== guide.slug)
+                .filter(t => !t.partOf && t.slug !== guide.slug)
+                .map(t => (
+                  <li key={t.slug}>
+                    <Link to={`/${t.slug}`} style={{ color: 'var(--ink-soft)', textDecoration: 'none', fontWeight: 500 }}>
+                      {t.name} →
+                    </Link>
+                  </li>
+                ))}
+            </ul>
+            <p className="aside-title" style={{ marginTop: 14 }}>LBT Sections</p>
+            <ul className="aside-list">
+              {townGuides
+                .filter(t => t.partOf && t.slug !== guide.slug)
                 .map(t => (
                   <li key={t.slug}>
                     <Link to={`/${t.slug}`} style={{ color: 'var(--ink-soft)', textDecoration: 'none', fontWeight: 500 }}>

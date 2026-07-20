@@ -19,6 +19,8 @@ export type Neighborhood = {
   name: string
   position: string
   blurb: string
+  /** Slug of a dedicated section guide page, when one exists (e.g. 'holgate'). */
+  slug?: string
 }
 
 export type TownGuide = {
@@ -35,6 +37,9 @@ export type TownGuide = {
   faqs?: { q: string; a: string }[]
   bestFor: string
   related: { slug: string; name: string }[]
+  /** Set when this guide covers a SECTION of a larger municipality (LBT).
+   *  Badge/lifeguard/town-hall lookups fall through to the parent's data. */
+  partOf?: { slug: string; name: string }
 }
 
 export const townGuides: TownGuide[] = [
@@ -119,6 +124,10 @@ export const townGuides: TownGuide[] = [
       {
         q: 'Where is the Beach Haven public dock?',
         a: "The public docks sit on the bay side of town around the Schooner's Wharf and Bay Village area, near Centre Street and 9th Street. It's where the bay tour boats, parasail and jet-ski operators launch, and a popular spot for crabbing off the bulkheads and watching the sunset over Barnegat Bay.",
+      },
+      {
+        q: 'What is there to do in Beach Haven at night?',
+        a: "More than anywhere else on LBI. Fantasy Island's rides and arcade run into the evening in summer, Surflight Theatre stages professional musicals, Show Place Ice Cream Parlour puts on its singing-server show, and the bar scene centers on Buckalew's and the bayfront restaurants around Schooner's Wharf.",
       },
     ],
     bestFor: "Families with kids, first-time LBI visitors, groups who want walkable food and nightlife, and anyone who values activity over solitude.",
@@ -374,18 +383,21 @@ export const townGuides: TownGuide[] = [
       },
       {
         name: 'Loveladies',
+        slug: 'loveladies',
         position: 'North end — between Barnegat Light and Harvey Cedars',
         blurb:
           'The most upscale stretch of LBI: large, architect-designed homes on wide lots with beaches that are nearly empty on weekdays. Home to the LBI Foundation of the Arts & Sciences. Almost entirely residential by design.',
       },
       {
         name: 'North Beach',
+        slug: 'north-beach',
         position: 'North-central — between Harvey Cedars and Surf City',
         blurb:
           'A tiny, quiet residential strip with no commercial district at all. The appeal is exactly that — a calm beach week away from the boulevard noise.',
       },
       {
         name: 'Brant Beach',
+        slug: 'brant-beach',
         position: 'Central — just south of Ship Bottom',
         blurb:
           "The largest section of Long Beach Township and a family-rental favorite. Wide beaches, easy parking, the Long Beach Boulevard bike path, and Bayview Park's bayside swimming, courts, dog park, and summer concerts.",
@@ -445,6 +457,7 @@ export const townGuides: TownGuide[] = [
       },
       {
         name: 'Holgate, Beach Haven Heights & Beach Haven Inlet',
+        slug: 'holgate',
         position: 'South tip — the peninsula south of Beach Haven borough',
         blurb:
           "The township's southern peninsula runs from Beach Haven borough down to the Edwin B. Forsythe National Wildlife Refuge at the island's tip. Wide, uncrowded beaches; the refuge end is closed April 1 – Aug 31 for piping plover nesting.",
@@ -454,6 +467,250 @@ export const townGuides: TownGuide[] = [
     related: [
       { slug: 'beach-haven', name: 'Beach Haven' },
       { slug: 'barnegat-light', name: 'Barnegat Light' },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LONG BEACH TOWNSHIP SECTION GUIDES — dedicated pages for the sections
+  // people actually search for. Each carries partOf so badge/lifeguard/town
+  // data falls through to Long Beach Township. Positions stay relative —
+  // exact street boundaries are not publicly documented, so we never invent
+  // them.
+  // ─────────────────────────────────────────────────────────────────────────
+
+  // ── HOLGATE ────────────────────────────────────────────────────────────────
+  {
+    slug: 'holgate',
+    name: 'Holgate',
+    shortName: 'Holgate',
+    h1: "Holgate, NJ — LBI's Wild Southern Tip",
+    eyebrow: 'Holgate · Long Beach Twp. · South Tip',
+    metaTitle: "Holgate NJ Guide — LBI's Quiet Southern Tip, Beaches & Wildlife Refuge",
+    metaDescription:
+      'Holgate is the southern tip of Long Beach Island — quiet, wide beaches, the Forsythe Wildlife Refuge, free and paid parking, LBT beach badges, and where to eat.',
+    partOf: { slug: 'long-beach-township', name: 'Long Beach Township' },
+    intro:
+      "Holgate is the southernmost section of Long Beach Island — the quiet peninsula that begins where Beach Haven borough ends and runs down to Beach Haven Inlet at the island's tip. It's part of Long Beach Township, not Beach Haven, and it trades the south end's crowds for wide beaches, a slower pace, and a genuinely wild finish: the last two miles of the island are a national wildlife refuge.",
+    sections: [
+      {
+        title: 'Where Holgate is (and what it is)',
+        body:
+          "Holgate starts at Nelson Avenue, the southern boundary of Beach Haven borough, and runs south to Beach Haven Inlet. Although most Holgate addresses read \"Beach Haven, NJ 08008,\" the section belongs to Long Beach Township — a distinction that matters for beach badges, parking rules, and municipal services. From downtown Beach Haven it's a five-minute drive south on Long Beach Boulevard, which makes Holgate popular with families who want Beach Haven's restaurants and amusements close by without staying in the middle of them.",
+      },
+      {
+        title: 'Beaches in Holgate',
+        body:
+          "Holgate's ocean beaches are wide and noticeably less crowded than Beach Haven's, guarded in season at designated streets. Because Holgate is Long Beach Township, the LBT beach badge applies here — one badge covers every township section from Loveladies down to Holgate, one of the best-value badges on the island. The surf near the inlet can run stronger than mid-island; swim at guarded beaches.",
+      },
+      {
+        title: 'Edwin B. Forsythe National Wildlife Refuge',
+        body:
+          "The southern end of Holgate is the Holgate Unit of the Edwin B. Forsythe National Wildlife Refuge — an undeveloped stretch of beach, dune, and tidal marsh running to Beach Haven Inlet. It's one of New Jersey's most important nesting grounds for piping plovers, so the refuge closes every year from April 1 through August 31. From September through March it reopens for birding, shell-hunting, and surf fishing, and walking to the island's very tip is one of the great off-season LBI experiences.",
+      },
+      {
+        title: 'Parking in Holgate',
+        body:
+          "Street parking in Holgate is free, with Long Beach Township's seasonal side-of-street rules in effect (no parking on easterly/southerly sides 9am Wednesday through 9am Sunday, May 1 – September 30). At the southern end, near the refuge entrance, the township operates a pay lot — the easiest option for refuge walkers and surf fishermen in the open season.",
+      },
+      {
+        title: 'Where to Eat in Holgate',
+        body:
+          "Holgate keeps it simple. Bowker's South Beach Deli & Grill is the local staple for breakfast sandwiches, bagels, and cheesesteaks. For everything else, downtown Beach Haven's restaurant row — the densest dining scene on LBI — is five minutes north.",
+      },
+    ],
+    faqs: [
+      {
+        q: 'Is Holgate part of Beach Haven?',
+        a: 'No. Holgate is a section of Long Beach Township, even though its mailing addresses say "Beach Haven, NJ 08008." Beach Haven borough ends at Nelson Avenue; everything south of that line is Holgate. That means Long Beach Township beach badges and parking rules apply, not Beach Haven\'s.',
+      },
+      {
+        q: 'Can you walk to the southern tip of LBI at Holgate?',
+        a: 'Yes, from September 1 through March 31, when the Holgate Unit of the Forsythe National Wildlife Refuge is open — the walk to Beach Haven Inlet crosses undeveloped refuge beach. The refuge is closed April 1 through August 31 to protect nesting piping plovers.',
+      },
+      {
+        q: 'What beach badge do I need in Holgate?',
+        a: "A Long Beach Township badge — Holgate is a township section, so the LBT badge applies, and the same badge also covers every other township section from Brant Beach up to Loveladies.",
+      },
+    ],
+    bestFor:
+      "Families who want Beach Haven's amenities a short drive away without the crowds, surf fishermen, birders, and anyone drawn to the quietest, wildest end of the island.",
+    related: [
+      { slug: 'long-beach-township', name: 'Long Beach Township' },
+      { slug: 'beach-haven', name: 'Beach Haven' },
+    ],
+  },
+
+  // ── LOVELADIES ─────────────────────────────────────────────────────────────
+  {
+    slug: 'loveladies',
+    name: 'Loveladies',
+    shortName: 'Loveladies',
+    h1: "Loveladies, NJ — LBI's Most Exclusive Stretch",
+    eyebrow: 'Loveladies · Long Beach Twp. · North End',
+    metaTitle: "Loveladies NJ Guide — LBI's Most Exclusive Beach Community",
+    metaDescription:
+      'Loveladies on Long Beach Island — architect-designed homes, quiet wide-lot beaches, the LBI Foundation of the Arts & Sciences, and how the section got its name.',
+    partOf: { slug: 'long-beach-township', name: 'Long Beach Township' },
+    intro:
+      "Loveladies is the most exclusive stretch of Long Beach Island — a section of Long Beach Township on the island's north end, between Barnegat Light and Harvey Cedars. It's known for large architect-designed homes on wide lots, beaches that stay quiet even in August, and an almost total absence of commercial development. That last part is by design, and it's exactly why people love it.",
+    sections: [
+      {
+        title: 'Where Loveladies is',
+        body:
+          "Loveladies sits on the north end of LBI, south of Barnegat Light and — counterintuitively — north of Harvey Cedars. Many first-time visitors assume the townships run in neat blocks, but Long Beach Township is a patchwork: Loveladies is one of its northern pieces, wedged between two independent boroughs. It's about ten minutes from the Causeway, up Long Beach Boulevard.",
+      },
+      {
+        title: 'Beaches in Loveladies',
+        body:
+          "Loveladies' beaches are among the quietest on the island — wide, backed by high dunes, and served by mostly private walkways with public access points along the boulevard. Long Beach Township badges apply here, and lifeguards cover designated beaches in season. On a weekday morning you can have a stretch of Atlantic practically to yourself.",
+      },
+      {
+        title: 'The LBI Foundation of the Arts & Sciences',
+        body:
+          "The Long Beach Island Foundation of the Arts and Sciences — the island's cultural anchor — sits on the bay side of Loveladies. Founded in 1948, it runs year-round classes, exhibitions, lectures, and summer programs for kids, and its campus of studios and galleries is open to visitors. If Loveladies has a \"downtown,\" this is it.",
+      },
+      {
+        title: 'Why is it called Loveladies?',
+        body:
+          "The name comes from Thomas Lovelady, a hunter from Waretown who kept a shack and shooting blinds on a small island in the bay here in the 1800s. When the U.S. Life-Saving Service opened Station #114 nearby in the 1870s, it took the name Lovelady's Island Station, and the name stuck to the surrounding shore. The area was briefly renamed Long Beach Park in the World War II era, but the old name won out — it's been officially Loveladies again since the 1950s.",
+      },
+      {
+        title: 'Around Loveladies',
+        body:
+          "There are almost no businesses in Loveladies — no restaurant strip, no shops — and residents like it that way. For food and supplies, Barnegat Light's restaurants and Viking Village are a few minutes north, and Harvey Cedars' small dining cluster is just south. The bay side is calm and shallow, good for paddleboarding and kayaking.",
+      },
+    ],
+    faqs: [
+      {
+        q: 'Why is it called Loveladies?',
+        a: "It's named for Thomas Lovelady, a Waretown waterfowl hunter who kept a gunning shack on a small bay island here in the 1800s. The U.S. Life-Saving Station built nearby in the 1870s was named Lovelady's Island Station, and the name spread to the whole section.",
+      },
+      {
+        q: 'Is Loveladies its own town?',
+        a: 'No — Loveladies is a section of Long Beach Township, not an independent borough. It sits between Barnegat Light and Harvey Cedars on the north end of LBI, and Long Beach Township beach badges and rules apply.',
+      },
+      {
+        q: 'Are there restaurants or shops in Loveladies?',
+        a: "Almost none — Loveladies is deliberately residential. The nearest dining is in Barnegat Light a few minutes north (Mustache Bill's, Kubel's, Viking Village) or Harvey Cedars just south (Black-Eyed Susans, Harvey Cedars Shellfish Co.).",
+      },
+    ],
+    bestFor:
+      'Travelers who want maximum quiet and privacy, architecture lovers, artists drawn to the LBI Foundation, and renters trading walkability for wide-open beaches.',
+    related: [
+      { slug: 'long-beach-township', name: 'Long Beach Township' },
+      { slug: 'barnegat-light', name: 'Barnegat Light' },
+      { slug: 'harvey-cedars', name: 'Harvey Cedars' },
+    ],
+  },
+
+  // ── NORTH BEACH ────────────────────────────────────────────────────────────
+  {
+    slug: 'north-beach',
+    name: 'North Beach',
+    shortName: 'North Beach',
+    h1: "North Beach, NJ — LBI's Quietest Residential Stretch",
+    eyebrow: 'North Beach · Long Beach Twp. · North-Central',
+    metaTitle: "North Beach NJ Guide — LBI's Quiet Residential Stretch",
+    metaDescription:
+      'North Beach is a small residential section of Long Beach Township between Harvey Cedars and Surf City — quiet beaches, no commercial strip, LBT beach badges.',
+    partOf: { slug: 'long-beach-township', name: 'Long Beach Township' },
+    intro:
+      "North Beach is a short, entirely residential section of Long Beach Township tucked between Harvey Cedars and Surf City on the north-central stretch of Long Beach Island. There's no commercial district at all — no shops, no restaurants — and that's precisely its appeal: a calm beach week with the boulevard noise turned all the way down.",
+    sections: [
+      {
+        title: 'Where North Beach is',
+        body:
+          "North Beach occupies a narrow run of the island between Harvey Cedars to the north and Surf City to the south. Like Loveladies and Holgate, it's a section of Long Beach Township rather than its own borough — one of the pieces of the township's patchwork woven between LBI's independent towns. Everything is a few minutes away: Surf City's shops and food to the south, Harvey Cedars' Sunset Park to the north.",
+      },
+      {
+        title: 'Beaches in North Beach',
+        body:
+          "The beaches here are quiet and uncrowded, used almost exclusively by the surrounding homes and their renters. Long Beach Township badges apply — the same badge that covers Brant Beach, Loveladies, and Holgate — and designated beaches are guarded in season. The dune line is tall and well-vegetated, so most access is by walkways at the street ends.",
+      },
+      {
+        title: 'Staying in North Beach',
+        body:
+          "North Beach is a rental-house section: oceanside and bayside homes, many of them large, with nothing commercial in between. Renters here plan on driving or biking for everything — Surf City's boulevard strip is the closest stop for coffee, groceries, and dinner, and the island-long bike route along Long Beach Boulevard passes right through.",
+      },
+    ],
+    faqs: [
+      {
+        q: 'Is North Beach a town?',
+        a: "No — North Beach is a residential section of Long Beach Township, located between Harvey Cedars and Surf City. It has no municipal government of its own; Long Beach Township badges, parking rules, and services apply.",
+      },
+      {
+        q: 'Where do you eat or shop near North Beach?',
+        a: "North Beach itself has no businesses. Surf City, immediately south, has the closest restaurants, coffee, and groceries along Long Beach Boulevard; Harvey Cedars' dining cluster is just north.",
+      },
+    ],
+    bestFor:
+      'Renters who want the quietest possible beach week, families who prefer house-and-beach routines over boardwalk energy, and anyone happy to drive five minutes for dinner.',
+    related: [
+      { slug: 'long-beach-township', name: 'Long Beach Township' },
+      { slug: 'harvey-cedars', name: 'Harvey Cedars' },
+      { slug: 'surf-city', name: 'Surf City' },
+    ],
+  },
+
+  // ── BRANT BEACH ────────────────────────────────────────────────────────────
+  {
+    slug: 'brant-beach',
+    name: 'Brant Beach',
+    shortName: 'Brant Beach',
+    h1: 'Brant Beach, NJ — Family Base Camp on LBI',
+    eyebrow: 'Brant Beach · Long Beach Twp. · Central',
+    metaTitle: 'Brant Beach NJ Guide — Family Beaches & Bayview Park on LBI',
+    metaDescription:
+      "Brant Beach is Long Beach Township's largest section — wide family beaches, Bayview Park's bayside swimming and courts, the boulevard bike path, parking, and dining.",
+    partOf: { slug: 'long-beach-township', name: 'Long Beach Township' },
+    intro:
+      "Brant Beach is the largest section of Long Beach Township and one of LBI's favorite family rental areas. It sits on the central island just south of Ship Bottom — close enough to the Causeway for easy arrivals, far enough south for a neighborhood feel — with wide ocean beaches on one side and Bayview Park's calm bayside swimming on the other.",
+    sections: [
+      {
+        title: 'Where Brant Beach is',
+        body:
+          "Brant Beach begins just south of Ship Bottom and runs down the central island — the northern anchor of Long Beach Township's big central patchwork of sections. The township's municipal offices sit here on Long Beach Boulevard, which makes Brant Beach the township's de facto hub. It's a section of Long Beach Township, not an independent borough, so LBT badges and parking rules apply.",
+      },
+      {
+        title: 'Beaches in Brant Beach',
+        body:
+          "Brant Beach's ocean beaches are wide, family-oriented, and guarded in season, with access at the numbered streets. The Long Beach Township badge applies — one badge covers every township section from Loveladies to Holgate, the broadest coverage of any badge on the island. Street parking near the beach is generally easier to find here than in Beach Haven or Ship Bottom.",
+      },
+      {
+        title: 'Bayview Park',
+        body:
+          "Bayview Park, around 68th Street on the bay side, is Brant Beach's signature amenity and one of the best family spots on LBI: a guarded bayside swimming area with shallow, calm water for young kids, plus a playground, basketball, volleyball, pickleball, a dedicated dog park, and free summer concerts. The township also hosts summer events here — it's the kind of place a family can burn a whole non-beach afternoon.",
+      },
+      {
+        title: 'Getting around Brant Beach',
+        body:
+          "The bike path along Long Beach Boulevard runs the length of Brant Beach and is one of the best ways to move around the central island — bike to Ship Bottom's shops and food in minutes, or cruise south through the township sections. The free LBI Shuttle also serves the boulevard in season.",
+      },
+      {
+        title: 'Where to Eat in Brant Beach',
+        body:
+          "Daddy O's Restaurant & Hotel anchors Brant Beach dining with a modern bar-restaurant scene. Jersey Girl Grill covers casual American mid-island, and Blue Water Cafe is a short hop south in Haven Beach. For a bigger restaurant crawl, Ship Bottom's food strip is minutes north and Beach Haven's restaurant row is a ten-minute drive south.",
+      },
+    ],
+    faqs: [
+      {
+        q: 'Is Brant Beach its own town?',
+        a: 'No — Brant Beach is the largest section of Long Beach Township, on the central island just south of Ship Bottom. Long Beach Township badges, parking rules, and services apply, and the township municipal offices are located in Brant Beach.',
+      },
+      {
+        q: 'What beach badge do I need in Brant Beach?',
+        a: 'A Long Beach Township badge. It covers Brant Beach and every other township section — Loveladies, North Beach, the central sections, and Holgate — which makes it the broadest-coverage badge on LBI.',
+      },
+      {
+        q: 'Does Brant Beach have a bay beach?',
+        a: 'Yes — Bayview Park, around 68th Street on the bay side, has a guarded bayside swimming area with shallow, calm water, plus a playground, courts, a dog park, and free summer concerts.',
+      },
+    ],
+    bestFor:
+      'Families with young kids (calm bay swimming plus ocean beaches), renters who want a central location with easy parking, and anyone who plans to bike the island.',
+    related: [
+      { slug: 'long-beach-township', name: 'Long Beach Township' },
+      { slug: 'ship-bottom', name: 'Ship Bottom' },
     ],
   },
 ]

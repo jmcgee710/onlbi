@@ -16,10 +16,14 @@ const towns = [
   'harvey-cedars', 'barnegat-light', 'long-beach-township',
 ]
 
-// The 20 sitemap URLs.
+// LBT section guides — top-level pages only (no /beaches/:town data for these).
+const sections = ['holgate', 'loveladies', 'north-beach', 'brant-beach']
+
+// The 24 sitemap URLs.
 const routesToPrerender = [
   '/', '/beaches', '/towns', '/lbi-conditions', '/accessibility', '/eat', '/do', '/getting-around',
   ...towns.map(t => `/${t}`),
+  ...sections.map(s => `/${s}`),
   ...towns.map(t => `/beaches/${t}`),
 ]
 
@@ -57,3 +61,35 @@ for (const route of routesToPrerender) {
 }
 
 console.log(`\n[prerender] ${ok}/${routesToPrerender.length} routes written`)
+
+// ── Sitemap — generated from routesToPrerender so it can never drift from the
+// actual prerendered routes (replaces the old hand-maintained public/sitemap.xml).
+const SITE_URL = 'https://onlongbeachisland.com'
+const lastmod = new Date().toISOString().slice(0, 10)
+const routeMeta = route => {
+  if (route === '/') return { changefreq: 'daily', priority: '1.0' }
+  if (route === '/lbi-conditions') return { changefreq: 'daily', priority: '0.9' }
+  if (route === '/towns') return { changefreq: 'weekly', priority: '0.9' }
+  if (route.startsWith('/beaches/')) return { changefreq: 'weekly', priority: '0.7' }
+  return { changefreq: 'weekly', priority: '0.8' }
+}
+const sitemap = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+  ...routesToPrerender.map(route => {
+    const { changefreq, priority } = routeMeta(route)
+    const loc = route === '/' ? `${SITE_URL}/` : `${SITE_URL}${route}`
+    return [
+      '  <url>',
+      `    <loc>${loc}</loc>`,
+      `    <lastmod>${lastmod}</lastmod>`,
+      `    <changefreq>${changefreq}</changefreq>`,
+      `    <priority>${priority}</priority>`,
+      '  </url>',
+    ].join('\n')
+  }),
+  '</urlset>',
+  '',
+].join('\n')
+fs.writeFileSync(toAbs('dist/sitemap.xml'), sitemap)
+console.log(`[sitemap] dist/sitemap.xml written with ${routesToPrerender.length} URLs`)

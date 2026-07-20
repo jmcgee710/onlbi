@@ -4,6 +4,7 @@ import { beaches, beachRules, lifeguardInfo } from '../data/beaches'
 import { beachBadgeInfo } from '../data/beachBadges'
 import { accessibleBeaches, beachTransportServices } from '../data/accessibility'
 import { findTownGuide } from '../data/townGuides'
+import { buildBreadcrumbSchema } from '../lib/breadcrumbSchema'
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 
@@ -77,8 +78,19 @@ export default function BeachTownPage() {
 
   const hasAccessibility = accessible.length > 0 || transport.length > 0 || !!beach.mobiMatStreets?.length
 
+  const breadcrumbData = buildBreadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'LBI Beaches', path: '/beaches' },
+    { name: displayName, path: `/beaches/${townSlug}` },
+  ])
+
   return (
     <div className="pg-wrap">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
+      />
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <div className="pg-hero">

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { townGuides } from '../data/townGuides'
 import { beachBadgeInfo } from '../data/beachBadges'
 import { SITE_URL } from '../lib/seo'
+import { buildBreadcrumbSchema } from '../lib/breadcrumbSchema'
 import LbiTownsMap from '../components/LbiTownsMap'
 import FaqSection from '../components/FaqSection'
 
@@ -23,6 +24,17 @@ export default function TownsPage() {
   const ordered = ORDER
     .map(slug => townGuides.find(t => t.slug === slug))
     .filter((t): t is NonNullable<typeof t> => Boolean(t))
+
+  // JSON-LD: the towns-map image — a real indexable file targeting the
+  // "lbi towns map" query cluster (also used as this page's og:image).
+  const mapImageData = {
+    '@context': 'https://schema.org',
+    '@type': 'ImageObject',
+    contentUrl: `${SITE_URL}/lbi-towns-map.png`,
+    name: 'Map of LBI Towns',
+    description:
+      'Map of the 6 LBI towns north to south — Barnegat Light, Harvey Cedars, Surf City, Ship Bottom, Long Beach Township, and Beach Haven — with the Long Beach Township sections shaded.',
+  }
 
   // JSON-LD: ordered ItemList of the six municipalities for SEO.
   const itemListData = {
@@ -46,6 +58,21 @@ export default function TownsPage() {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListData) }}
       />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(mapImageData) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildBreadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'LBI Towns', path: '/towns' },
+          ])),
+        }}
+      />
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <div className="pg-hero">
@@ -54,16 +81,18 @@ export default function TownsPage() {
           <span className="rule" />
           <span>6 towns · 18 miles</span>
         </div>
-        <h1>LBI <em>Towns</em></h1>
+        <h1>LBI Towns <em>&amp; Map</em></h1>
         <p className="pg-lede">
-          <b>Six distinct municipalities</b> stretch 18 miles down Long Beach Island —
-          each with its own personality, beach badges, and pace. Pick the one that
-          matches your trip.
+          <b>LBI stands for Long Beach Island</b>, an 18-mile barrier island on the Jersey
+          Shore in Ocean County, New Jersey. It sits between Barnegat Bay and the Atlantic,
+          reached by the Route 72 Causeway into Ship Bottom. Six distinct municipalities
+          stretch north to south — each with its own personality, beach badges, and pace.
+          Pick the one that matches your trip.
         </p>
         <div className="pg-tabs pg-tabs-static" style={{ pointerEvents: 'none' }}>
           <div className="pg-tab active">
             <span className="tab-lbl">Towns</span>
-            <span className="tab-val">{townGuides.length}</span>
+            <span className="tab-val">{ordered.length}</span>
           </div>
           <div className="pg-tab">
             <span className="tab-lbl">North to South</span>
@@ -140,6 +169,43 @@ export default function TownsPage() {
             )
           })}
 
+          {/* LBT section guides — dedicated pages for the searched-for sections */}
+          <article className="lc">
+            <h2 className="lc-name" style={{ fontSize: 22, marginBottom: 10 }}>Inside Long Beach Township</h2>
+            <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)', marginBottom: 12 }}>
+              Long Beach Township isn&apos;t one continuous town — it&apos;s a patchwork of sections
+              woven between the boroughs. The four most searched-for sections have their own guides:
+            </p>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              {[
+                { slug: 'holgate', name: 'Holgate' },
+                { slug: 'brant-beach', name: 'Brant Beach' },
+                { slug: 'loveladies', name: 'Loveladies' },
+                { slug: 'north-beach', name: 'North Beach' },
+              ].map(s => (
+                <Link
+                  key={s.slug}
+                  to={`/${s.slug}`}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '10px 16px',
+                    background: 'var(--sand)',
+                    border: '1px solid var(--line)',
+                    borderRadius: 6,
+                    color: 'var(--ink)',
+                    textDecoration: 'none',
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 16,
+                  }}
+                >
+                  {s.name} <span style={{ color: 'var(--teal-deep)' }}>→</span>
+                </Link>
+              ))}
+            </div>
+          </article>
+
           {/* Towns near LBI — mainland gateways people search alongside the island */}
           <article className="lc">
             <h2 className="lc-name" style={{ fontSize: 22, marginBottom: 10 }}>Towns near LBI (on the mainland)</h2>
@@ -164,6 +230,10 @@ export default function TownsPage() {
               {
                 q: 'What does LBI stand for?',
                 a: 'LBI stands for Long Beach Island, a barrier island on the Jersey Shore in Ocean County, New Jersey.',
+              },
+              {
+                q: 'Where is Long Beach Island?',
+                a: 'Long Beach Island is on the southern New Jersey coast in Ocean County, roughly halfway between Atlantic City and Toms River. The only road access is the Route 72 Causeway from Manahawkin, which brings you onto the island at Ship Bottom.',
               },
               {
                 q: 'What county is LBI in?',

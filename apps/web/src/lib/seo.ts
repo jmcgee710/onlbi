@@ -3,14 +3,14 @@ import { townGuides } from '../data/townGuides'
 export const SITE_URL = 'https://onlongbeachisland.com'
 const OG_IMAGE = `${SITE_URL}/logo-light.png`
 
-export type PageSeo = { title: string; description: string }
+export type PageSeo = { title: string; description: string; ogImage?: string }
 
 // Static per-page titles/descriptions — unique and keyword-targeted per route.
 const STATIC_SEO: Record<string, PageSeo> = {
   '/': {
-    title: 'On LBI — Long Beach Island Beach Guide',
+    title: 'Long Beach Island, NJ — Towns, Beaches, Conditions & Local Guide | On LBI',
     description:
-      'Your live guide to Long Beach Island, NJ — beach badge prices, tides and surf conditions, parking, wheelchair-accessible beaches, restaurants, and things to do in every LBI town.',
+      'The local guide to Long Beach Island, NJ — all 6 LBI towns, live ocean temperature and tides, 2026 beach badge prices, parking, restaurants, and things to do.',
   },
   '/beaches': {
     title: 'LBI Beach Badges & Conditions — Prices, Lifeguards, Rules | On LBI',
@@ -18,9 +18,10 @@ const STATIC_SEO: Record<string, PageSeo> = {
       'Compare 2026 beach badge prices, lifeguard hours, and beach rules for all six Long Beach Island towns, plus live beach conditions.',
   },
   '/towns': {
-    title: 'LBI Town Map & Guide — All 6 Long Beach Island Towns Compared | On LBI',
+    title: 'LBI Towns & Map — All 6 Towns of Long Beach Island, NJ (North to South)',
     description:
-      'Map and guide to all six Long Beach Island towns — Barnegat Light, Harvey Cedars, Surf City, Ship Bottom, Long Beach Township, and Beach Haven. See where each sits and which is right for your trip.',
+      'The 6 LBI towns in order from north to south — Barnegat Light to Holgate — with a map of Long Beach Island, 2026 beach badge prices, and which town fits your trip.',
+    ogImage: '/lbi-towns-map.png',
   },
   '/lbi-conditions': {
     title: 'LBI Ocean Temperature, Tides & Live Beach Conditions Today | On LBI',
@@ -89,9 +90,10 @@ function esc(s: string): string {
 
 /** Full per-page <head> SEO block injected at prerender time (server-only output). */
 export function buildHeadTags(pathname: string): string {
-  const { title, description } = getPageSeo(pathname)
+  const { title, description, ogImage } = getPageSeo(pathname)
   const path = normalize(pathname)
   const canonical = path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}`
+  const image = ogImage ? `${SITE_URL}${ogImage}` : OG_IMAGE
   return [
     `<title>${esc(title)}</title>`,
     `<meta name="description" content="${esc(description)}" />`,
@@ -99,9 +101,9 @@ export function buildHeadTags(pathname: string): string {
     `<meta property="og:title" content="${esc(title)}" />`,
     `<meta property="og:description" content="${esc(description)}" />`,
     `<meta property="og:url" content="${canonical}" />`,
-    `<meta property="og:image" content="${OG_IMAGE}" />`,
+    `<meta property="og:image" content="${image}" />`,
     `<meta name="twitter:title" content="${esc(title)}" />`,
     `<meta name="twitter:description" content="${esc(description)}" />`,
-    `<meta name="twitter:image" content="${OG_IMAGE}" />`,
+    `<meta name="twitter:image" content="${image}" />`,
   ].join('\n    ')
 }
