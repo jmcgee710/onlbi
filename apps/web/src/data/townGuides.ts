@@ -345,6 +345,11 @@ export const townGuides: TownGuide[] = [
         body:
           "Just west of Barnegat Light, reached by a single two-lane road, is High Bar Harbor — a secluded bayside lagoon community. Despite sharing Barnegat Light's gateway, it's technically part of Long Beach Township, not the borough. Nearly every home sits on the bay or a canal, making it one of the island's most boater-friendly enclaves.",
       },
+      {
+        title: 'Where Barnegat Light Ends',
+        body:
+          "The north end needs no explaining: the borough runs out of island at Barnegat Inlet, inside Barnegat Lighthouse State Park. The south end is the least settled boundary on LBI, and we would rather say so than guess. Barnegat Light's numbered grid runs 1st Street up to around 30th, with guarded beaches from 10th to 30th. South of that the next section is Loveladies, which belongs to Long Beach Township and doesn't use a street grid at all — it runs on tract numbers 1 to 176, counting down as you drive south, and its southernmost beach-badge entry is 87th Street. Two unrelated numbering systems meeting head-on means neither set of numbers locates the line, and there is no welcome sign pair here of the kind that marks the Harvey Cedars boundary. An Ocean County parcel record or a township tax map sheet would settle it; until one is pulled, we publish it as unresolved. What is certain is the practical part: once you are past the grid you are in Long Beach Township, on a township beach badge, and the ZIP changes from 08006 to 08008.",
+      },
     ],
     bestFor: "Travelers who want the quietest, most scenic corner of LBI. Fishermen. Sunrise people. Anyone willing to drive a little farther for fewer crowds.",
     related: [
@@ -384,6 +389,11 @@ export const townGuides: TownGuide[] = [
         title: 'Holgate (South End)',
         body:
           "The southernmost point of LBI, ending at the Edwin B. Forsythe National Wildlife Refuge. Quieter than Beach Haven, with wide, less-crowded beaches and access to the protected refuge for birding and shell-hunting (closed April 1 – August 31 for piping plover nesting). Bowker's South Beach Deli & Grill is the local favorite for breakfast, bagels, and cheesesteaks. Great for families who want Beach Haven's amenities a short drive away without being in the middle of them.",
+      },
+      {
+        title: 'Where Long Beach Township Begins and Ends',
+        body:
+          "It begins and ends more than once. Long Beach Township is non-contiguous — five separate pieces wrapped around the five boroughs — so driving the island north to south you enter and leave it repeatedly: Loveladies, then North Beach, then the long middle run from Brant Beach down to North Beach Haven, then Holgate at the tip. Four of its lines are pinned. At 31st Street the township meets Ship Bottom along the centerline of the street rather than at either end of it, so the north side of 31st is Ship Bottom and the south side is Brant Beach — neighbors facing each other need different badges. At William Street the Harvey Cedars grid stops and 124th Street begins North Beach, marked by two welcome signs standing at the same point on the Boulevard facing opposite directions. At 12th Street North Beach Haven ends and Beach Haven borough begins, confirmed three ways over. At Nelson Avenue Beach Haven ends again and Holgate runs south to the wildlife refuge. Two lines are softer: the North Beach edge against Surf City sits somewhere between Sherwood Way and North 25th Street, and the Loveladies edge against Harvey Cedars is inferred from a badge list around 87th Street. The Barnegat Light line is not established at street level at all. Every one of these, with what the claim rests on, is laid out on the LBI town boundaries page.",
       },
       {
         title: 'Beach Badges & Parking',

@@ -163,6 +163,13 @@ export type VillageBlocks = {
   note?: string
   /** Street name → block number. Absent where the numbering isn't settled. */
   crosswalk?: { name: string; block: number }[]
+  /**
+   * Rendered directly beneath the crosswalk chips. For the cases where the
+   * printed list does not cover the whole block range — a reader who counts the
+   * chips against the header and finds a gap should find the reason right there,
+   * not several sections further up the page.
+   */
+  crosswalkNote?: string
 }
 
 export const villageBlocks: VillageBlocks[] = [
@@ -242,6 +249,8 @@ export const villageBlocks: VillageBlocks[] = [
     streetRange: 'Herbert Ave (96) → block 109',
     confidence: 'official',
     note: 'Blocks 108 and 109 carry numbers but no names in the directory.',
+    crosswalkNote:
+      'The list ends at Georgia (107) but the range runs to 109: blocks 108 and 109 carry numbers with no posted street names in the directory, so there is nothing to put beside them.',
     crosswalk: [
       { name: 'Herbert', block: 96 }, { name: 'Jerome', block: 97 }, { name: 'Muriel', block: 98 },
       { name: 'Alabama', block: 99 }, { name: 'California', block: 100 }, { name: 'Florida', block: 101 },
@@ -256,6 +265,8 @@ export const villageBlocks: VillageBlocks[] = [
     confidence: 'official',
     note:
       'Posted at both ends: a Haven Beach post on the bay side of Virginia Ave at 10998, and another at MacEvoy Lane facing the Dunes post across the Boulevard. A single Beach Haven Terrace post also stands at Virginia Ave, beside a development wall that itself reads "Haven Beach" — the badge directory and both Haven Beach posts side with the wall, so that one post is most likely mislabeled.',
+    crosswalkNote:
+      'Weldon Avenue runs inside this range too, but carries no block number: the eleven state-named avenues already account for all eleven blocks from 110 to 120, and the badge directory does not list Weldon at all. That is the same gap that hides 124th Street and MacEvoy Lane — a street with no beach access has no reason to appear on a badge list. Its block number needs a street post to settle.',
     crosswalk: [
       { name: 'Virginia', block: 110 }, { name: 'North Carolina', block: 111 }, { name: 'South Carolina', block: 112 },
       { name: 'Kentucky', block: 113 }, { name: 'Tennessee', block: 114 }, { name: 'Idaho', block: 115 },
@@ -327,12 +338,16 @@ export type MarkerPost = {
   at: string
   /** Boulevard address the post stands at. */
   blvd: string
+  /** Set where the Boulevard number is read off the block rather than pinned to
+   *  a building — rendered as "approx." so it doesn't sit in a column of exact
+   *  addresses looking like one. */
+  blvdApprox?: boolean
   establishes: string
 }
 
 export const markerPosts: MarkerPost[] = [
   { reads: 'Welcome to Brant Beach', at: 'Between Harrington and Mea', blvd: '7299', establishes: 'Brant Beach ends at Harrington (73)' },
-  { reads: 'Peahala Park + "88 Mermaid La"', at: 'Mermaid Ln', blvd: '~8800', establishes: 'Mermaid is block 88, printed on the post' },
+  { reads: 'Peahala Park + "88 Mermaid La"', at: 'Mermaid Ln', blvd: '8800', blvdApprox: true, establishes: 'Mermaid is block 88, printed on the post' },
   { reads: "Sound's Edge / Beach Haven Park", at: '96th–97th', blvd: '9698', establishes: 'Beach Haven Park at blocks 96–97' },
   { reads: 'Township of Long Beach — Hideaway Bay Nature Trail', at: 'Louisiana / Nebraska', blvd: '10600', establishes: 'Louisiana 105, Nebraska 106' },
   { reads: 'Haven Beach', at: 'Virginia Ave — bay side', blvd: '10998', establishes: 'Haven Beach is a posted Township section starting at 110' },
@@ -401,11 +416,14 @@ export const numberingSystems: NumberingSystem[] = [
  * Holgate. Reversal two happens at Division Avenue — the very street people
  * mistake for the Surf City / Ship Bottom line.
  */
+// Four states, three transitions between them — so the list runs one item longer
+// than the count of reversals. Items 2–4 name which reversal they are, because
+// "changes direction three times" over four bullets otherwise reads as a miscount.
 export const numberingReversals: { step: string; detail: string }[] = [
   { step: 'Rising', detail: 'through Barnegat Light, 1st → 30th' },
-  { step: 'Falling', detail: 'from Loveladies through Surf City’s North series — tract 176 → 1, 86th → 69th, N 25th → N 1st' },
-  { step: 'Rising', detail: 'from Division Avenue on through Ship Bottom and the whole Township middle — S 1st → S 3rd, then up to block 133' },
-  { step: 'Falling', detail: 'again from Beach Haven Gardens to the end of Beach Haven, 34th → 1st' },
+  { step: 'Falling — reversal one', detail: 'from Loveladies through Surf City’s North series — tract 176 → 1, 86th → 69th, N 25th → N 1st' },
+  { step: 'Rising — reversal two', detail: 'from Division Avenue on through Ship Bottom and the whole Township middle — S 1st → S 3rd, then up to block 133' },
+  { step: 'Falling — reversal three', detail: 'again from Beach Haven Gardens to the end of Beach Haven, 34th → 1st' },
 ]
 
 // ── Sources ──────────────────────────────────────────────────────────────────

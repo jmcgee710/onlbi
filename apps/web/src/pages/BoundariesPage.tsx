@@ -301,6 +301,11 @@ export default function BoundariesPage() {
                       </span>
                     ))}
                   </div>
+                  {v.crosswalkNote && (
+                    <p style={{ fontSize: 12.5, color: 'var(--slate)', lineHeight: 1.5, margin: '8px 0 0' }}>
+                      {v.crosswalkNote}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
@@ -440,7 +445,12 @@ export default function BoundariesPage() {
                     <tr key={`${p.reads}-${p.blvd}`}>
                       <td style={{ ...td, color: 'var(--ink)', fontWeight: 500 }}>{p.reads}</td>
                       <td style={td}>{p.at}</td>
-                      <td style={{ ...td, whiteSpace: 'nowrap' }}>{p.blvd}</td>
+                      <td style={{ ...td, whiteSpace: 'nowrap' }}>
+                        {p.blvd}
+                        {p.blvdApprox && (
+                          <span style={{ color: 'var(--slate)', fontSize: 12 }}> approx.</span>
+                        )}
+                      </td>
                       <td style={td}>{p.establishes}</td>
                     </tr>
                   ))}

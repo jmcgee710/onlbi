@@ -5,6 +5,7 @@ import { tideKeyTimes } from '../data/conditions'
 import { todayEvents } from '../data/events'
 import { useTides } from '../hooks/useTides'
 import { useNow } from '../hooks/useNow'
+import { useClientDate, formatLongDate } from '../hooks/useClientDate'
 import { useWeather } from '../hooks/useWeather'
 import { useWaterTemp } from '../hooks/useWaterTemp'
 import { useUV, classifyUV } from '../hooks/useUV'
@@ -71,6 +72,8 @@ export default function TodayPage() {
 
   // Live clock — re-renders every minute so the chart markers track real time.
   const now = useNow()
+  // Client-only date for anything printed as text — see useClientDate.
+  const clientDate = useClientDate()
   const nowT = dateToFrac(now)
   const nowLabel = fmtNowLabel(now)
 
@@ -94,11 +97,11 @@ export default function TodayPage() {
   )
 
   // Live values for hero display, with mock fallbacks so it never blanks.
-  const heroDateStr = now.toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-  })
+  // The date comes from useClientDate, not `now`: this page is prerendered to
+  // static HTML, so a date rendered on the server is the build date and stays
+  // wrong until the next deploy. `now` is fine for chart math — it self-corrects
+  // on the first tick after hydration — but not for a printed date.
+  const heroDateStr = clientDate ? formatLongDate(clientDate) : ''
   const heroToday = liveForecast?.[0]
   const heroHi = heroToday?.hi ?? 81
   const heroLo = heroToday?.lo ?? 65
@@ -134,7 +137,7 @@ export default function TodayPage() {
         <div className="hero">
           <div className="hero-row">
             <div>
-              <div className="hero-eyebrow">Long Beach Island · {heroDateStr}</div>
+              <div className="hero-eyebrow">Long Beach Island{heroDateStr && ` · ${heroDateStr}`}</div>
               <h1>Today <em>on</em><br />the island.</h1>
               <div className="hero-sub">
                 {heroToday ? (
@@ -254,6 +257,7 @@ export default function TodayPage() {
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 14 }}>
             {[
               ['/towns', 'LBI Towns & Map'],
+              ['/lbi-town-boundaries', 'Town Boundaries'],
               ['/lbi-conditions', 'Water Temp & Tides'],
               ['/beaches', 'Beach Badges 2026'],
               ['/eat', 'Where to Eat'],

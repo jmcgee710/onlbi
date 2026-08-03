@@ -4,6 +4,7 @@ import { Sun, Umbrella, MapPinned, UtensilsCrossed, Anchor, Compass, Accessibili
 import { Analytics } from '@vercel/analytics/react'
 import Sidebar from './Sidebar'
 import { getPageSeo } from '../lib/seo'
+import { useClientDate, formatLongDate } from '../hooks/useClientDate'
 
 const mobileNav = [
   { to: '/',               Icon: Sun,             label: 'Today' },
@@ -17,6 +18,12 @@ const mobileNav = [
 
 export default function Layout() {
   const { pathname } = useLocation()
+
+  // Filled in after mount, deliberately. These pages are static HTML built once
+  // per deploy, so a date rendered on the server is the *build* date, not
+  // today's — see useClientDate. ` ` holds the line height until it lands.
+  const today = useClientDate()
+  const todayLabel = today ? formatLongDate(today) : ' '
 
   // Reset scroll to the top of the page on every route change. Without this,
   // navigating from the bottom of one page lands you at the bottom of the next.
@@ -49,7 +56,7 @@ export default function Layout() {
           </Link>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1, flex: 1, minWidth: 0, margin: '0 12px' }}>
             <span style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.01em' }}>
-              {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+              {todayLabel}
             </span>
             <span style={{ fontFamily: 'var(--font-display)', fontSize: 13, color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', letterSpacing: '0.01em' }}>
               because you're <span style={{ color: 'rgba(255,255,255,0.85)', fontStyle: 'normal', fontWeight: 500 }}>ON</span> the island, not in it!
@@ -63,9 +70,7 @@ export default function Layout() {
         {/* Desktop top bar */}
         <div className="topbar">
           <div className="crumbs">
-            <strong>Today</strong> · {new Date().toLocaleDateString('en-US', {
-              weekday: 'long', month: 'long', day: 'numeric',
-            })}
+            <strong>Today</strong> · {todayLabel}
           </div>
         </div>
 
