@@ -558,7 +558,9 @@ export default function BoundariesPage() {
           <div className="aside-card">
             <p className="aside-title">Go deeper</p>
             <ul className="aside-list">
-              <li><Link to="/towns" style={linkStyle}>All 6 LBI towns &amp; map →</Link></li>
+              <li><Link to="/lbi-map" style={linkStyle}>Map of LBI &amp; island layout →</Link></li>
+              <li><Link to="/lbi-town-services" style={linkStyle}>Police, schools &amp; ZIP codes →</Link></li>
+              <li><Link to="/towns" style={linkStyle}>All 6 LBI towns →</Link></li>
               <li><Link to="/long-beach-township" style={linkStyle}>Long Beach Township sections →</Link></li>
               <li><Link to="/beaches" style={linkStyle}>Beach badges by town →</Link></li>
             </ul>

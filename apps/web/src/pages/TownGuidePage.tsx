@@ -301,6 +301,11 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
                 </Link>
               </li>
               <li>
+                <Link to="/lbi-town-services" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
+                  Police, schools &amp; ZIP codes →
+                </Link>
+              </li>
+              <li>
                 <Link to="/eat" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
                   Eat &amp; Drink directory →
                 </Link>

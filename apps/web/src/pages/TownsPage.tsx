@@ -25,16 +25,10 @@ export default function TownsPage() {
     .map(slug => townGuides.find(t => t.slug === slug))
     .filter((t): t is NonNullable<typeof t> => Boolean(t))
 
-  // JSON-LD: the towns-map image — a real indexable file targeting the
-  // "lbi towns map" query cluster (also used as this page's og:image).
-  const mapImageData = {
-    '@context': 'https://schema.org',
-    '@type': 'ImageObject',
-    contentUrl: `${SITE_URL}/lbi-towns-map.png`,
-    name: 'Map of LBI Towns',
-    description:
-      'Map of the 6 LBI towns north to south — Barnegat Light, Harvey Cedars, Surf City, Ship Bottom, Long Beach Township, and Beach Haven — with the Long Beach Township sections shaded.',
-  }
+  // NOTE: the ImageObject for /lbi-towns-map.png now lives on /lbi-map, which
+  // is the page built for map intent. Declaring the same contentUrl here too
+  // split the signal between two pages for the queries /lbi-map exists to win.
+  // The image is still this page's og:image (see STATIC_SEO in lib/seo.ts).
 
   // JSON-LD: ordered ItemList of the six municipalities for SEO.
   const itemListData = {
@@ -57,11 +51,6 @@ export default function TownsPage() {
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListData) }}
-      />
-      <script
-        type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(mapImageData) }}
       />
       <script
         type="application/ld+json"
@@ -123,9 +112,12 @@ export default function TownsPage() {
             </p>
             <LbiTownsMap />
             <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 14 }}>
-              Need the lines street by street?{' '}
+              <Link to="/lbi-map" style={{ color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
+                Open the full LBI map &amp; island layout →
+              </Link>
+              {'  ·  '}
               <Link to="/lbi-town-boundaries" style={{ color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
-                See where every LBI town boundary falls →
+                Where every town boundary falls →
               </Link>
             </p>
           </article>
@@ -302,6 +294,21 @@ export default function TownsPage() {
               <li>
                 <Link to="/beaches" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
                   All beach badges side-by-side →
+                </Link>
+              </li>
+              <li>
+                <Link to="/lbi-map" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
+                  Map of LBI &amp; island layout →
+                </Link>
+              </li>
+              <li>
+                <Link to="/lbi-town-boundaries" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
+                  Town boundaries &amp; block numbers →
+                </Link>
+              </li>
+              <li>
+                <Link to="/lbi-town-services" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
+                  Police, schools &amp; ZIP codes →
                 </Link>
               </li>
               <li>
