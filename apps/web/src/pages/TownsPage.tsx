@@ -25,16 +25,10 @@ export default function TownsPage() {
     .map(slug => townGuides.find(t => t.slug === slug))
     .filter((t): t is NonNullable<typeof t> => Boolean(t))
 
-  // JSON-LD: the towns-map image — a real indexable file targeting the
-  // "lbi towns map" query cluster (also used as this page's og:image).
-  const mapImageData = {
-    '@context': 'https://schema.org',
-    '@type': 'ImageObject',
-    contentUrl: `${SITE_URL}/lbi-towns-map.png`,
-    name: 'Map of LBI Towns',
-    description:
-      'Map of the 6 LBI towns north to south — Barnegat Light, Harvey Cedars, Surf City, Ship Bottom, Long Beach Township, and Beach Haven — with the Long Beach Township sections shaded.',
-  }
+  // NOTE: the ImageObject for /lbi-towns-map.png now lives on /lbi-map, which
+  // is the page built for map intent. Declaring the same contentUrl here too
+  // split the signal between two pages for the queries /lbi-map exists to win.
+  // The image is still this page's og:image (see STATIC_SEO in lib/seo.ts).
 
   // JSON-LD: ordered ItemList of the six municipalities for SEO.
   const itemListData = {
@@ -57,11 +51,6 @@ export default function TownsPage() {
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListData) }}
-      />
-      <script
-        type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(mapImageData) }}
       />
       <script
         type="application/ld+json"
@@ -122,6 +111,35 @@ export default function TownsPage() {
               Bar Harbor is a bayside enclave off Barnegat Light.
             </p>
             <LbiTownsMap />
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 14 }}>
+              <Link to="/lbi-map" style={{ color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
+                Open the full LBI map &amp; island layout →
+              </Link>
+              {'  ·  '}
+              <Link to="/lbi-town-boundaries" style={{ color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
+                Where every town boundary falls →
+              </Link>
+            </p>
+          </article>
+
+          {/* Boundary teaser — the split-street hook, linking to the full page */}
+          <article className="lc">
+            <h2 className="lc-name" style={{ fontSize: 22, marginBottom: 10 }}>Which Town Is My Street Actually In?</h2>
+            <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)', marginBottom: 12 }}>
+              On LBI your mailing address often isn&apos;t your town. Two of the island&apos;s
+              boundaries run straight down the middle of a street, so neighbors facing each other
+              live in different towns, pay different taxes, and need different beach badges:
+            </p>
+            <ul className="aside-list" style={{ fontSize: 14 }}>
+              <li><span><strong>South 2nd Street</strong> — north side Surf City, south side Ship Bottom. All of South 3rd Street is Ship Bottom, despite a Surf City mailing address.</span></li>
+              <li><span><strong>31st Street</strong> — north side Ship Bottom, south side Brant Beach in Long Beach Township.</span></li>
+              <li><span><strong>Division Avenue is not a town line.</strong> It sits two blocks inside Surf City and marks where the street numbering flips, not where the towns divide.</span></li>
+            </ul>
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 12 }}>
+              <Link to="/lbi-town-boundaries" style={{ color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
+                Full boundary guide, plus block ranges for all 14 Long Beach Township villages →
+              </Link>
+            </p>
           </article>
 
           {ordered.map((t, i) => {
@@ -276,6 +294,21 @@ export default function TownsPage() {
               <li>
                 <Link to="/beaches" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
                   All beach badges side-by-side →
+                </Link>
+              </li>
+              <li>
+                <Link to="/lbi-map" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
+                  Map of LBI &amp; island layout →
+                </Link>
+              </li>
+              <li>
+                <Link to="/lbi-town-boundaries" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
+                  Town boundaries &amp; block numbers →
+                </Link>
+              </li>
+              <li>
+                <Link to="/lbi-town-services" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
+                  Police, schools &amp; ZIP codes →
                 </Link>
               </li>
               <li>

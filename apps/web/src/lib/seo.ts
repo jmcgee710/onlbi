@@ -23,6 +23,23 @@ const STATIC_SEO: Record<string, PageSeo> = {
       'The 6 LBI towns in order from north to south — Barnegat Light to Holgate — with a map of Long Beach Island, 2026 beach badge prices, and which town fits your trip.',
     ogImage: '/lbi-towns-map.png',
   },
+  '/lbi-map': {
+    title: 'Map of LBI — Long Beach Island NJ Towns Map, North to South',
+    description:
+      'A map of Long Beach Island, NJ showing all 6 LBI towns north to south from Barnegat Light to Holgate, where the Route 72 Causeway lands, and why Long Beach Township appears in five separate pieces.',
+    ogImage: '/lbi-towns-map.png',
+  },
+  '/lbi-town-services': {
+    title: 'LBI Police, Schools & ZIP Codes — Who Serves Each Long Beach Island Town',
+    description:
+      'Which police department, school district, ZIP code and beach badge covers each LBI town. Barnegat Light is policed by Long Beach Township, Beach Haven runs its own school district, and 08008 covers everything except the north tip.',
+  },
+  '/lbi-town-boundaries': {
+    title: 'LBI Town Boundaries — Which Long Beach Island Town Is My Street In?',
+    description:
+      'Where every LBI town line actually falls, street by street — the split streets at S 2nd and 31st, the Division Avenue myth, and the block range for all 14 Long Beach Township villages from Loveladies to Holgate.',
+    ogImage: '/lbi-towns-map.png',
+  },
   '/lbi-conditions': {
     title: 'LBI Ocean Temperature, Tides & Live Beach Conditions Today | On LBI',
     description:
