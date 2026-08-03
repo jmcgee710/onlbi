@@ -116,7 +116,7 @@ export default function BoundariesPage() {
             <span className="tab-val">2</span>
           </div>
           <div className="pg-tab">
-            <span className="tab-lbl">Marker Posts</span>
+            <span className="tab-lbl">Posts &amp; Signs</span>
             <span className="tab-val">{markerPosts.length}</span>
           </div>
         </div>
@@ -229,6 +229,15 @@ export default function BoundariesPage() {
               range for each. Village <em>middles</em> are solid; village <em>ends</em> are softer,
               because our main source is a beach-badge list that skips streets with no beach access.
               Where the Township&apos;s own marker posts confirm a seam, we say so.
+            </p>
+            <p style={{ ...body, marginBottom: 14 }}>
+              <b>There is a fifteenth Township section not in this table: High Bar Harbor.</b> It sits
+              on the bay at the north end, reached by one road off Barnegat Light, and it belongs to
+              Long Beach Township rather than the borough — despite sharing the borough&apos;s 08006
+              ZIP code, which is why it is so often assigned to Barnegat Light. It has no row here
+              because it has no ocean beach, so it never appears in a badge directory and carries no
+              Boulevard block range. It is the cleanest illustration of this page&apos;s whole caveat:
+              a badge list is not a street census, and an entire community can fall through it.
             </p>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
@@ -428,7 +437,9 @@ export default function BoundariesPage() {
               <em>with its block number printed on it</em>. They&apos;re the Township&apos;s own
               answer to the question this page is trying to settle, and at four separate section
               seams they agree with the beach-badge directory — including back-to-back pairs at
-              MacEvoy Lane and Virginia Avenue where one village ends and the next begins.
+              MacEvoy Lane and Virginia Avenue where one village ends and the next begins. The last
+              two rows are borough welcome signs rather than Township posts: they mark the two ends
+              of the island where a borough, not the Township, does the signing.
             </p>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
@@ -510,6 +521,14 @@ export default function BoundariesPage() {
                 a: 'At 12th Street. North of 12th is North Beach Haven, which is part of Long Beach Township; south of 12th is Beach Haven borough. Three sources agree: the borough defines its beaches as 12th St. to Nelson Ave., the Township badge directory ends at 13th St, and the "Welcome to Historic Beach Haven" sign stands at the corner of 12th.',
               },
               {
+                q: 'Where does Barnegat Light end and Loveladies begin?',
+                a: 'At about 177 Long Beach Boulevard, just south of E 30th Street. The "Welcome to Barnegat Light" sign stands there, and the first street below it — Holly Drive — is tract 176, the northernmost entry in the Long Beach Township badge list for Loveladies. The Loveladies tract numbers and the Boulevard addresses turn out to be the same series, which is what pins the line: 176 is Township, 177 is the borough. This rests on a single welcome sign rather than a parcel record, so treat it as the block rather than the exact property line.',
+              },
+              {
+                q: 'Is High Bar Harbor in Barnegat Light or Long Beach Township?',
+                a: 'Long Beach Township. High Bar Harbor is the secluded bayside lagoon community at the north end of the island, reached by a single road off Barnegat Light, and it is governed by Long Beach Township as its northwestern-most section — separated geographically from every other Township section. It shares Barnegat Light’s 08006 ZIP code, which is why it is so often listed as part of the borough, but the mail and the municipality disagree here just as they do on South 3rd Street.',
+              },
+              {
                 q: 'Is Loveladies its own town?',
                 a: 'No. Loveladies is a section of Long Beach Township on the north end of the island, sitting between Barnegat Light and Harvey Cedars — north of Harvey Cedars, which surprises most first-time visitors. Long Beach Township beach badges and rules apply.',
               },
@@ -530,6 +549,7 @@ export default function BoundariesPage() {
           <div className="aside-card advisory">
             <p className="aside-title">The short version</p>
             <ul className="aside-list">
+              <li><span><strong>Holly Dr</strong> — Loveladies ends at 176, Barnegat Light begins at 177</span></li>
               <li><span><strong>S 2nd St</strong> — Surf City north side, Ship Bottom south side</span></li>
               <li><span><strong>31st St</strong> — Ship Bottom north side, Brant Beach south side</span></li>
               <li><span><strong>William St</strong> — Harvey Cedars ends, North Beach begins</span></li>
