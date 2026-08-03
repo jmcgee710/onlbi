@@ -345,6 +345,11 @@ export const townGuides: TownGuide[] = [
         body:
           "Just west of Barnegat Light, reached by a single two-lane road, is High Bar Harbor — a secluded bayside lagoon community. Despite sharing Barnegat Light's gateway, it's technically part of Long Beach Township, not the borough. Nearly every home sits on the bay or a canal, making it one of the island's most boater-friendly enclaves.",
       },
+      {
+        title: 'Where Barnegat Light Ends',
+        body:
+          "The north end needs no explaining: the borough runs out of island at Barnegat Inlet, inside Barnegat Lighthouse State Park. The south end took longer to pin down. Barnegat Light's numbered grid runs 1st Street down to 30th, with guarded beaches from 10th to 30th, and the next section south is Loveladies, which belongs to Long Beach Township and uses tract numbers instead of a street grid. Two unrelated systems meeting head-on, so for a long time neither set of numbers appeared to locate the line. The Boulevard address is what settles it: the \"Welcome to Barnegat Light — Incorporated 1904\" sign stands at about 177 Long Beach Boulevard, just south of E 30th Street, and the first street below it is Holly Drive — tract 176, the northernmost Loveladies entry in the Township badge list. The tract numbers and the Boulevard numbers are the same series running straight through the boundary: 176 is Long Beach Township, 177 is the borough. It is one sign rather than the matched pair that marks the Harvey Cedars line, and a sign can be set back from the true line for shoulder room, so read it as the block rather than the parcel until a tax map says otherwise. The practical part is unambiguous either way: south of that sign you are in Long Beach Township, on a township beach badge, and the ZIP changes from 08006 to 08008.",
+      },
     ],
     bestFor: "Travelers who want the quietest, most scenic corner of LBI. Fishermen. Sunrise people. Anyone willing to drive a little farther for fewer crowds.",
     related: [
@@ -384,6 +389,11 @@ export const townGuides: TownGuide[] = [
         title: 'Holgate (South End)',
         body:
           "The southernmost point of LBI, ending at the Edwin B. Forsythe National Wildlife Refuge. Quieter than Beach Haven, with wide, less-crowded beaches and access to the protected refuge for birding and shell-hunting (closed April 1 – August 31 for piping plover nesting). Bowker's South Beach Deli & Grill is the local favorite for breakfast, bagels, and cheesesteaks. Great for families who want Beach Haven's amenities a short drive away without being in the middle of them.",
+      },
+      {
+        title: 'Where Long Beach Township Begins and Ends',
+        body:
+          "It begins and ends more than once. Long Beach Township is non-contiguous — five separate pieces wrapped around the five boroughs — so driving the island north to south you enter and leave it repeatedly: Loveladies, then North Beach, then the long middle run from Brant Beach down to North Beach Haven, then Holgate at the tip. Four of its lines are pinned. At 31st Street the township meets Ship Bottom along the centerline of the street rather than at either end of it, so the north side of 31st is Ship Bottom and the south side is Brant Beach — neighbors facing each other need different badges. At William Street the Harvey Cedars grid stops and 124th Street begins North Beach, marked by two welcome signs standing at the same point on the Boulevard facing opposite directions. At 12th Street North Beach Haven ends and Beach Haven borough begins, confirmed three ways over. At Nelson Avenue Beach Haven ends again and Holgate runs south to the wildlife refuge. At the north end the township's Loveladies section runs up to Holly Drive, tract 176, with the Barnegat Light borough welcome sign one number above it at about 177 on the Boulevard. Two lines are softer: the North Beach edge against Surf City sits somewhere between Sherwood Way and North 25th Street, and the Loveladies edge against Harvey Cedars is inferred from a badge list around 87th Street. Every one of these, with what the claim rests on, is laid out on the LBI town boundaries page.",
       },
       {
         title: 'Beach Badges & Parking',
@@ -590,7 +600,7 @@ export const townGuides: TownGuide[] = [
       {
         title: 'Loveladies has no street grid',
         body:
-          "Unlike most of the island, Loveladies isn't laid out on numbered streets. It runs on tract numbers — roughly 1 to 176 — plus a set of private lanes, and the numbers fall as you drive south. Holly Road sits near the top of the range; the southernmost tract in the Township's badge list is 87th Street, which is about where Harvey Cedars begins. That southern line is our best reading rather than a documented fact: the badge list only names streets with beach access, so the true edge could sit a little south of 87th on a street that never needed to appear. The Barnegat Light line to the north is genuinely unsettled — the borough's numbered grid and the Loveladies tract system are unrelated schemes, so neither set of numbers locates it.",
+          "Unlike most of the island, Loveladies isn't laid out on numbered streets. It runs on tract numbers — roughly 1 to 176 — plus a set of private lanes, and the numbers fall as you drive south. Holly Drive sits at the top of the range at 176; the southernmost tract in the Township's badge list is 87th Street, which is about where Harvey Cedars begins. That southern line is our best reading rather than a documented fact: the badge list only names streets with beach access, so the true edge could sit a little south of 87th on a street that never needed to appear. The northern line is firmer than it looks. The tract numbers are also the Long Beach Boulevard addresses, and the \"Welcome to Barnegat Light\" sign stands at about 177 — one number above Holly Drive. So Holly is the last Loveladies address and the borough starts immediately above it, on the evidence of a single sign rather than a parcel record.",
       },
       {
         title: 'Beaches in Loveladies',

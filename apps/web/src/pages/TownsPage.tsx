@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { townGuides } from '../data/townGuides'
 import { beachBadgeInfo } from '../data/beachBadges'
+import { villageBlocks } from '../data/boundaries'
 import { SITE_URL } from '../lib/seo'
 import { buildBreadcrumbSchema } from '../lib/breadcrumbSchema'
 import LbiTownsMap from '../components/LbiTownsMap'
@@ -9,6 +10,21 @@ import FaqSection from '../components/FaqSection'
 const badgeByTown = Object.fromEntries(
   beachBadgeInfo.map(b => [b.townSlug, b.pricing.daily])
 )
+
+// Table cell styling for the Long Beach Township section list.
+const thin: React.CSSProperties = {
+  textAlign: 'left',
+  padding: '8px 10px',
+  borderBottom: '2px solid var(--line)',
+  color: 'var(--ink)',
+  whiteSpace: 'nowrap',
+}
+const tdc: React.CSSProperties = {
+  padding: '8px 10px',
+  borderBottom: '1px solid var(--line)',
+  color: 'var(--ink-soft)',
+  verticalAlign: 'top',
+}
 
 // Order north → south so the page reads geographically
 const ORDER = [
@@ -187,12 +203,54 @@ export default function TownsPage() {
             )
           })}
 
-          {/* LBT section guides — dedicated pages for the searched-for sections */}
+          {/* LBT sections — the full village list, north to south. Block ranges
+              come from src/data/boundaries.ts so this table and the boundaries
+              page can never disagree. The four sections with their own guides
+              link through; the rest link to the full boundary breakdown. */}
           <article className="lc">
             <h2 className="lc-name" style={{ fontSize: 22, marginBottom: 10 }}>Inside Long Beach Township</h2>
             <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)', marginBottom: 12 }}>
-              Long Beach Township isn&apos;t one continuous town — it&apos;s a patchwork of sections
-              woven between the boroughs. The four most searched-for sections have their own guides:
+              Long Beach Township isn&apos;t one continuous town — it&apos;s a patchwork of{' '}
+              <b>{villageBlocks.length} named villages</b> woven between the five boroughs, in five
+              separate pieces. Loveladies sits <em>north</em> of Harvey Cedars; Holgate is the south
+              tip. They all share one beach badge and one police department, but the section name is
+              what rental listings and locals use, and each one has a Boulevard block range behind it:
+            </p>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+                <thead>
+                  <tr>
+                    <th style={thin}>Section</th>
+                    <th style={thin}>Blocks</th>
+                    <th style={thin}>Street range</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {villageBlocks.map(v => (
+                    <tr key={v.name}>
+                      <td style={{ ...tdc, color: 'var(--ink)', fontWeight: 500 }}>
+                        {v.slug
+                          ? <Link to={`/${v.slug}`} style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>{v.name} →</Link>
+                          : v.name}
+                      </td>
+                      <td style={{ ...tdc, fontFamily: 'var(--font-display)', color: 'var(--ink)', whiteSpace: 'nowrap' }}>
+                        {v.blocks}
+                      </td>
+                      <td style={tdc}>{v.streetRange}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 14, lineHeight: 1.6 }}>
+              Village middles are solid; village ends are softer, because the main source is a
+              beach-badge list that skips streets with no beach access.{' '}
+              <Link to="/lbi-town-boundaries" style={{ color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
+                See the block ranges, the street-name crosswalk and what each claim rests on →
+              </Link>
+            </p>
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 14, marginBottom: 8 }}>
+              The four most searched-for sections have their own guides:
             </p>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               {[

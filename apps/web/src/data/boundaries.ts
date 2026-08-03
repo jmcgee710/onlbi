@@ -52,7 +52,11 @@ export type IslandSegment = {
 }
 
 export const islandSegments: IslandSegment[] = [
-  { segment: 'Barnegat Light + High Bar Harbor', municipality: 'Barnegat Light Borough', slug: 'barnegat-light' },
+  // High Bar Harbor is NOT part of this segment. It hangs off the bay side here
+  // but is Long Beach Township — see the note under the village table. It gets no
+  // row of its own because these nine are the stretches you drive through on the
+  // Boulevard, and High Bar Harbor is reached by a spur off it.
+  { segment: 'Barnegat Light', municipality: 'Barnegat Light Borough', slug: 'barnegat-light' },
   { segment: 'Loveladies', municipality: 'Long Beach Township', slug: 'loveladies' },
   { segment: 'Harvey Cedars', municipality: 'Harvey Cedars Borough', slug: 'harvey-cedars' },
   { segment: 'North Beach', municipality: 'Long Beach Township', slug: 'north-beach' },
@@ -81,11 +85,11 @@ export const municipalBoundaries: MunicipalBoundary[] = [
   {
     north: 'Barnegat Light',
     south: 'Loveladies',
-    line: 'Not established at street level.',
+    line: 'At about 177 Long Beach Boulevard — the “Welcome to Barnegat Light” sign stands south of E 30th Street, and Holly Drive, the first street below it, is Loveladies tract 176.',
     detail:
-      "Barnegat Light's numbered grid ends around 30th Street; Loveladies uses tract numbers instead of a street grid, and its southernmost badge-list entry is 87th Street. Two unrelated numbering systems meeting, so neither set of numbers locates the line.",
-    confidence: 'open',
-    basis: 'Needs the Ocean County parcel record or an LBT tax map sheet.',
+      "Barnegat Light's numbered grid ends at 30th Street and Loveladies runs on tract numbers rather than a street grid, so for a long time neither set of numbers appeared to locate the line. The Boulevard address settles it: the borough's welcome sign sits at 177, and the tract numbers ARE the Boulevard numbers — Holly Drive, the next street south, is tract 176 and the northernmost entry in the Township badge list. One series, running straight through the boundary. Grade this the same way as the Harvey Cedars line and no higher: it is one sign, not a matched pair, and a single sign can always be set back from the true line for shoulder room. The 177 is read off a Google Street View position label (captured August 2023), which snaps to the nearest address, so treat it as the block rather than the parcel.",
+    confidence: 'local',
+    basis: 'The Borough of Barnegat Light welcome sign on Long Beach Boulevard, read against the Loveladies tract numbering (Holly Rd = 176). No parcel record pulled.',
   },
   {
     north: 'Loveladies',
@@ -163,6 +167,13 @@ export type VillageBlocks = {
   note?: string
   /** Street name → block number. Absent where the numbering isn't settled. */
   crosswalk?: { name: string; block: number }[]
+  /**
+   * Rendered directly beneath the crosswalk chips. For the cases where the
+   * printed list does not cover the whole block range — a reader who counts the
+   * chips against the header and finds a gap should find the reason right there,
+   * not several sections further up the page.
+   */
+  crosswalkNote?: string
 }
 
 export const villageBlocks: VillageBlocks[] = [
@@ -173,7 +184,7 @@ export const villageBlocks: VillageBlocks[] = [
     streetRange: 'Holly Rd (176) → 87th St (1)',
     confidence: 'inferred',
     note:
-      'Loveladies has no street grid — it runs on tract numbers plus private lanes, and the numbers fall as you drive south.',
+      'Loveladies has no street grid — it runs on tract numbers plus private lanes, and the numbers fall as you drive south. The north end is now anchored: the Barnegat Light welcome sign stands at about 177 on the Boulevard, one number above Holly Drive at 176, which means the tract numbers and the Boulevard addresses are the same series.',
   },
   {
     name: 'North Beach',
@@ -242,6 +253,8 @@ export const villageBlocks: VillageBlocks[] = [
     streetRange: 'Herbert Ave (96) → block 109',
     confidence: 'official',
     note: 'Blocks 108 and 109 carry numbers but no names in the directory.',
+    crosswalkNote:
+      'The list ends at Georgia (107) but the range runs to 109: blocks 108 and 109 carry numbers with no posted street names in the directory, so there is nothing to put beside them.',
     crosswalk: [
       { name: 'Herbert', block: 96 }, { name: 'Jerome', block: 97 }, { name: 'Muriel', block: 98 },
       { name: 'Alabama', block: 99 }, { name: 'California', block: 100 }, { name: 'Florida', block: 101 },
@@ -256,6 +269,8 @@ export const villageBlocks: VillageBlocks[] = [
     confidence: 'official',
     note:
       'Posted at both ends: a Haven Beach post on the bay side of Virginia Ave at 10998, and another at MacEvoy Lane facing the Dunes post across the Boulevard. A single Beach Haven Terrace post also stands at Virginia Ave, beside a development wall that itself reads "Haven Beach" — the badge directory and both Haven Beach posts side with the wall, so that one post is most likely mislabeled.',
+    crosswalkNote:
+      'Weldon Avenue runs inside this range too, but carries no block number: the eleven state-named avenues already account for all eleven blocks from 110 to 120, and the badge directory does not list Weldon at all. That is the same gap that hides 124th Street and MacEvoy Lane — a street with no beach access has no reason to appear on a badge list. Its block number needs a street post to settle.',
     crosswalk: [
       { name: 'Virginia', block: 110 }, { name: 'North Carolina', block: 111 }, { name: 'South Carolina', block: 112 },
       { name: 'Kentucky', block: 113 }, { name: 'Tennessee', block: 114 }, { name: 'Idaho', block: 115 },
@@ -327,12 +342,16 @@ export type MarkerPost = {
   at: string
   /** Boulevard address the post stands at. */
   blvd: string
+  /** Set where the Boulevard number is read off the block rather than pinned to
+   *  a building — rendered as "approx." so it doesn't sit in a column of exact
+   *  addresses looking like one. */
+  blvdApprox?: boolean
   establishes: string
 }
 
 export const markerPosts: MarkerPost[] = [
   { reads: 'Welcome to Brant Beach', at: 'Between Harrington and Mea', blvd: '7299', establishes: 'Brant Beach ends at Harrington (73)' },
-  { reads: 'Peahala Park + "88 Mermaid La"', at: 'Mermaid Ln', blvd: '~8800', establishes: 'Mermaid is block 88, printed on the post' },
+  { reads: 'Peahala Park + "88 Mermaid La"', at: 'Mermaid Ln', blvd: '8800', blvdApprox: true, establishes: 'Mermaid is block 88, printed on the post' },
   { reads: "Sound's Edge / Beach Haven Park", at: '96th–97th', blvd: '9698', establishes: 'Beach Haven Park at blocks 96–97' },
   { reads: 'Township of Long Beach — Hideaway Bay Nature Trail', at: 'Louisiana / Nebraska', blvd: '10600', establishes: 'Louisiana 105, Nebraska 106' },
   { reads: 'Haven Beach', at: 'Virginia Ave — bay side', blvd: '10998', establishes: 'Haven Beach is a posted Township section starting at 110' },
@@ -343,8 +362,11 @@ export const markerPosts: MarkerPost[] = [
   { reads: 'Beach Haven Gdns', at: 'Delaware Ave', blvd: '13211', establishes: 'The Gardens begin right at the numbering flip' },
   { reads: 'Spray Beach', at: 'E 26th–27th', blvd: '2613', establishes: 'Spray Beach begins around 26th' },
   { reads: 'North Beach Haven + "21 St"', at: '21st St', blvd: '2101', establishes: 'North Beach Haven starts at 21st, not 20th' },
-  { reads: 'Welcome to Historic Beach Haven — Queen City, 1874', at: '12th St', blvd: '271 12th St', establishes: 'The Beach Haven borough line' },
   { reads: 'LBT 31st St Beach Buggy Ramp', at: '31st St', blvd: '3001', establishes: '31st Street is Township' },
+  // The two borough welcome signs close the table — not Township posts, but the
+  // same class of evidence, and they mark the island's two end boundaries.
+  { reads: 'Welcome to Barnegat Light — Incorporated 1904', at: 'Boulevard, south of E 30th St', blvd: '177', blvdApprox: true, establishes: "Barnegat Light's south line, one number above Holly Dr (Loveladies 176)" },
+  { reads: 'Welcome to Historic Beach Haven — Queen City, 1874', at: '12th St', blvd: '271 12th St', establishes: 'The Beach Haven borough line' },
 ]
 
 // ── Names that appear twice ──────────────────────────────────────────────────
@@ -401,11 +423,14 @@ export const numberingSystems: NumberingSystem[] = [
  * Holgate. Reversal two happens at Division Avenue — the very street people
  * mistake for the Surf City / Ship Bottom line.
  */
+// Four states, three transitions between them — so the list runs one item longer
+// than the count of reversals. Items 2–4 name which reversal they are, because
+// "changes direction three times" over four bullets otherwise reads as a miscount.
 export const numberingReversals: { step: string; detail: string }[] = [
   { step: 'Rising', detail: 'through Barnegat Light, 1st → 30th' },
-  { step: 'Falling', detail: 'from Loveladies through Surf City’s North series — tract 176 → 1, 86th → 69th, N 25th → N 1st' },
-  { step: 'Rising', detail: 'from Division Avenue on through Ship Bottom and the whole Township middle — S 1st → S 3rd, then up to block 133' },
-  { step: 'Falling', detail: 'again from Beach Haven Gardens to the end of Beach Haven, 34th → 1st' },
+  { step: 'Falling — reversal one', detail: 'from Loveladies through Surf City’s North series — tract 176 → 1, 86th → 69th, N 25th → N 1st' },
+  { step: 'Rising — reversal two', detail: 'from Division Avenue on through Ship Bottom and the whole Township middle — S 1st → S 3rd, then up to block 133' },
+  { step: 'Falling — reversal three', detail: 'again from Beach Haven Gardens to the end of Beach Haven, 34th → 1st' },
 ]
 
 // ── Sources ──────────────────────────────────────────────────────────────────
@@ -416,5 +441,5 @@ export const boundarySources: { name: string; detail: string }[] = [
   { name: 'Borough of Ship Bottom', detail: 'Beaches defined from 3rd Street to the northern side of 31st Street.' },
   { name: 'Borough of Beach Haven', detail: 'Beaches defined as 12th St. to Nelson Ave.' },
   { name: 'Borough of Surf City', detail: 'Badge zone defined as S 3rd to N 25th.' },
-  { name: 'Barnegat Light Borough', detail: 'Guarded beaches 10th–30th.' },
+  { name: 'Barnegat Light Borough', detail: 'Guarded beaches 10th–30th, and the borough welcome sign on the Boulevard at about 177 — the anchor for the south line against Loveladies.' },
 ]
