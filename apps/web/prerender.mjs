@@ -19,9 +19,10 @@ const towns = [
 // LBT section guides — top-level pages only (no /beaches/:town data for these).
 const sections = ['holgate', 'loveladies', 'north-beach', 'brant-beach']
 
-// The 24 sitemap URLs.
+// The 25 sitemap URLs.
 const routesToPrerender = [
-  '/', '/beaches', '/towns', '/lbi-conditions', '/accessibility', '/eat', '/do', '/getting-around',
+  '/', '/beaches', '/towns', '/lbi-town-boundaries', '/lbi-conditions',
+  '/accessibility', '/eat', '/do', '/getting-around',
   ...towns.map(t => `/${t}`),
   ...sections.map(s => `/${s}`),
   ...towns.map(t => `/beaches/${t}`),
@@ -70,6 +71,7 @@ const routeMeta = route => {
   if (route === '/') return { changefreq: 'daily', priority: '1.0' }
   if (route === '/lbi-conditions') return { changefreq: 'daily', priority: '0.9' }
   if (route === '/towns') return { changefreq: 'weekly', priority: '0.9' }
+  if (route === '/lbi-town-boundaries') return { changefreq: 'monthly', priority: '0.8' }
   if (route.startsWith('/beaches/')) return { changefreq: 'weekly', priority: '0.7' }
   return { changefreq: 'weekly', priority: '0.8' }
 }

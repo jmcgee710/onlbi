@@ -122,6 +122,32 @@ export default function TownsPage() {
               Bar Harbor is a bayside enclave off Barnegat Light.
             </p>
             <LbiTownsMap />
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 14 }}>
+              Need the lines street by street?{' '}
+              <Link to="/lbi-town-boundaries" style={{ color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
+                See where every LBI town boundary falls →
+              </Link>
+            </p>
+          </article>
+
+          {/* Boundary teaser — the split-street hook, linking to the full page */}
+          <article className="lc">
+            <h2 className="lc-name" style={{ fontSize: 22, marginBottom: 10 }}>Which Town Is My Street Actually In?</h2>
+            <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)', marginBottom: 12 }}>
+              On LBI your mailing address often isn&apos;t your town. Two of the island&apos;s
+              boundaries run straight down the middle of a street, so neighbors facing each other
+              live in different towns, pay different taxes, and need different beach badges:
+            </p>
+            <ul className="aside-list" style={{ fontSize: 14 }}>
+              <li><span><strong>South 2nd Street</strong> — north side Surf City, south side Ship Bottom. All of South 3rd Street is Ship Bottom, despite a Surf City mailing address.</span></li>
+              <li><span><strong>31st Street</strong> — north side Ship Bottom, south side Brant Beach in Long Beach Township.</span></li>
+              <li><span><strong>Division Avenue is not a town line.</strong> It sits two blocks inside Surf City and marks where the street numbering flips, not where the towns divide.</span></li>
+            </ul>
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 12 }}>
+              <Link to="/lbi-town-boundaries" style={{ color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
+                Full boundary guide, plus block ranges for all 14 Long Beach Township villages →
+              </Link>
+            </p>
           </article>
 
           {ordered.map((t, i) => {

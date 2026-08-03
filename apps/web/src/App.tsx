@@ -24,6 +24,7 @@ const clientPages: PageModules = {
   AlertsPage: lazy(() => import('./pages/AlertsPage')),
   TownGuidePage: lazy(() => import('./pages/TownGuidePage')),
   TownsPage: lazy(() => import('./pages/TownsPage')),
+  BoundariesPage: lazy(() => import('./pages/BoundariesPage')),
   ConditionsPage: lazy(() => import('./pages/ConditionsPage')),
   NotFoundPage: lazy(() => import('./pages/NotFoundPage')),
 }

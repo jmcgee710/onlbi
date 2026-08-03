@@ -296,6 +296,11 @@ export default function TownGuidePage({ slug }: TownGuidePageProps) {
                 </Link>
               </li>
               <li>
+                <Link to="/lbi-town-boundaries" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
+                  Town boundaries &amp; block numbers →
+                </Link>
+              </li>
+              <li>
                 <Link to="/eat" style={{ color: 'var(--teal-deep)', textDecoration: 'none' }}>
                   Eat &amp; Drink directory →
                 </Link>
