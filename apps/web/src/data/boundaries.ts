@@ -283,20 +283,20 @@ export const villageBlocks: VillageBlocks[] = [
   {
     name: 'The Dunes',
     blocks: '121–128',
-    streetRange: 'MacEvoy Ln (121) → Dune Ln (128)',
+    streetRange: 'MacEvoy Ln (121) → Dune Ln',
     confidence: 'official',
     // Range only — see the file header. The per-street numbering is unsettled,
     // so no street inside the range carries a block number here except MacEvoy,
     // which a Township marker post states outright.
     note:
-      'Facing posts at MacEvoy Lane both read 121 — Haven Beach ending, The Dunes beginning. The street numbering inside isn’t published yet: the post calls 121 MacEvoy, the badge directory calls it Holly Banks and doesn’t list MacEvoy at all. Two streets, one block number. One more street post settles it.',
+      'Facing posts at MacEvoy Lane both read 121 — Haven Beach ending, The Dunes beginning. Block 128 at the south end is split with Beach Haven Terrace. The street numbering inside isn’t published yet: the post calls 121 MacEvoy, the badge directory calls it Holly Banks and doesn’t list MacEvoy at all. Two streets, one block number. One more street post settles it.',
   },
   {
     name: 'Beach Haven Terrace',
     blocks: '128–133',
     streetRange: 'Ohio Ave (128) → Delaware Ave (133)',
     confidence: 'official',
-    note: 'Posted at both ends — "Beach Haven Terr" at Ohio Ave (12799) and the Gardens post at Delaware (13211).',
+    note: 'Posted at both ends — "Beach Haven Terr" at Ohio Ave (12799) and the Gardens post at Delaware (13211). Block 128 is split with The Dunes, which is why it appears in both rows.',
     crosswalk: [
       { name: 'Ohio', block: 128 }, { name: 'Indiana', block: 129 }, { name: 'New Jersey', block: 130 },
       { name: 'Pennsylvania', block: 131 }, { name: 'Maryland', block: 132 }, { name: 'Delaware', block: 133 },

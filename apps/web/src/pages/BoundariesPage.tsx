@@ -258,6 +258,10 @@ export default function BoundariesPage() {
                 </tbody>
               </table>
             </div>
+            <p style={{ fontSize: 12.5, color: 'var(--slate)', margin: '10px 0 0' }}>
+              Block 128 appears twice on purpose — The Dunes and Beach Haven Terrace split it, the way
+              Surf City and Ship Bottom split S 2nd Street.
+            </p>
             <ul className="aside-list" style={{ fontSize: 13, marginTop: 18 }}>
               {villageBlocks.filter(v => v.note).map(v => (
                 <li key={v.name}><span><strong>{v.name}</strong> — {v.note}</span></li>
