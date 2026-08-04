@@ -279,8 +279,11 @@ export default function BoundariesPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
               {crosswalkVillages.map(v => (
                 <div key={v.name}>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 17, margin: '0 0 8px' }}>
-                    {v.name} <span style={{ color: 'var(--slate)', fontSize: 14 }}>· {v.blocks}</span>
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 17, margin: '0 0 8px', display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+                    <span>
+                      {v.name} <span style={{ color: 'var(--slate)', fontSize: 14 }}>· {v.blocks}</span>
+                    </span>
+                    {v.crosswalkConfidence && <ConfidenceChip level={v.crosswalkConfidence} />}
                   </h3>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                     {v.crosswalk!.map(c => (
@@ -312,14 +315,16 @@ export default function BoundariesPage() {
               ))}
             </div>
             <div className="aside-card advisory" style={{ marginTop: 20 }}>
-              <p className="aside-title" style={{ fontSize: 17 }}>The Dunes — held back on purpose</p>
+              <p className="aside-title" style={{ fontSize: 17 }}>The Dunes — held back until it wasn&apos;t</p>
               <p className="aside-body">
-                The Dunes runs blocks <b>121–127</b>, MacEvoy Lane to Dune Lane. The street-by-street
-                numbering inside it isn&apos;t published yet. The Township&apos;s post reads
-                &ldquo;121 Mac Evoy Lane,&rdquo; while the beach-badge directory doesn&apos;t list
-                MacEvoy at all and gives 121 to Holly Banks. That leaves eight street names for seven
-                blocks, so at least one of those numbers is wrong. One more street post settles it.
-                Until then, guessing would be worse than saying nothing.
+                This section sat unnumbered here for a long time. The badge directory gives block 121
+                to Holly Banks and doesn&apos;t list MacEvoy Lane at all, while the Township&apos;s own
+                post at MacEvoy reads <b>121</b> — and the directory needs eight street names to fill
+                seven blocks, so one of them had to be wrong. Counting the Boulevard cross streets
+                answers it: there are exactly <b>seven</b> between the MacEvoy post and the Beach
+                Haven Terrace post at Ohio Avenue (128). The post wins, the directory&apos;s eighth
+                name is the anomaly, and the numbers below are what&apos;s left. Starboard is that
+                eighth name, and it sits on no block in this run.
               </p>
             </div>
           </article>
