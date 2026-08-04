@@ -20,8 +20,8 @@
 // DELIBERATELY WITHHELD: the street-level crosswalk for The Dunes. The marker
 // post at MacEvoy Lane reads block 121, but the badge directory (which omits
 // MacEvoy entirely) assigns 121 to Holly Banks. The whole Dunes sequence may
-// therefore run one block behind. The block RANGE 121–127 is corroborated by
-// paired posts and is published; the per-street numbers are not.
+// therefore run one block behind. The block RANGE 121–128 is published; the
+// per-street numbers are not.
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -282,14 +282,14 @@ export const villageBlocks: VillageBlocks[] = [
   },
   {
     name: 'The Dunes',
-    blocks: '121–127',
-    streetRange: 'MacEvoy Ln (121) → Dune Ln',
+    blocks: '121–128',
+    streetRange: 'MacEvoy Ln (121) → Dune Ln (128)',
     confidence: 'official',
     // Range only — see the file header. The per-street numbering is unsettled,
     // so no street inside the range carries a block number here except MacEvoy,
     // which a Township marker post states outright.
     note:
-      'The block range is confirmed by a back-to-back pair of marker posts at MacEvoy Lane — Haven Beach ending, The Dunes beginning, both reading block 121. The street-level numbering inside the range is NOT settled: the badge directory omits MacEvoy entirely and assigns 121 to Holly Banks. That leaves eight street names for seven blocks, so at least one number in the directory’s Dunes sequence is wrong. We are holding all of them until another Dunes street post is photographed.',
+      'Facing posts at MacEvoy Lane both read 121 — Haven Beach ending, The Dunes beginning. The street numbering inside isn’t published yet: the post calls 121 MacEvoy, the badge directory calls it Holly Banks and doesn’t list MacEvoy at all. Two streets, one block number. One more street post settles it.',
   },
   {
     name: 'Beach Haven Terrace',
@@ -381,8 +381,8 @@ export const duplicateNames: DuplicateName[] = [
   { name: 'Pennsylvania Ave', here: 'Block 86 — Brighton Beach', andHere: 'Block 131 — Beach Haven Terrace' },
   { name: 'Delaware Ave', here: 'Block 87 — Peahala Park', andHere: 'Block 133 — Beach Haven Terrace' },
   // The Dunes entries carry no block number on purpose — see the file header.
-  { name: 'Starboard', here: 'The Dunes (blocks 121–127)', andHere: 'Starboard Rd — North Beach' },
-  { name: 'Marine', here: 'The Dunes (blocks 121–127)', andHere: 'Marine St — Beach Haven' },
+  { name: 'Starboard', here: 'The Dunes (blocks 121–128)', andHere: 'Starboard Rd — North Beach' },
+  { name: 'Marine', here: 'The Dunes (blocks 121–128)', andHere: 'Marine St — Beach Haven' },
 ]
 
 // ── Names with no official standing ──────────────────────────────────────────

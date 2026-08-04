@@ -462,7 +462,7 @@ export const townGuides: TownGuide[] = [
       },
       {
         name: 'The Dunes',
-        position: 'Central-south — blocks 121–127, MacEvoy Lane to Dune Lane',
+        position: 'Central-south — blocks 121–128, MacEvoy Lane to Dune Lane',
         blurb: 'A short, quiet residential stretch named for its protected dune line. It begins at MacEvoy Lane, where two Township marker posts stand on facing corners — Haven Beach ending, The Dunes beginning, both reading block 121.',
       },
       {
