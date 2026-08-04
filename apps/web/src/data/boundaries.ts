@@ -122,7 +122,7 @@ export const municipalBoundaries: MunicipalBoundary[] = [
     south: 'Surf City',
     line: 'Between Sherwood Way and North 25th Street — the Surf City sign sits just south of Sherwood Way, around 1004 on the Boulevard.',
     detail:
-      'North 25th is Surf City’s last numbered street, but Shallow Shore Lane sits between the sign and the numbered grid, so the borough appears to have a named lane or two above N 25th. Shallow Shore appears in no badge list — the third example of the directory skipping streets without beach access.',
+      'North 25th is Surf City’s last numbered street, and exactly one named lane sits above it: Shallow Shore Lane, between Sherwood Way and 25th. Shallow Shore appears in no badge list — the third example of the directory skipping streets without beach access.',
     confidence: 'inferred',
     basis: 'The LBT badge directory ends North Beach at Sherwood Way, and the Surf City welcome sign lands on the same block. Two independent sources agreeing.',
   },
