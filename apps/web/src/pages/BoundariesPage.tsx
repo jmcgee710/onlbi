@@ -322,9 +322,10 @@ export default function BoundariesPage() {
                 post at MacEvoy reads <b>121</b> — and the directory needs eight street names to fill
                 seven blocks, so one of them had to be wrong. Counting the Boulevard cross streets
                 answers it: there are exactly <b>seven</b> between the MacEvoy post and the Beach
-                Haven Terrace post at Ohio Avenue (128). The post wins, the directory&apos;s eighth
-                name is the anomaly, and the numbers below are what&apos;s left. Starboard is that
-                eighth name, and it sits on no block in this run.
+                Haven Terrace post at Ohio Avenue (128). The post wins and the numbers below are
+                what&apos;s left. The directory&apos;s eighth name was Starboard — and there is one
+                Starboard Road on Long Beach Island, in North Beach. It was filed under the wrong
+                village all along.
               </p>
             </div>
           </article>
@@ -335,9 +336,10 @@ export default function BoundariesPage() {
               Street Names That Appear Twice
             </h2>
             <p style={{ ...body, marginBottom: 14 }}>
-              Five street names occur in two different Long Beach Township villages, in three cases
-              roughly 45 blocks apart. Type one into a phone without the block number and you can
-              end up a ten-minute drive from where you meant to be.
+              These {duplicateNames.length} names each occur twice on the island, three of them in
+              two different Long Beach Township villages roughly 45 blocks apart. Type one into a
+              phone without the block number and you can end up a ten-minute drive from where you
+              meant to be.
             </p>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>

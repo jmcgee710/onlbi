@@ -24,7 +24,8 @@
 // streets between the MacEvoy post (121) and the Beach Haven Terrace post at
 // Ohio Ave (128), so the directory's eighth name is the anomaly and the post
 // wins. Published as `inferred`: the two ends are posted, the middle is street
-// order. Starboard is the directory name with nowhere to sit.
+// order. The directory's eighth name, Starboard, is a misfile — there is one
+// Starboard Rd on the island and it is in North Beach, not The Dunes.
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -302,7 +303,7 @@ export const villageBlocks: VillageBlocks[] = [
     // street order below follows the post, not the directory.
     crosswalkConfidence: 'inferred',
     crosswalkNote:
-      'Deduced from the street order between two posts rather than read off a sign, so it carries a lower grade than the block range above it. Starboard appears in the badge directory under The Dunes but crosses no block between MacEvoy and Ohio — if it turns up inside this run, every number below it moves.',
+      'Deduced from the street order between two posts rather than read off a sign, so it carries a lower grade than the block range above it. The directory’s eighth Dunes name, Starboard, turns out to be a misfile: there is one Starboard Road on Long Beach Island and it is in North Beach.',
     crosswalk: [
       { name: 'MacEvoy', block: 121 }, { name: 'Holly Banks', block: 122 }, { name: 'Ramapo', block: 123 },
       { name: 'Old Whaling', block: 124 }, { name: 'Ryerson', block: 125 }, { name: 'Marine', block: 126 },
@@ -398,7 +399,9 @@ export const duplicateNames: DuplicateName[] = [
   { name: 'New Jersey Ave', here: 'Block 85 — Brighton Beach', andHere: 'Block 130 — Beach Haven Terrace' },
   { name: 'Pennsylvania Ave', here: 'Block 86 — Brighton Beach', andHere: 'Block 131 — Beach Haven Terrace' },
   { name: 'Delaware Ave', here: 'Block 87 — Peahala Park', andHere: 'Block 133 — Beach Haven Terrace' },
-  { name: 'Starboard', here: 'Listed under The Dunes, but on no block there', andHere: 'Starboard Rd — North Beach' },
+  // Starboard was listed here until a street search returned exactly one on the
+  // island — Starboard Rd in North Beach. It is not a duplicate; the badge
+  // directory simply files it under the wrong village. See The Dunes.
   { name: 'Marine', here: 'Block 126 — The Dunes', andHere: 'Marine St — Beach Haven' },
 ]
 
