@@ -258,6 +258,10 @@ export default function BoundariesPage() {
                 </tbody>
               </table>
             </div>
+            <p style={{ fontSize: 12.5, color: 'var(--slate)', margin: '10px 0 0' }}>
+              Block 128 appears twice on purpose — The Dunes and Beach Haven Terrace split it, the way
+              Surf City and Ship Bottom split S 2nd Street.
+            </p>
             <ul className="aside-list" style={{ fontSize: 13, marginTop: 18 }}>
               {villageBlocks.filter(v => v.note).map(v => (
                 <li key={v.name}><span><strong>{v.name}</strong> — {v.note}</span></li>
@@ -314,13 +318,12 @@ export default function BoundariesPage() {
             <div className="aside-card advisory" style={{ marginTop: 20 }}>
               <p className="aside-title" style={{ fontSize: 17 }}>The Dunes — held back on purpose</p>
               <p className="aside-body">
-                The Dunes runs blocks <b>121–127</b>, confirmed by a matched pair of marker posts at
-                MacEvoy Lane. But we are <b>not</b> publishing its street-by-street numbering yet.
-                The Township&apos;s post reads &ldquo;121 Mac Evoy Lane,&rdquo; while the beach-badge
-                directory doesn&apos;t list MacEvoy at all and assigns 121 to Holly Banks. Between
-                them that&apos;s eight street names for seven blocks, so at least one of those
-                numbers is wrong. One more street post settles it. Until then, guessing would be
-                worse than saying nothing.
+                The Dunes runs blocks <b>121–128</b>, MacEvoy Lane to Dune Lane. The street-by-street
+                numbering inside it isn&apos;t published yet. The Township&apos;s post reads
+                &ldquo;121 Mac Evoy Lane,&rdquo; while the beach-badge directory doesn&apos;t list
+                MacEvoy at all and gives 121 to Holly Banks — two streets claiming one block number.
+                One more street post settles it. Until then, guessing would be worse than saying
+                nothing.
               </p>
             </div>
           </article>
