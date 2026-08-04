@@ -20,7 +20,7 @@
 // DELIBERATELY WITHHELD: the street-level crosswalk for The Dunes. The marker
 // post at MacEvoy Lane reads block 121, but the badge directory (which omits
 // MacEvoy entirely) assigns 121 to Holly Banks. The whole Dunes sequence may
-// therefore run one block behind. The block RANGE 121–128 is published; the
+// therefore run one block behind. The block RANGE 121–127 is published; the
 // per-street numbers are not.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -282,21 +282,21 @@ export const villageBlocks: VillageBlocks[] = [
   },
   {
     name: 'The Dunes',
-    blocks: '121–128',
+    blocks: '121–127',
     streetRange: 'MacEvoy Ln (121) → Dune Ln',
     confidence: 'official',
     // Range only — see the file header. The per-street numbering is unsettled,
     // so no street inside the range carries a block number here except MacEvoy,
     // which a Township marker post states outright.
     note:
-      'Facing posts at MacEvoy Lane both read 121 — Haven Beach ending, The Dunes beginning. Block 128 at the south end is split with Beach Haven Terrace. The street numbering inside isn’t published yet: the post calls 121 MacEvoy, the badge directory calls it Holly Banks and doesn’t list MacEvoy at all. Two streets, one block number. One more street post settles it.',
+      'Facing posts at MacEvoy Lane both read 121 — Haven Beach ending, The Dunes beginning. Ohio Ave, the next street below Dune Lane, is Beach Haven Terrace at 128. The street numbering inside isn’t published: the post calls 121 MacEvoy, the badge directory calls it Holly Banks and omits MacEvoy entirely — eight names for seven blocks, so one of them is wrong. One more street post settles it.',
   },
   {
     name: 'Beach Haven Terrace',
     blocks: '128–133',
     streetRange: 'Ohio Ave (128) → Delaware Ave (133)',
     confidence: 'official',
-    note: 'Posted at both ends — "Beach Haven Terr" at Ohio Ave (12799) and the Gardens post at Delaware (13211). Block 128 is split with The Dunes, which is why it appears in both rows.',
+    note: 'Posted at both ends — "Beach Haven Terr" at Ohio Ave (12799) and the Gardens post at Delaware (13211).',
     crosswalk: [
       { name: 'Ohio', block: 128 }, { name: 'Indiana', block: 129 }, { name: 'New Jersey', block: 130 },
       { name: 'Pennsylvania', block: 131 }, { name: 'Maryland', block: 132 }, { name: 'Delaware', block: 133 },
@@ -381,8 +381,8 @@ export const duplicateNames: DuplicateName[] = [
   { name: 'Pennsylvania Ave', here: 'Block 86 — Brighton Beach', andHere: 'Block 131 — Beach Haven Terrace' },
   { name: 'Delaware Ave', here: 'Block 87 — Peahala Park', andHere: 'Block 133 — Beach Haven Terrace' },
   // The Dunes entries carry no block number on purpose — see the file header.
-  { name: 'Starboard', here: 'The Dunes (blocks 121–128)', andHere: 'Starboard Rd — North Beach' },
-  { name: 'Marine', here: 'The Dunes (blocks 121–128)', andHere: 'Marine St — Beach Haven' },
+  { name: 'Starboard', here: 'The Dunes (blocks 121–127)', andHere: 'Starboard Rd — North Beach' },
+  { name: 'Marine', here: 'The Dunes (blocks 121–127)', andHere: 'Marine St — Beach Haven' },
 ]
 
 // ── Names with no official standing ──────────────────────────────────────────
