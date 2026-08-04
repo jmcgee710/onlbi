@@ -17,11 +17,14 @@
 // hedges in prose — a reader can see which lines are documented and which are
 // still one tax map away from being settled.
 //
-// DELIBERATELY WITHHELD: the street-level crosswalk for The Dunes. The marker
-// post at MacEvoy Lane reads block 121, but the badge directory (which omits
-// MacEvoy entirely) assigns 121 to Holly Banks. The whole Dunes sequence may
-// therefore run one block behind. The block RANGE 121–127 is published; the
-// per-street numbers are not.
+// THE DUNES, resolved: the crosswalk was withheld for a long time because the
+// badge directory lists eight street names for a seven-block range, starting
+// Holly Banks at 121 while the Township's own post at MacEvoy Lane reads 121.
+// Satellite imagery of the Boulevard settles it — there are exactly seven cross
+// streets between the MacEvoy post (121) and the Beach Haven Terrace post at
+// Ohio Ave (128), so the directory's eighth name is the anomaly and the post
+// wins. Published as `inferred`: the two ends are posted, the middle is street
+// order. Starboard is the directory name with nowhere to sit.
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -172,6 +175,13 @@ export type VillageBlocks = {
   /** Street name → block number. Absent where the numbering isn't settled. */
   crosswalk?: { name: string; block: number }[]
   /**
+   * Confidence for the crosswalk specifically, where it differs from the block
+   * range. The Dunes range is bracketed by two Township posts (Confirmed) while
+   * the per-street numbers between them are deduced from the street order
+   * (Inferred). Omit when the crosswalk carries the row's own confidence.
+   */
+  crosswalkConfidence?: Confidence
+  /**
    * Rendered directly beneath the crosswalk chips. For the cases where the
    * printed list does not cover the whole block range — a reader who counts the
    * chips against the header and finds a gap should find the reason right there,
@@ -283,13 +293,21 @@ export const villageBlocks: VillageBlocks[] = [
   {
     name: 'The Dunes',
     blocks: '121–127',
-    streetRange: 'MacEvoy Ln (121) → Dune Ln',
+    streetRange: 'MacEvoy Ln (121) → Dune Ln (127)',
     confidence: 'official',
-    // Range only — see the file header. The per-street numbering is unsettled,
-    // so no street inside the range carries a block number here except MacEvoy,
-    // which a Township marker post states outright.
     note:
-      'Facing posts at MacEvoy Lane both read 121 — Haven Beach ending, The Dunes beginning. Ohio Ave, the next street below Dune Lane, is Beach Haven Terrace at 128. The street numbering inside isn’t published: the post calls 121 MacEvoy, the badge directory calls it Holly Banks and omits MacEvoy entirely — eight names for seven blocks, so one of them is wrong. One more street post settles it.',
+      'Bracketed by Township posts at both ends — facing posts at MacEvoy Lane reading 121, and the "Beach Haven Terr" post at Ohio Ave, the next street below Dune Lane, at 128. Seven cross streets run between them, which fixes every number in between.',
+    // The badge directory starts this village at Holly Banks 121 and omits
+    // MacEvoy, which shifts its whole sequence one block north of the post. The
+    // street order below follows the post, not the directory.
+    crosswalkConfidence: 'inferred',
+    crosswalkNote:
+      'Deduced from the street order between two posts rather than read off a sign, so it carries a lower grade than the block range above it. Starboard appears in the badge directory under The Dunes but crosses no block between MacEvoy and Ohio — if it turns up inside this run, every number below it moves.',
+    crosswalk: [
+      { name: 'MacEvoy', block: 121 }, { name: 'Holly Banks', block: 122 }, { name: 'Ramapo', block: 123 },
+      { name: 'Old Whaling', block: 124 }, { name: 'Ryerson', block: 125 }, { name: 'Marine', block: 126 },
+      { name: 'Dune', block: 127 },
+    ],
   },
   {
     name: 'Beach Haven Terrace',
@@ -380,9 +398,8 @@ export const duplicateNames: DuplicateName[] = [
   { name: 'New Jersey Ave', here: 'Block 85 — Brighton Beach', andHere: 'Block 130 — Beach Haven Terrace' },
   { name: 'Pennsylvania Ave', here: 'Block 86 — Brighton Beach', andHere: 'Block 131 — Beach Haven Terrace' },
   { name: 'Delaware Ave', here: 'Block 87 — Peahala Park', andHere: 'Block 133 — Beach Haven Terrace' },
-  // The Dunes entries carry no block number on purpose — see the file header.
-  { name: 'Starboard', here: 'The Dunes (blocks 121–127)', andHere: 'Starboard Rd — North Beach' },
-  { name: 'Marine', here: 'The Dunes (blocks 121–127)', andHere: 'Marine St — Beach Haven' },
+  { name: 'Starboard', here: 'Listed under The Dunes, but on no block there', andHere: 'Starboard Rd — North Beach' },
+  { name: 'Marine', here: 'Block 126 — The Dunes', andHere: 'Marine St — Beach Haven' },
 ]
 
 // ── Names with no official standing ──────────────────────────────────────────
