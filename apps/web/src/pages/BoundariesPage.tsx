@@ -185,10 +185,7 @@ export default function BoundariesPage() {
                     <ConfidenceChip level={b.confidence} />
                   </div>
                   <p style={{ ...body, margin: '0 0 8px', color: 'var(--ink)', fontWeight: 500 }}>{b.line}</p>
-                  {b.detail && <p style={{ ...body, margin: '0 0 8px' }}>{b.detail}</p>}
-                  <p style={{ fontSize: 12.5, color: 'var(--slate)', margin: 0, lineHeight: 1.5 }}>
-                    <b>Basis:</b> {b.basis}
-                  </p>
+                  {b.detail && <p style={{ ...body, margin: 0 }}>{b.detail}</p>}
                 </li>
               ))}
             </ul>
@@ -231,13 +228,9 @@ export default function BoundariesPage() {
               Where the Township&apos;s own marker posts confirm a seam, we say so.
             </p>
             <p style={{ ...body, marginBottom: 14 }}>
-              <b>There is a fifteenth Township section not in this table: High Bar Harbor.</b> It sits
-              on the bay at the north end, reached by one road off Barnegat Light, and it belongs to
-              Long Beach Township rather than the borough — despite sharing the borough&apos;s 08006
-              ZIP code, which is why it is so often assigned to Barnegat Light. It has no row here
-              because it has no ocean beach, so it never appears in a badge directory and carries no
-              Boulevard block range. It is the cleanest illustration of this page&apos;s whole caveat:
-              a badge list is not a street census, and an entire community can fall through it.
+              <b>High Bar Harbor is a fifteenth section, not in this table.</b> It&apos;s on the bay at
+              the north end, off Barnegat Light, and it&apos;s Long Beach Township despite carrying the
+              borough&apos;s 08006 ZIP. No ocean beach means no badge-list entry and no block range.
             </p>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
@@ -438,8 +431,7 @@ export default function BoundariesPage() {
               answer to the question this page is trying to settle, and at four separate section
               seams they agree with the beach-badge directory — including back-to-back pairs at
               MacEvoy Lane and Virginia Avenue where one village ends and the next begins. The last
-              two rows are borough welcome signs rather than Township posts: they mark the two ends
-              of the island where a borough, not the Township, does the signing.
+              two rows are borough welcome signs rather than Township posts.
             </p>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
@@ -457,10 +449,7 @@ export default function BoundariesPage() {
                       <td style={{ ...td, color: 'var(--ink)', fontWeight: 500 }}>{p.reads}</td>
                       <td style={td}>{p.at}</td>
                       <td style={{ ...td, whiteSpace: 'nowrap' }}>
-                        {p.blvd}
-                        {p.blvdApprox && (
-                          <span style={{ color: 'var(--slate)', fontSize: 12 }}> approx.</span>
-                        )}
+                        {p.blvdApprox ? `~${p.blvd}` : p.blvd}
                       </td>
                       <td style={td}>{p.establishes}</td>
                     </tr>
@@ -468,6 +457,9 @@ export default function BoundariesPage() {
                 </tbody>
               </table>
             </div>
+            <p style={{ fontSize: 12.5, color: 'var(--slate)', margin: '10px 0 0' }}>
+              ~ marks a Boulevard number read off the block rather than a building.
+            </p>
           </article>
 
           {/* 10 — method */}
@@ -522,11 +514,11 @@ export default function BoundariesPage() {
               },
               {
                 q: 'Where does Barnegat Light end and Loveladies begin?',
-                a: 'At about 177 Long Beach Boulevard, just south of E 30th Street. The "Welcome to Barnegat Light" sign stands there, and the first street below it — Holly Drive — is tract 176, the northernmost entry in the Long Beach Township badge list for Loveladies. The Loveladies tract numbers and the Boulevard addresses turn out to be the same series, which is what pins the line: 176 is Township, 177 is the borough. This rests on a single welcome sign rather than a parcel record, so treat it as the block rather than the exact property line.',
+                a: 'At Holly Drive, just south of E 30th Street. The "Welcome to Barnegat Light" sign stands at about 177 Long Beach Boulevard, and Holly Drive — the next street south — is tract 176, the northernmost Loveladies entry in the Long Beach Township badge list. The Loveladies tract numbers are the Boulevard addresses, so 176 is Township and 177 is the borough.',
               },
               {
                 q: 'Is High Bar Harbor in Barnegat Light or Long Beach Township?',
-                a: 'Long Beach Township. High Bar Harbor is the secluded bayside lagoon community at the north end of the island, reached by a single road off Barnegat Light, and it is governed by Long Beach Township as its northwestern-most section — separated geographically from every other Township section. It shares Barnegat Light’s 08006 ZIP code, which is why it is so often listed as part of the borough, but the mail and the municipality disagree here just as they do on South 3rd Street.',
+                a: 'Long Beach Township. High Bar Harbor is the bayside lagoon community at the north end of the island, reached by one road off Barnegat Light, and it is the Township’s northwestern-most section. It shares Barnegat Light’s 08006 ZIP code, which is why it gets listed as part of the borough — the mail and the municipality disagree here, the same way they do on South 3rd Street.',
               },
               {
                 q: 'Is Loveladies its own town?',
@@ -565,10 +557,10 @@ export default function BoundariesPage() {
                 <li key={level} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4 }}>
                   <ConfidenceChip level={level} />
                   <span style={{ fontSize: 12.5, color: 'var(--ink-soft)', lineHeight: 1.45 }}>
-                    {level === 'official' && 'An authority stated this in its own words — a borough beach code, the Township directory, or a Township marker post.'}
-                    {level === 'inferred' && "Deduced from an official source that doesn't say it outright. A tax map could overturn it."}
-                    {level === 'local' && 'On-the-ground observation — signage, physical markers — with no published source yet.'}
-                    {level === 'open' && 'Needs an Ocean County parcel record or a Township tax map sheet to settle.'}
+                    {level === 'official' && 'Stated outright by a borough code, the Township directory, or a marker post.'}
+                    {level === 'inferred' && 'Deduced from an official source that doesn’t say it directly.'}
+                    {level === 'local' && 'Seen on the ground — signage or physical markers.'}
+                    {level === 'open' && 'Needs a parcel record or tax map to settle.'}
                   </span>
                 </li>
               ))}
