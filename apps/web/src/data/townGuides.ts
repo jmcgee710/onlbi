@@ -110,6 +110,15 @@ export const townGuides: TownGuide[] = [
           "The borough's northern line is 12th Street, and it's the best-documented boundary on the island: the borough defines its own beaches as running from 12th Street to Nelson Avenue, the Long Beach Township badge directory ends at 13th Street, and the \"Welcome to Historic Beach Haven — Queen City, 1874\" sign stands at the corner of 12th. An easy way to hold onto it: Panzone's sits at 1106 N Bay Ave — 11th Street and the Boulevard, which is named Bay Avenue through the borough — one block inside Beach Haven. At Panzone's you're in Beach Haven. Two blocks north at 13th you're in Long Beach Township. The mail says Beach Haven either way.",
       },
       {
+        // /beach-haven is the island's highest-value town name and sits on page
+        // two. This section adds the civic detail the guide was missing — the
+        // things that make Beach Haven a borough rather than a stretch of sand —
+        // drawn from the same sourced data behind /lbi-town-services.
+        title: 'Beach Haven runs its own everything',
+        body:
+          "Beach Haven is the most self-contained municipality on Long Beach Island. It has its own police department rather than contracting the work out, and it is the only one of the six LBI towns that runs its own school district — the other five all send children to LBI Consolidated. It sells its own beach badge, which is not valid one block north in Long Beach Township, and it sets its own parking rules. The two things it shares with the rest of the island are the LBI Health Department, which covers all six towns, and the ZIP code: Beach Haven is 08008, the same code as almost every other address on LBI. Borough Hall is at 300 Engleside Avenue, open weekdays 9 AM to 4 PM.",
+      },
+      {
         title: 'Beach Haven vs. the "Beach Haven" sections',
         body:
           "One quirk that trips up first-time visitors: Beach Haven borough is its own municipality, but several nearby sections — Beach Haven Terrace, Beach Haven Park, Beach Haven Crest, Beach Haven Gardens, and North Beach Haven — are actually part of Long Beach Township, not Beach Haven borough. They sit north of the borough along the central island, starting at 13th Street. If your rental address is one of those, you'll buy Long Beach Township beach badges, not Beach Haven ones.",
@@ -131,6 +140,14 @@ export const townGuides: TownGuide[] = [
       {
         q: 'Where is the Beach Haven public dock?',
         a: "The public docks sit on the bay side of town around the Schooner's Wharf and Bay Village area, near Centre Street and 9th Street. It's where the bay tour boats, parasail and jet-ski operators launch, and a popular spot for crabbing off the bulkheads and watching the sunset over Barnegat Bay.",
+      },
+      {
+        q: 'What ZIP code is Beach Haven, NJ?',
+        a: 'Beach Haven is 08008. That is the ZIP code for almost all of Long Beach Island — the sole exception is Barnegat Light at the north tip, which uses 08006. The ZIP does not tell you which town you are in: Beach Haven Terrace, Beach Haven Park and North Beach Haven all share 08008 but are Long Beach Township, not Beach Haven borough.',
+      },
+      {
+        q: 'Does Beach Haven have its own police and school district?',
+        a: 'Yes to both, and it is the only LBI town that can say so. Beach Haven has its own police department, and it runs its own school district while the other five towns share LBI Consolidated. It also sells its own beach badge, which is not valid in Long Beach Township.',
       },
       {
         q: 'What is there to do in Beach Haven at night?',
@@ -721,7 +738,7 @@ export const townGuides: TownGuide[] = [
       {
         title: 'Where Brant Beach is',
         body:
-          "Brant Beach begins just south of Ship Bottom and runs down the central island — the northern anchor of Long Beach Township's big central patchwork of sections. The township's municipal offices sit here on Long Beach Boulevard, which makes Brant Beach the township's de facto hub. It's a section of Long Beach Township, not an independent borough, so LBT badges and parking rules apply.",
+          "Brant Beach begins just south of Ship Bottom and runs down the central island — the northern anchor of Long Beach Township's big central patchwork of sections. The township's municipal offices sit here on Long Beach Boulevard, which makes Brant Beach the township's de facto hub. It's a section of Long Beach Township, not an independent borough, so LBT badges and parking rules apply. One note on the name: it is Brant Beach, one syllable, with no \"y\" and no \"d\". Bryant Beach and Brandt Beach are the two spellings people reach for first, and neither is a real place on Long Beach Island — if that's what you typed, this is the section you were looking for.",
       },
       {
         title: 'Beaches in Brant Beach',
@@ -761,6 +778,17 @@ export const townGuides: TownGuide[] = [
       {
         q: 'Does Brant Beach have a bay beach?',
         a: 'Yes — Bayview Park, around 68th Street on the bay side, has a guarded bayside swimming area with shallow, calm water, plus a playground, courts, a dog park, and free summer concerts.',
+      },
+      {
+        // "bryant beach" and "brandt beach" both rank here already on body-copy
+        // signal alone; naming them outright is what closes the gap between what
+        // was typed and what the page says back.
+        q: 'Is it Brant Beach, Bryant Beach, or Brandt Beach?',
+        a: 'Brant Beach. There is no Bryant Beach or Brandt Beach on Long Beach Island — both are common misspellings of Brant Beach, the largest section of Long Beach Township, on the central island just south of Ship Bottom.',
+      },
+      {
+        q: 'What ZIP code is Brant Beach, NJ?',
+        a: 'Brant Beach is 08008, the ZIP code shared by almost all of Long Beach Island. Because Brant Beach is a section of Long Beach Township rather than its own municipality, it carries the same ZIP as Loveladies, Spray Beach, Holgate and the rest of the Township.',
       },
     ],
     bestFor:
