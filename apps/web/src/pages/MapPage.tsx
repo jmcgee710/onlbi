@@ -21,13 +21,18 @@ const linkStyle: React.CSSProperties = { color: 'var(--teal-deep)', textDecorati
 
 export default function MapPage() {
   // The map image is a real indexable file — this is the page it belongs to.
+  // It is now picking up image-search impressions, so the name, the caption and
+  // the anchor text below all say "LBI town map" in the words people type.
   const mapImageData = {
     '@context': 'https://schema.org',
     '@type': 'ImageObject',
     contentUrl: `${SITE_URL}/lbi-towns-map.png`,
-    name: 'Map of Long Beach Island, NJ',
+    url: `${SITE_URL}/lbi-map`,
+    name: 'LBI Town Map — Map of Long Beach Island, NJ Towns',
+    caption: 'LBI town map: all six Long Beach Island towns north to south, Barnegat Light to Holgate.',
+    representativeOfPage: true,
     description:
-      'Map of Long Beach Island, New Jersey showing all six towns north to south — Barnegat Light, Harvey Cedars, Surf City, Ship Bottom, Long Beach Township and Beach Haven — with the non-contiguous Long Beach Township sections shaded and the Route 72 Causeway landing at Ship Bottom.',
+      'LBI town map. Map of Long Beach Island, New Jersey showing all six towns north to south — Barnegat Light, Harvey Cedars, Surf City, Ship Bottom, Long Beach Township and Beach Haven — with the non-contiguous Long Beach Township sections shaded and the Route 72 Causeway landing at Ship Bottom.',
   }
 
   return (
@@ -56,12 +61,14 @@ export default function MapPage() {
           <span className="rule" />
           <span>Map · 18 miles · north to south</span>
         </div>
-        <h1>Map of <em>LBI</em></h1>
+        {/* H1 leads with the literal query — "lbi map" — rather than inverting it. */}
+        <h1>LBI <em>Map</em></h1>
         <p className="pg-lede">
-          Long Beach Island is a narrow barrier island on the New Jersey shore, about{' '}
-          <b>18 miles</b> long and in places only a few blocks wide — you can see Barnegat Bay and
-          the Atlantic from the same street. It sits in Ocean County, and there is exactly one road
-          on: the Route 72 Causeway, which lands you in Ship Bottom, roughly in the middle.
+          A map of Long Beach Island, NJ and all six LBI towns, north to south. The island is a
+          narrow barrier island on the New Jersey shore, about <b>18 miles</b> long and in places
+          only a few blocks wide — you can see Barnegat Bay and the Atlantic from the same street.
+          It sits in Ocean County, and there is exactly one road on: the Route 72 Causeway, which
+          lands you in Ship Bottom, roughly in the middle.
         </p>
       </div>
 
@@ -82,6 +89,20 @@ export default function MapPage() {
               Cedars and High Bar Harbor hangs off the bay side at the top.
             </p>
             <LbiTownsMap />
+            {/* The PNG render of this map is picking up image-search impressions
+                on its own. Linking it from the page it belongs to, with the
+                phrase people search, gives the file real page context instead of
+                only an og:image reference. */}
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 14, marginBottom: 0 }}>
+              <a
+                href="/lbi-towns-map.png"
+                style={linkStyle}
+                download="lbi-towns-map.png"
+              >
+                Download the LBI town map (PNG) →
+              </a>{' '}
+              Printable map of Long Beach Island towns, north to south.
+            </p>
           </article>
 
           {/* Orientation — how to read the island */}
@@ -171,8 +192,11 @@ export default function MapPage() {
                 a: 'Long Beach Island sits off the southern New Jersey coast in Ocean County, roughly halfway between Atlantic City and Toms River. It is a barrier island separated from the mainland by Barnegat Bay, reached only by the Route 72 Causeway from Manahawkin, which lands at Ship Bottom.',
               },
               {
-                q: 'How long is Long Beach Island?',
-                a: 'About 18 miles from Barnegat Light at the north tip to the Forsythe refuge below Holgate at the south. It is very narrow — in places only a few blocks wide, with the ocean and Barnegat Bay visible from the same street.',
+                // "How long is Long Beach Island" is answered once, at the top of
+                // /towns — the stronger page. Asking it here as well would put two
+                // of this site's own pages in front of the same query.
+                q: 'How long does it take to drive the length of LBI?',
+                a: 'Roughly 35 to 40 minutes end to end in summer traffic, and about 25 off-season. There is one road for almost the whole 18 miles — Long Beach Boulevard, which becomes Bay Avenue through Beach Haven — so there is no way around a backup, and the stretch through Ship Bottom near the Causeway is the reliable pinch point.',
               },
               {
                 q: 'What are the towns on LBI in order from north to south?',

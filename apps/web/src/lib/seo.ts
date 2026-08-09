@@ -24,20 +24,26 @@ const STATIC_SEO: Record<string, PageSeo> = {
     ogImage: '/lbi-towns-map.png',
   },
   '/lbi-map': {
-    title: 'Map of LBI — Long Beach Island NJ Towns Map, North to South',
+    // Leads with the literal phrase people type ("lbi map"), then the towns-map
+    // variants — the cluster this page exists to win.
+    title: 'LBI Map — Long Beach Island NJ Towns Map, North to South',
     description:
-      'A map of Long Beach Island, NJ showing all 6 LBI towns north to south from Barnegat Light to Holgate, where the Route 72 Causeway lands, and why Long Beach Township appears in five separate pieces.',
+      'An LBI map of all 6 Long Beach Island towns north to south, Barnegat Light to Holgate — plus where the Route 72 Causeway lands and how the island is laid out.',
     ogImage: '/lbi-towns-map.png',
   },
   '/lbi-town-services': {
-    title: 'LBI Police, Schools & ZIP Codes — Who Serves Each Long Beach Island Town',
+    // ZIP-code queries are the demonstrated demand on this page, so the ZIPs
+    // themselves lead the title instead of sitting third behind police/schools.
+    title: 'LBI ZIP Codes — 08008 & 08006 by Town, Plus Police & Schools',
     description:
-      'Which police department, school district, ZIP code and beach badge covers each LBI town. Barnegat Light is policed by Long Beach Township, Beach Haven runs its own school district, and 08008 covers everything except the north tip.',
+      'ZIP code for every LBI town and section: Loveladies, Brant Beach and Holgate are 08008, Barnegat Light is 08006. Plus police and school districts by town.',
   },
   '/lbi-town-boundaries': {
-    title: 'LBI Town Boundaries — Which Long Beach Island Town Is My Street In?',
+    // Page one, zero clicks. The old question-form title promised an answer but
+    // named none of the concrete things the page actually holds.
+    title: 'LBI Town Boundaries: Street-by-Street Town Lines & Block Numbers',
     description:
-      'Where every LBI town line actually falls, street by street — the split streets at S 2nd and 31st, the Division Avenue myth, and the block range for all 14 Long Beach Township villages from Loveladies to Holgate.',
+      'Which LBI town is your street in? Every town line street by street, the two split streets, and Boulevard block ranges for all 14 Long Beach Township villages.',
     ogImage: '/lbi-towns-map.png',
   },
   '/lbi-conditions': {

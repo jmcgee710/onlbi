@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
-import { serviceLayers, townServices, zipCoverage } from '../data/services'
+import { serviceLayers, townServices, zipByPlace, zipCoverage } from '../data/services'
 import { towns } from '../data/towns'
 import { buildBreadcrumbSchema } from '../lib/breadcrumbSchema'
 import FaqSection from '../components/FaqSection'
+import AnswerBlock from '../components/AnswerBlock'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // LBI TOWN SERVICES — who polices your street, which school district you're in,
@@ -53,13 +54,16 @@ export default function ServicesPage() {
           <span className="rule" />
           <span>Police · Schools · ZIP · Badges</span>
         </div>
-        <h1>Who Serves My <em>LBI Town</em></h1>
+        {/* H1 leads with ZIP codes to match the title tag — ZIP lookups are the
+            demonstrated demand on this page, and the service map is what the
+            reader gets once they arrive. */}
+        <h1>LBI ZIP Codes <em>&amp; Town Services</em></h1>
         <p className="pg-lede">
-          Which town you live in is only one of the lines drawn across Long Beach Island, and no
-          two of them match. Barnegat Light has its own mayor but is policed by Long Beach
-          Township. Five of the six towns share one school district; Beach Haven runs its own. The
-          whole island shares one health department and — apart from Barnegat Light — a single ZIP
-          code. Here is who actually covers your street.
+          The whole island runs on two ZIP codes — and they are only one of the lines drawn across
+          Long Beach Island, none of which match each other. Barnegat Light has its own mayor but
+          is policed by Long Beach Township. Five of the six towns share one school district; Beach
+          Haven runs its own. Here is the ZIP code for every town and section, and who actually
+          covers your street.
         </p>
         <div className="pg-tabs pg-tabs-static" style={{ pointerEvents: 'none' }}>
           <div className="pg-tab active">
@@ -85,6 +89,29 @@ export default function ServicesPage() {
 
         {/* ── Main column ────────────────────────────────────────────────────── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+          {/* ZIP is the demonstrated demand on this page and the question was
+              only answered two thirds of the way down. Answer it first, in the
+              words it gets typed in, then let the tables do the detail. */}
+          <AnswerBlock
+            answers={[
+              {
+                q: 'What is the ZIP code for LBI?',
+                lead: 'Long Beach Island has two ZIP codes: 08008 covers almost the whole island, and 08006 covers Barnegat Light at the north tip.',
+                detail:
+                  'Harvey Cedars, Surf City, Ship Bottom, Beach Haven and every Long Beach Township section — Loveladies, Brant Beach, Spray Beach, Holgate and the rest — all share 08008. High Bar Harbor is the one Township address inside 08006.',
+              },
+              {
+                // Deliberately the section-wide question, not "what is the ZIP for
+                // Loveladies" — /loveladies already answers that one, and it is the
+                // page that should keep it.
+                q: 'Do the Long Beach Township sections have their own ZIP codes?',
+                lead: 'No. Every Long Beach Township section is 08008, the same code as most of the island — the section name in the address is doing the work the ZIP code cannot.',
+                detail:
+                  'Loveladies, North Beach, Brant Beach, Beach Haven Crest, Brighton Beach, Peahala Park, Beach Haven Park, Haven Beach, The Dunes, Beach Haven Terrace, Beach Haven Gardens, Spray Beach, North Beach Haven and Holgate all share it. High Bar Harbor is the one Township address inside 08006.',
+              },
+            ]}
+          />
 
           {/* Per-town lookup — the thing people actually came for */}
           <article className="lc">
@@ -217,7 +244,7 @@ export default function ServicesPage() {
           </article>
 
           {/* ZIP */}
-          <article className="lc">
+          <article className="lc" id="zip-codes">
             <h2 className="lc-name" style={{ fontSize: 24, marginBottom: 10 }}>
               LBI ZIP Codes — 08008 and 08006
             </h2>
@@ -251,6 +278,59 @@ export default function ServicesPage() {
             </p>
           </article>
 
+          {/* ZIP by place name — the lookup people actually search for, one place
+              at a time ("loveladies nj zip code"), rather than island-wide. */}
+          <article className="lc" id="zip-by-town">
+            <h2 className="lc-name" style={{ fontSize: 24, marginBottom: 10 }}>
+              ZIP Code for Every LBI Town and Section
+            </h2>
+            <p style={{ ...body, marginBottom: 14 }}>
+              Every place name that appears in a Long Beach Island mailing address, with the ZIP
+              code that serves it. Only Barnegat Light and High Bar Harbor use{' '}
+              <b>08006</b> — everywhere else on the island is <b>08008</b>.
+            </p>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+                <caption style={{ captionSide: 'bottom', textAlign: 'left', paddingTop: 10, fontSize: 12, color: 'var(--slate)' }}>
+                  LBI ZIP codes by town and Long Beach Township section, north to south.
+                </caption>
+                <thead>
+                  <tr>
+                    <th style={th}>Place</th>
+                    <th style={th}>ZIP</th>
+                    <th style={th}>Municipality</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {zipByPlace.map(p => (
+                    <tr key={`${p.name}-${p.municipality}`}>
+                      <td style={{ ...td, color: 'var(--ink)', fontWeight: 500 }}>
+                        {p.slug
+                          ? <Link to={`/${p.slug}`} style={{ ...linkStyle, fontWeight: 500 }}>{p.name}</Link>
+                          : p.name}
+                        {p.section && (
+                          <span style={{ color: 'var(--slate)', fontWeight: 400 }}> · section</span>
+                        )}
+                      </td>
+                      <td style={{ ...td, color: 'var(--ink)', fontFamily: 'var(--font-display)', fontSize: 16, whiteSpace: 'nowrap' }}>
+                        {p.zip}
+                      </td>
+                      <td style={td}>{p.municipality}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p style={{ ...body, marginTop: 14, marginBottom: 0 }}>
+              A section name is not a town. Loveladies, Brant Beach, Spray Beach, Holgate and the
+              rest are all Long Beach Township — same ZIP, same police, same beach badge — even
+              though the mail is addressed to the section.{' '}
+              <Link to="/lbi-town-boundaries" style={linkStyle}>
+                See where each section starts and ends →
+              </Link>
+            </p>
+          </article>
+
           {/* Badges */}
           <article className="lc">
             <h2 className="lc-name" style={{ fontSize: 22, marginBottom: 10 }}>
@@ -275,8 +355,10 @@ export default function ServicesPage() {
             title="LBI Services FAQ"
             faqs={[
               {
-                q: 'What is the ZIP code for Long Beach Island?',
-                a: 'Almost all of Long Beach Island uses 08008 — Harvey Cedars, Surf City, Ship Bottom, Beach Haven, and every Long Beach Township section including Loveladies, Brant Beach, Spray Beach and Holgate. The one exception is Barnegat Light at the north tip, which has its own ZIP code, 08006.',
+                // The island-wide ZIP question is answered at the top of this page
+                // now; repeating it here would split the page against itself.
+                q: 'Does my ZIP code tell me which LBI town I am in?',
+                a: 'No. Two ZIP codes cover six municipalities and fourteen Township sections, so 08008 alone narrows you down to "almost anywhere on Long Beach Island." Your mailing address does not settle it either — a South 3rd Street house is addressed Surf City but sits in Ship Bottom. The town line is what determines your police department, your taxes and your beach badge.',
               },
               {
                 q: 'Which school district is LBI in?',
