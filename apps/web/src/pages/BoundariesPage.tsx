@@ -315,17 +315,19 @@ export default function BoundariesPage() {
               ))}
             </div>
             <div className="aside-card advisory" style={{ marginTop: 20 }}>
-              <p className="aside-title" style={{ fontSize: 17 }}>The Dunes — held back until it wasn&apos;t</p>
+              <p className="aside-title" style={{ fontSize: 17 }}>Why The Dunes starts at MacEvoy</p>
               <p className="aside-body">
-                This section sat unnumbered here for a long time. The badge directory gives block 121
-                to Holly Banks and doesn&apos;t list MacEvoy Lane at all, while the Township&apos;s own
-                post at MacEvoy reads <b>121</b> — and the directory needs eight street names to fill
-                seven blocks, so one of them had to be wrong. Counting the Boulevard cross streets
-                answers it: there are exactly <b>seven</b> between the MacEvoy post and the Beach
-                Haven Terrace post at Ohio Avenue (128). The post wins and the numbers below are
-                what&apos;s left. The directory&apos;s eighth name was Starboard — and there is one
-                Starboard Road on Long Beach Island, in North Beach. It was filed under the wrong
-                village all along.
+                The badge directory and the Township&apos;s own marker post disagree here. The
+                directory gives block 121 to Holly Banks and doesn&apos;t list MacEvoy Lane at all;
+                the post standing at MacEvoy reads <b>121</b>. The directory also needs eight street
+                names to fill seven blocks, so something in it had to be wrong.
+              </p>
+              <p className="aside-body" style={{ marginTop: 10 }}>
+                Counting settles it. There are exactly <b>seven</b> Boulevard cross streets between
+                the MacEvoy post and the Beach Haven Terrace post at Ohio Avenue (128), so the post
+                is right and the numbers above follow it. The directory&apos;s spare eighth name was
+                Starboard — and there is exactly one Starboard Road on Long Beach Island, in North
+                Beach. It was filed under the wrong village.
               </p>
             </div>
           </article>
