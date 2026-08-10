@@ -302,8 +302,11 @@ export const villageBlocks: VillageBlocks[] = [
     // MacEvoy, which shifts its whole sequence one block north of the post. The
     // street order below follows the post, not the directory.
     crosswalkConfidence: 'inferred',
+    // Keep this to the one fact the Inferred chip doesn't already convey. The
+    // Starboard misfile is the aside's story on /lbi-town-boundaries — telling
+    // it here too put the same punchline twice within a screen of itself.
     crosswalkNote:
-      'Deduced from the street order between two posts rather than read off a sign, so it carries a lower grade than the block range above it. The directory’s eighth Dunes name, Starboard, turns out to be a misfile: there is one Starboard Road on Long Beach Island and it is in North Beach.',
+      'These follow the street order between the two posts — the block range is signed, the individual numbers are not.',
     crosswalk: [
       { name: 'MacEvoy', block: 121 }, { name: 'Holly Banks', block: 122 }, { name: 'Ramapo', block: 123 },
       { name: 'Old Whaling', block: 124 }, { name: 'Ryerson', block: 125 }, { name: 'Marine', block: 126 },
