@@ -1,27 +1,46 @@
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
-import { Sun, Umbrella, MapPinned, UtensilsCrossed, Anchor, Compass, Accessibility, Bell } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { Analytics } from '@vercel/analytics/react'
-import Sidebar from './Sidebar'
 import { getPageSeo } from '../lib/seo'
 
+// Main nav — shown in the desktop header and the mobile menu.
+const mainNav = [
+  { to: '/towns',          label: 'Towns' },
+  { to: '/lbi-conditions', label: 'Conditions' },
+  { to: '/beaches',        label: 'Beaches' },
+  { to: '/eat',            label: 'Eat' },
+  { to: '/do',             label: 'Do' },
+  { to: '/getting-around', label: 'Getting Around' },
+]
+
+// Mobile menu also carries the practical pages the desktop header leaves to the footer.
 const mobileNav = [
-  { to: '/',               Icon: Sun,             label: 'Today' },
-  { to: '/beaches',        Icon: Umbrella,        label: 'Beaches' },
-  { to: '/towns',          Icon: MapPinned,       label: 'Towns' },
-  { to: '/eat',            Icon: UtensilsCrossed, label: 'Eat' },
-  { to: '/do',             Icon: Anchor,          label: 'Do' },
-  { to: '/getting-around', Icon: Compass,         label: 'Around' },
-  { to: '/accessibility',  Icon: Accessibility,   label: 'Access' },
+  { to: '/', label: 'Today' },
+  ...mainNav,
+  { to: '/accessibility', label: 'Accessibility' },
+  { to: '/alerts',        label: 'Alerts' },
+]
+
+const footerNav = [
+  { to: '/towns',          label: 'Towns' },
+  { to: '/lbi-conditions', label: 'Conditions' },
+  { to: '/beaches',        label: 'Beaches' },
+  { to: '/accessibility',  label: 'Accessibility' },
+  { to: '/getting-around', label: 'Getting Around' },
+  { to: '/alerts',         label: 'Alerts' },
 ]
 
 export default function Layout() {
   const { pathname } = useLocation()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   // Reset scroll to the top of the page on every route change. Without this,
   // navigating from the bottom of one page lands you at the bottom of the next.
+  // Also closes the mobile menu after a link in it is followed.
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 })
+    setMenuOpen(false)
   }, [pathname])
 
   // Keep <title> + meta description correct during client-side (SPA) navigation.
@@ -40,35 +59,40 @@ export default function Layout() {
 
   return (
     <div className="app">
-      <Sidebar />
+      <header className="site-header">
+        <div className="site-header-inner">
+          <Link to="/" className="site-logo" aria-label="On LBI — home">
+            <img src="/logo-light.png" alt="On LBI" width={160} height={213} />
+          </Link>
+          <nav className="site-nav" aria-label="Main">
+            {mainNav.map(({ to, label }) => (
+              <NavLink key={to} to={to} className={({ isActive }) => (isActive ? 'active' : undefined)}>
+                {label}
+              </NavLink>
+            ))}
+          </nav>
+          <Link to="/lbi-conditions" className="site-cta">Tides &amp; temps</Link>
+          <button
+            type="button"
+            className="menu-btn"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            {menuOpen ? <X size={20} strokeWidth={2} /> : <Menu size={20} strokeWidth={2} />}
+          </button>
+        </div>
+        <nav id="mobile-menu" className={`mobile-menu${menuOpen ? ' open' : ''}`} aria-label="Mobile">
+          {mobileNav.map(({ to, label }) => (
+            <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => (isActive ? 'active' : undefined)}>
+              {label} <span aria-hidden="true">→</span>
+            </NavLink>
+          ))}
+        </nav>
+      </header>
+
       <main className="main">
-        {/* Mobile top bar */}
-        <div className="mobile-topbar">
-          <Link to="/" aria-label="On LBI — go to Today" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-            <img src="/logo-dark.png" alt="On LBI" style={{ height: 40, objectFit: 'contain' }} />
-          </Link>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1, flex: 1, minWidth: 0, margin: '0 12px' }}>
-            <span style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.01em' }}>
-              {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-            </span>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: 13, color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', letterSpacing: '0.01em' }}>
-              because you're <span style={{ color: 'rgba(255,255,255,0.85)', fontStyle: 'normal', fontWeight: 500 }}>ON</span> the island, not in it!
-            </span>
-          </div>
-          <Link to="/alerts" style={{ color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center' }}>
-            <Bell size={18} strokeWidth={1.5} />
-          </Link>
-        </div>
-
-        {/* Desktop top bar */}
-        <div className="topbar">
-          <div className="crumbs">
-            <strong>Today</strong> · {new Date().toLocaleDateString('en-US', {
-              weekday: 'long', month: 'long', day: 'numeric',
-            })}
-          </div>
-        </div>
-
         {/* Suspense boundary for the lazy per-page chunks (App.tsx). During
             hydration React keeps the prerendered HTML inside this boundary
             visible until the page's chunk loads — do not remove it, or every
@@ -77,30 +101,21 @@ export default function Layout() {
         <Suspense fallback={null}>
           <Outlet />
         </Suspense>
-
-        {/* Mobile bottom nav */}
-        <nav className="mobile-bottom-nav">
-          <div style={{ display: 'flex', width: '100%' }}>
-            {mobileNav.map(({ to, Icon, label }) => (
-              <NavLink
-                key={to}
-                to={to}
-                end={to === '/'}
-                style={({ isActive }) => ({
-                  flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
-                  gap: 3, padding: '10px 2px', fontSize: 9.5, fontWeight: 600, textDecoration: 'none',
-                  whiteSpace: 'nowrap',
-                  color: isActive ? '#B8CDC8' : 'rgba(255,255,255,0.4)',
-                  fontFamily: 'var(--font-body)',
-                })}
-              >
-                <Icon size={19} strokeWidth={1.5} />
-                {label}
-              </NavLink>
-            ))}
-          </div>
-        </nav>
       </main>
+
+      <footer className="site-footer">
+        <div className="site-footer-inner">
+          <Link to="/" aria-label="On LBI — home">
+            <img src="/logo-light.png" alt="On LBI" width={160} height={213} />
+          </Link>
+          <nav aria-label="Footer">
+            {footerNav.map(({ to, label }) => (
+              <Link key={to} to={to}>{label}</Link>
+            ))}
+          </nav>
+          <div>onlongbeachisland.com</div>
+        </div>
+      </footer>
       <Analytics />
     </div>
   )

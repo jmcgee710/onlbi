@@ -1,680 +1,467 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Sun, CloudSun, CloudRain, Cloud, Umbrella, Droplets, Waves, Bug, Thermometer, Car, Calendar, type LucideIcon } from 'lucide-react'
-import { tideKeyTimes } from '../data/conditions'
-import { todayEvents } from '../data/events'
-import { useTides } from '../hooks/useTides'
-import { useNow } from '../hooks/useNow'
+import { Sun, CloudSun, CloudRain, Cloud, Video, type LucideIcon } from 'lucide-react'
 import { useWeather } from '../hooks/useWeather'
 import { useWaterTemp } from '../hooks/useWaterTemp'
-import { useUV, classifyUV } from '../hooks/useUV'
 import { useBuoy } from '../hooks/useBuoy'
-import { useRipCurrent, ripRiskColor } from '../hooks/useRipCurrent'
-import TideCard, { timeStrToFrac, dateToFrac, fmtNowLabel } from '../components/TideCard'
-
-// NDBC offshore buoy nearest to LBI for wave/swell/sea-temp data.
-const BUOY_STATION = '44091' // Barnegat
+import { useRipCurrent, type RipRisk } from '../hooks/useRipCurrent'
+import { useSunset } from '../hooks/useSunset'
+import { useUsgsWaterTemps } from '../hooks/useUsgsWaterTemps'
+import { useTideSeries, nextTides, tideCurve, nyNow } from '../hooks/useTideSeries'
+import { useNow } from '../hooks/useNow'
+import IslandMap from '../components/IslandMap'
+import { cameras } from '../data/gettingAround'
 import {
   classifyBugLevel,
   computeLoungeScore,
   computeSwimScore,
   computeSurfScore,
   describeBugs,
-  describeWind,
+  isFlySeason,
   scoreShortLabel,
+  scoreVerdict,
   windDirCategory,
 } from '../lib/scoring'
-import { friendlyShortForecast, tideContext, seasonStatus, type SeasonStatus } from '../lib/copy'
+import { friendlyShortForecast } from '../lib/copy'
 
-// Water temp comes from a Tides & Currents station that has a temp sensor.
-// AC is the closest reliable one to LBI.
-const WATER_TEMP_STATION = '8534720' // Atlantic City
-
-// NOAA station IDs — change here if you want different reference points.
-const BAY_STATION = '8534208' // Beach Haven Coast Guard Station
-const BAY_NAME = 'Beach Haven Coast Guard Station'
-const OCEAN_STATION = '8534720' // Atlantic City (Ocean) — nearest dedicated ocean station
-const OCEAN_NAME = 'Atlantic City (Ocean)'
-
-// Coordinates for the NWS forecast lookup. Beach Haven proper.
-// Weather is essentially uniform across 18-mi LBI, so one point is fine.
+// Weather is essentially uniform across the 18-mile island; one point is fine.
 const LBI_LAT = 39.5604
 const LBI_LON = -74.2429
 
-// "Happening today" is hidden for now — it's hand-maintained (not live) and
-// risks going stale. Flip to true to restore the section as-is; revisit when
-// it's backed by a live source (Google Calendar embed / Ticketmaster feed).
-const SHOW_HAPPENING_TODAY = false
+const BUOY_STATION = '44091' // NDBC Barnegat, offshore
+const OCEAN_STATION = '8534720' // NOAA Atlantic City — tides + surf-zone water temp
+const USGS_NORTH = '01409125' // Barnegat Bay at Barnegat Light
+const USGS_SOUTH = '01409335' // Little Egg Inlet near Tuckerton
 
-// Color treatment for the season badge on each "Happening today" event.
-const SEASON_COLOR: Record<SeasonStatus['kind'], { color: string; bg: string }> = {
-  upcoming: { color: '#9a5a24', bg: 'rgba(196,90,62,0.12)' }, // amber — not open yet
-  open:     { color: 'var(--teal-deep)', bg: 'rgba(72,108,107,0.1)' },
-  closed:   { color: 'var(--slate)', bg: 'rgba(15,31,46,0.05)' },
+// NOAA bay-side tide prediction stations, north to south. Water temp only
+// where USGS has a sensor nearby.
+const BAY_STATIONS = [
+  { id: 'B1', station: '8533631', name: 'High Bar', sub: 'Barnegat Light · bayside', usgs: USGS_NORTH, tempSrc: 'USGS sensor' },
+  { id: 'B2', station: '8533862', name: 'North Beach', sub: 'Bayside' },
+  { id: 'B3', station: '8533935', name: 'Rt 72 Causeway', sub: 'Manahawkin Bay bridge' },
+  { id: 'B4', station: '8534208', name: 'Beach Haven', sub: 'Coast Guard station · bayside', usgs: USGS_SOUTH, tempSrc: 'USGS · Little Egg Inlet' },
+] as const
+
+const TOWNS = [
+  { to: '/barnegat-light', name: 'Barnegat Light', meta: 'Borough · north tip' },
+  { to: '/loveladies', name: 'Loveladies', meta: 'Long Beach Twp.' },
+  { to: '/harvey-cedars', name: 'Harvey Cedars', meta: 'Borough' },
+  { to: '/surf-city', name: 'Surf City', meta: 'Borough' },
+  { to: '/ship-bottom', name: 'Ship Bottom', meta: 'Borough · causeway' },
+  { to: '/brant-beach', name: 'Brant Beach', meta: 'Long Beach Twp.' },
+  { to: '/beach-haven', name: 'Beach Haven', meta: 'Borough' },
+  { to: '/holgate', name: 'Holgate', meta: 'Long Beach Twp. · south end' },
+]
+
+const OCEAN = '#2A6F97'
+const BAY = '#4E7A5A'
+
+const WEATHER_ICON: Record<string, LucideIcon> = { Sun, CloudSun, Rain: CloudRain, Cloud }
+
+function scoreTone(n: number): string {
+  return n >= 70 ? '#8FD1A6' : n >= 50 ? '#E9C27A' : '#F0A07A'
 }
 
-// ─── FORECAST ICONS ───────────────────────────────────────────────────────────
-function WeatherIcon({ type }: { type: string }) {
-  const map: Record<string, LucideIcon> = { Sun, CloudSun, Rain: CloudRain, Cloud }
-  const Icon = map[type] ?? Cloud
-  return <Icon size={26} strokeWidth={1.5} color="var(--teal-deep)" />
+const RIP_STYLE: Record<RipRisk, { bg: string; fg: string; note: string }> = {
+  Low: { bg: '#E3EEE5', fg: '#2F5A3B', note: 'Low still means rips near jetties and piers.' },
+  Moderate: { bg: '#F6ECD6', fg: '#7A5412', note: 'Stronger rips possible. Swim near a lifeguard.' },
+  High: { bg: '#F7E1DA', fg: '#8A2E17', note: 'Life-threatening rips likely. The surf zone is dangerous for all swimmers.' },
+}
+
+/** "-0.004" → "0.0", so a slightly negative MLLW prediction doesn't print "-0.0". */
+function fmtFt(ft: number): string {
+  return (Math.abs(ft) < 0.05 ? 0 : ft).toFixed(1)
+}
+
+/** "25 to 30 mph" → "25–30" */
+function windRange(speed: string): string {
+  return speed.replace(/\s*mph/i, '').replace(/\s+to\s+/, '–')
+}
+
+// ─── TIDE STATION CARD ────────────────────────────────────────────────────────
+function TideStationCard(props: {
+  id: string
+  name: string
+  sub: string
+  station: string
+  color: string
+  temp?: number | null
+  tempSrc?: string
+  footnote?: string
+}) {
+  const { points, error } = useTideSeries(props.station)
+  const nowMin = nyNow(useNow()).min
+  const next = points ? nextTides(points, nowMin) : []
+
+  return (
+    <article className="h-card">
+      <div className="h-card-top">
+        <div className="h-station">
+          <span className="h-pin" style={{ background: props.color }}>{props.id}</span>
+          <div>
+            <div className="h-station-name">{props.name}</div>
+            <div className="h-muted">{props.sub}</div>
+          </div>
+        </div>
+        {props.temp != null && (
+          <div className="h-temp">
+            <div className="h-big">{Math.round(props.temp)}°</div>
+            <div className="h-tiny">{props.tempSrc}</div>
+          </div>
+        )}
+      </div>
+      {error ? (
+        <div className="h-muted">NOAA predictions are unavailable right now.</div>
+      ) : (
+        <>
+          <div className="h-pair">
+            {[0, 1].map((i) => {
+              const p = next[i]
+              return (
+                <div key={i}>
+                  <div className="h-tiny">{p ? `Next ${p.type.toLowerCase()}` : 'Next tide'}</div>
+                  <div className="h-strong">{p ? `${p.label} · ${fmtFt(p.ft)} ft` : '—'}</div>
+                </div>
+              )
+            })}
+          </div>
+          <div className="h-curve">
+            <svg viewBox="0 0 296 44" preserveAspectRatio="none" aria-hidden="true">
+              <line x1="0" y1="40" x2="296" y2="40" stroke="#E4DCCD" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+              {points && (
+                <polyline
+                  points={tideCurve(points)}
+                  fill="none"
+                  stroke={props.color}
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  vectorEffect="non-scaling-stroke"
+                />
+              )}
+            </svg>
+            {points && (
+              <span className="h-now" style={{ left: `${(nowMin / 1440) * 100}%` }}>
+                <span>Now</span>
+              </span>
+            )}
+          </div>
+        </>
+      )}
+      {props.footnote && <div className="h-tiny">{props.footnote}</div>}
+    </article>
+  )
 }
 
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function TodayPage() {
-  const [activeDay, setActiveDay] = useState(0)
-
-  // Two independent NOAA fetches — bay tides and ocean tides differ in both
-  // timing and amplitude, so they get their own charts.
-  const { tides: bayTides, loading: bayLoading } = useTides(BAY_STATION)
-  const { tides: oceanTides, loading: oceanLoading } = useTides(OCEAN_STATION)
-
-  // Live clock — re-renders every minute so the chart markers track real time.
+  const [side, setSide] = useState<'ocean' | 'bay'>('ocean')
   const now = useNow()
-  const nowT = dateToFrac(now)
-  const nowLabel = fmtNowLabel(now)
 
-  // Live 5-day forecast from NWS. liveCurrent is the first NWS period
-  // ("This Afternoon" / "Tonight") and is what powers the hero strip.
-  const { forecast: liveForecast, current: liveCurrent, loading: weatherLoading } =
-    useWeather(LBI_LAT, LBI_LON)
-
-  // Live water temp from NOAA Tides & Currents (AC station has the sensor).
-  const { temp: liveWaterTemp } = useWaterTemp(WATER_TEMP_STATION)
-  // Live UV index from Open-Meteo (NWS doesn't expose UV in standard forecast).
-  const { uv: liveUV } = useUV(LBI_LAT, LBI_LON)
-  // Live wave/swell from the Barnegat offshore buoy.
+  const { forecast, current } = useWeather(LBI_LAT, LBI_LON)
+  const { temp: surfTemp } = useWaterTemp(OCEAN_STATION)
   const { reading: buoy } = useBuoy(BUOY_STATION)
   const { rip } = useRipCurrent()
+  const { sunset } = useSunset(LBI_LAT, LBI_LON)
+  const { temps: bayTemps } = useUsgsWaterTemps([USGS_NORTH, USGS_SOUTH])
 
-  // Find the next upcoming HIGH tide on the ocean side for the hero sub-line.
-  const oceanEvents = oceanTides ?? tideKeyTimes
-  const nextHigh = oceanEvents.find(
-    (e) => e.type === 'High' && timeStrToFrac(e.time) > nowT,
-  )
+  const today = forecast?.[0]
+  const tonight = today?.dow === 'Tonight'
+  const waveFt = buoy?.waveHeightFt ?? null
+  const seaTemp = buoy?.waterTempF ?? surfTemp ?? null
 
-  // Live values for hero display, with mock fallbacks so it never blanks.
-  const heroDateStr = now.toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-  })
-  const heroToday = liveForecast?.[0]
-  const heroHi = heroToday?.hi ?? 81
-  const heroLo = heroToday?.lo ?? 65
-  const heroConditionRaw =
-    liveCurrent?.shortForecast ?? heroToday?.shortForecast ?? 'Sunny'
-  const heroCondition = friendlyShortForecast(heroConditionRaw)
-  const heroWind = heroToday?.wind ?? 'SSW 12'
+  // ── Scores: the site's scoring.ts on live NWS + buoy inputs ──
+  const scores = today
+    ? (() => {
+        const wind = current ? `${current.windDir} ${windRange(current.windSpeed)} mph` : today.wind
+        const dirCat = windDirCategory(today.windDir)
+        const swimBits = [
+          seaTemp != null && `${Math.round(seaTemp)}° water`,
+          waveFt != null && `${waveFt.toFixed(1)} ft waves`,
+          rip && `${rip.risk.toLowerCase()} rip risk`,
+        ].filter(Boolean) as string[]
+        const surfBits = [
+          waveFt != null && `${waveFt.toFixed(1)} ft${buoy?.wavePeriodSec != null ? ` at ${Math.round(buoy.wavePeriodSec)} s` : ''}`,
+          `${today.windDir} wind${dirCat === 'west' ? ' (offshore)' : dirCat === 'east' ? ' (onshore)' : ''}`,
+        ].filter(Boolean) as string[]
+        return [
+          {
+            name: 'Lounge',
+            score: computeLoungeScore({
+              precipPct: today.precipPct, hi: today.hi, ico: today.ico,
+              windSpeed: today.windSpeed, bugScore: today.bugScore,
+            }),
+            why: `${friendlyShortForecast(today.shortForecast)}, ${today.hi}°, wind ${wind}.`,
+          },
+          {
+            name: 'Swim',
+            score: computeSwimScore({
+              seaTempF: seaTemp, waveHeightFt: waveFt, hi: today.hi, precipPct: today.precipPct,
+              ico: today.ico, windSpeed: today.windSpeed, bugScore: today.bugScore,
+            }),
+            why: swimBits.length ? `${swimBits.join(', ')}.` : 'Waiting on water readings.',
+          },
+          {
+            name: 'Surf',
+            // No buoy reading = no surf score (scoring.ts would return a neutral 50).
+            score: waveFt == null ? null : computeSurfScore({
+              waveHeightFt: waveFt, wavePeriodSec: buoy?.wavePeriodSec ?? null,
+              windDir: today.windDir, windSpeed: today.windSpeed,
+              precipPct: today.precipPct, seaTempF: buoy?.waterTempF ?? null,
+            }),
+            why: waveFt == null ? 'Waiting on the offshore buoy.' : `${surfBits.join(', ')}.`,
+          },
+        ]
+      })()
+    : null
 
-  // Bug pressure for the hero copy + rip-status row.
-  const heroBugScore = heroToday?.bugScore ?? 65
-  const heroBugLevel = classifyBugLevel(heroBugScore)
-  const heroWindDirCat = windDirCategory(heroToday?.windDir ?? 'S')
-  const bugCopy = describeBugs(heroBugScore, heroWindDirCat, now)
-  const windCopy = heroToday
-    ? describeWind(heroToday.windSpeed, heroToday.windDir)
-    : 'a soft southwest breeze'
+  const inFlySeason = isFlySeason(now)
+  const bugLevel = today ? (inFlySeason ? classifyBugLevel(today.bugScore) : 'None') : null
+  const bugNote = !inFlySeason
+    ? 'Out of season. The flies run late June to early September and are worst on a west wind.'
+    : today
+      ? describeBugs(today.bugScore, windDirCategory(today.windDir), now) || 'Few around with today’s wind.'
+      : ''
 
-  const mockForecast = [
-    { dow: 'Today', hi: 81, lo: 65, ico: 'Sun',      score: 88 },
-    { dow: 'Sun',   hi: 78, lo: 62, ico: 'CloudSun', score: 71 },
-    { dow: 'Mon',   hi: 72, lo: 60, ico: 'Rain',     score: 34 },
-    { dow: 'Tue',   hi: 75, lo: 61, ico: 'Cloud',    score: 74 },
-    { dow: 'Wed',   hi: 83, lo: 66, ico: 'Sun',      score: 94 },
+  // Date + "updated" stamp only render once live data arrives (client-side),
+  // so the prerendered HTML never carries a stale build-time date.
+  const stamp = forecast
+    ? `${now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'America/New_York' })} · Updated ${now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' })}`
+    : 'Live conditions'
+
+  const stats = [
+    { label: tonight ? 'Low tonight' : 'High today', val: today ? `${tonight ? today.lo : today.hi}°` : '—', unit: '' },
+    { label: 'Wind', val: current ? `${current.windDir} ${windRange(current.windSpeed)}` : '—', unit: current ? 'mph' : '' },
+    { label: 'Waves', val: waveFt != null ? waveFt.toFixed(1) : '—', unit: waveFt != null ? 'ft' : '' },
+    { label: 'Sunset', val: sunset ? sunset.replace(/ (AM|PM)$/, '') : '—', unit: sunset?.slice(-2) ?? '' },
   ]
-  const forecastData = liveForecast ?? mockForecast
 
   return (
-    <div className="content">
-      {/* LEFT COLUMN */}
-      <div className="col">
-
-        {/* Hero */}
-        <div className="hero">
-          <div className="hero-row">
-            <div>
-              <div className="hero-eyebrow">Long Beach Island · {heroDateStr}</div>
-              <h1>Today <em>on</em><br />the island.</h1>
-              <div className="hero-sub">
-                {heroToday ? (
-                  <>
-                    {friendlyShortForecast(heroToday.shortForecast)} with {windCopy}.
-                    {bugCopy && <> {bugCopy}</>}
-                    {nextHigh && (
-                      <>
-                        {' '}
-                        <strong>
-                          Next high tide {tideContext(nextHigh.time, now)}.
-                        </strong>
-                      </>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    Clear skies with a soft southwest breeze.{' '}
-                    <strong>High tide at 10:45.</strong>
-                  </>
-                )}
-              </div>
-            </div>
-            <div>
-              <div className="hero-temps">
-                {heroToday?.dow === 'Tonight' ? (
-                  // After-sunset edge case: NWS gives us only the night
-                  // period, no day high. Show the low explicitly so we
-                  // don't display "65° / 65°" with the same number twice.
-                  <>
-                    <span className="big">{heroLo}</span>
-                    <span className="deg">°</span>
-                    <span className="lo">tonight</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="big">{heroHi}</span>
-                    <span className="deg">°</span>
-                    <span className="lo">/ {heroLo}°</span>
-                  </>
-                )}
-              </div>
-              <div className="hero-condition">{heroCondition}</div>
-            </div>
-          </div>
-          <div className="hero-stats">
-            {[
-              {
-                label: 'Water',
-                val: liveWaterTemp != null ? String(Math.round(liveWaterTemp)) : '72',
-                suf: '°F',
-                sub: liveWaterTemp != null ? 'Atlantic City buoy · live' : 'Warming through 3 pm',
-                href: null as string | null,
-              },
-              {
-                label: 'Wind',
-                val: heroWind,
-                suf: '',
-                sub: heroToday ? heroToday.shortForecast : 'Light, steady',
-                href: null,
-              },
-              {
-                label: 'UV Index',
-                val: liveUV != null ? String(Math.round(liveUV)) : '8',
-                suf: '/11',
-                sub: liveUV != null ? `${classifyUV(liveUV)} · live` : 'High · reapply at 1 pm',
-                href: null,
-              },
-              {
-                label: 'Traffic',
-                val: '→',
-                suf: '',
-                sub: 'NJ511 + beach cams',
-                href: '/getting-around',
-              },
-            ].map((s) => {
-              const inner = (
-                <>
-                  <div className="label">{s.label}</div>
-                  <div className="val">
-                    {s.val}
-                    <small>{s.suf}</small>
-                  </div>
-                  <div className="sub">{s.sub}</div>
-                </>
-              )
-              if (s.href) {
-                return (
-                  <Link
-                    to={s.href}
-                    key={s.label}
-                    className="hero-stat"
-                    style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
-                  >
-                    {inner}
-                  </Link>
-                )
-              }
-              return (
-                <div className="hero-stat" key={s.label}>
-                  {inner}
-                </div>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Static hub copy + links — crawlable homepage text naming the island
-            and pushing equity to the core landing pages. Literal JSX only. */}
-        <div className="card">
-          <p style={{ fontSize: 14, lineHeight: 1.65, color: 'var(--ink-soft)', margin: 0 }}>
-            On LBI is the local guide to <b>Long Beach Island, New Jersey</b> — an 18-mile
-            barrier island on the Jersey Shore with six beach towns from Barnegat Light to
-            Beach Haven and Holgate. Live ocean temperature, tides, and surf above; guides
-            to every town, beach badges, and things to do below.
+    <div className="home">
+      {/* ── Hero ── */}
+      <section className="h-hero">
+        <div className="h-hero-copy">
+          <div className="h-eyebrow">{stamp}</div>
+          <h1 className="h-title">Long Beach Island, <em>right now.</em></h1>
+          {/* Static, crawlable hub copy — literal JSX, never bound to live data. */}
+          <p className="h-lede">
+            On LBI is the local guide to <b>Long Beach Island, New Jersey</b> — an 18-mile barrier
+            island on the Jersey Shore with six beach towns from Barnegat Light to Beach Haven and
+            Holgate. Live tides and water temps from both sides of the island, today’s beach scores,
+            and a guide to every town.
           </p>
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 14 }}>
-            {[
-              ['/towns', 'LBI Towns & Map'],
-              ['/lbi-conditions', 'Water Temp & Tides'],
-              ['/beaches', 'Beach Badges 2026'],
-              ['/eat', 'Where to Eat'],
-              ['/do', 'Things to Do'],
-              ['/getting-around', 'Getting Around'],
-            ].map(([href, label]) => (
-              <Link
-                key={href}
-                to={href}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px',
-                  background: 'var(--sand)', border: '1px solid var(--line)', borderRadius: 6,
-                  color: 'var(--ink)', textDecoration: 'none', fontSize: 13, fontWeight: 600,
-                }}
-              >
-                {label} <ArrowRight size={14} strokeWidth={2} color="var(--teal-deep)" />
-              </Link>
-            ))}
-          </div>
         </div>
-
-        {/* Three activity scores — same day can rate differently for lounging
-            vs swimming vs surfing (e.g. perfect sun + 55°F water + 9ft surf
-            = Peak lounge, Tough swim, Great surf). */}
-        {(() => {
-          const loungeScore = heroToday
-            ? computeLoungeScore({
-                precipPct: heroToday.precipPct,
-                hi: heroToday.hi,
-                ico: heroToday.ico,
-                windSpeed: heroToday.windSpeed,
-                bugScore: heroToday.bugScore,
-              })
-            : 88
-          const swimScore = heroToday
-            ? computeSwimScore({
-                seaTempF: buoy?.waterTempF ?? liveWaterTemp ?? null,
-                waveHeightFt: buoy?.waveHeightFt ?? null,
-                hi: heroToday.hi,
-                precipPct: heroToday.precipPct,
-                ico: heroToday.ico,
-                windSpeed: heroToday.windSpeed,
-                bugScore: heroToday.bugScore,
-              })
-            : 65
-          const surfScore = heroToday
-            ? computeSurfScore({
-                waveHeightFt: buoy?.waveHeightFt ?? null,
-                wavePeriodSec: buoy?.wavePeriodSec ?? null,
-                windDir: heroToday.windDir,
-                windSpeed: heroToday.windSpeed,
-                precipPct: heroToday.precipPct,
-                seaTempF: buoy?.waterTempF ?? null,
-              })
-            : 50
-
-          const pillars: Array<{ Icon: LucideIcon; label: string; score: number }> = [
-            { Icon: Umbrella, label: 'Lounge', score: loungeScore },
-            { Icon: Droplets, label: 'Swim', score: swimScore },
-            { Icon: Waves, label: 'Surf', score: surfScore },
-          ]
-
-          return (
-            <div className="card score-card">
-              <div className="card-head">
-                <div>
-                  <h2 className="card-title">Today's Scores</h2>
-                  <div className="card-sub" style={{ marginTop: 4 }}>
-                    By how you'd use the beach
-                  </div>
-                </div>
-                <a href="https://safebeachday.com" target="_blank" rel="noopener noreferrer" className="section-link">Live conditions ↗</a>
-              </div>
-
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(3, 1fr)',
-                  gap: 16,
-                  margin: '12px 0 18px',
-                }}
-              >
-                {pillars.map((p) => (
-                  <div key={p.label} style={{ textAlign: 'center' }}>
-                    <div style={{ lineHeight: 1, display: 'flex', justifyContent: 'center' }}>
-                      <p.Icon size={28} strokeWidth={1.5} color="var(--teal-deep)" />
-                    </div>
-                    <div
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: 56,
-                        fontWeight: 300,
-                        color: 'var(--navy)',
-                        lineHeight: 1,
-                        letterSpacing: '-0.03em',
-                        marginTop: 6,
-                      }}
-                    >
-                      {p.score}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 10.5,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.16em',
-                        color: 'var(--slate, #6b8580)',
-                        marginTop: 4,
-                      }}
-                    >
-                      {p.label}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 13,
-                        color: 'var(--teal-deep, #1b3654)',
-                        fontStyle: 'italic',
-                        marginTop: 4,
-                      }}
-                    >
-                      {scoreShortLabel(p.score)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="score-bullets">
-                {heroToday && (
-                  <span>{describeWind(heroToday.windSpeed, heroToday.windDir)}</span>
-                )}
-                {liveWaterTemp != null && (
-                  <span>Water {Math.round(liveWaterTemp)}°F at Atlantic City</span>
-                )}
-                {liveUV != null && (
-                  <span className={liveUV >= 6 ? 'warn' : undefined}>
-                    UV {Math.round(liveUV)} — {classifyUV(liveUV)}
-                  </span>
-                )}
-                {buoy?.waveHeightFt != null && buoy.waveHeightFt >= 2.5 && (
-                  <span className={buoy.waveHeightFt >= 4 ? 'warn' : undefined}>
-                    Surf {buoy.waveHeightFt.toFixed(1)} ft offshore
-                    {buoy.waveHeightFt >= 4 ? ' — rough water' : ''}
-                  </span>
-                )}
-                {buoy?.waterTempF != null && buoy.waterTempF < 65 && (
-                  <span className="warn">
-                    Sea temp {Math.round(buoy.waterTempF)}°F — cold for swimming
-                  </span>
-                )}
-              </div>
-
-              <div className="rip-status">
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                  <Waves size={14} strokeWidth={1.5} /> Rip current risk · {rip ? (
-                  <strong style={{ color: ripRiskColor(rip.risk) }}>{rip.risk} across the island</strong>
-                ) : (
-                  <strong style={{ color: 'var(--slate)' }}>see safebeachday.com</strong>
-                )}</span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                  <Bug size={14} strokeWidth={1.5} /> Bugs · <strong>{heroBugLevel}</strong>
-                </span>
-              </div>
+        <div className="h-stats">
+          {stats.map((s) => (
+            <div key={s.label} className="h-stat">
+              <div className="h-label">{s.label}</div>
+              <div className="h-stat-val">{s.val} {s.unit && <small>{s.unit}</small>}</div>
             </div>
-          )
-        })()}
-
-        {/* Tides — split into Bay and Ocean since they differ in timing + height */}
-        <TideCard
-          title="Bay Tide"
-          stationName={BAY_NAME}
-          liveTides={bayTides}
-          loading={bayLoading}
-          fallbackEvents={tideKeyTimes}
-          nowT={nowT}
-          nowLabel={nowLabel}
-        />
-        <TideCard
-          title="Ocean Tide"
-          stationName={OCEAN_NAME}
-          liveTides={oceanTides}
-          loading={oceanLoading}
-          fallbackEvents={tideKeyTimes}
-          nowT={nowT}
-          nowLabel={nowLabel}
-        />
-
-        <Link to="/lbi-conditions" className="live-cta">
-          <span className="live-badge">Live</span>
-          <span>LBI ocean temp, tides &amp; flooding</span>
-          <span className="cta-arrow"><ArrowRight size={16} strokeWidth={2.5} /></span>
-        </Link>
-
-        {/* Waves — only renders when the buoy actually returned a reading.
-            NDBC buoys go offline for maintenance, so hiding the card on
-            missing data is preferable to showing dashes. */}
-        {buoy && (
-          <div className="card">
-            <div className="card-head">
-              <h2 className="card-title">Waves</h2>
-              <span className="card-sub"><span className="live-pip" />Live · Barnegat Buoy 44091</span>
-            </div>
-            <div className="tide-events">
-              <div className="tide-event">
-                <div className="lab">Height</div>
-                <div className="time">
-                  {buoy.waveHeightFt != null
-                    ? `${buoy.waveHeightFt.toFixed(1)}ft`
-                    : '—'}
-                </div>
-                <div className="ft">significant</div>
-              </div>
-              <div className="tide-event">
-                <div className="lab">Period</div>
-                <div className="time">
-                  {buoy.wavePeriodSec != null
-                    ? `${buoy.wavePeriodSec.toFixed(0)}s`
-                    : '—'}
-                </div>
-                <div className="ft">dominant</div>
-              </div>
-              <div className="tide-event">
-                <div className="lab">Direction</div>
-                <div className="time">{buoy.waveDir ?? '—'}</div>
-                <div className="ft">
-                  {buoy.waveDirDeg != null ? `${Math.round(buoy.waveDirDeg)}°` : ''}
-                </div>
-              </div>
-              <div className="tide-event">
-                <div className="lab">Sea temp</div>
-                <div className="time">
-                  {buoy.waterTempF != null
-                    ? `${Math.round(buoy.waterTempF)}°F`
-                    : '—'}
-                </div>
-                <div className="ft">offshore</div>
-              </div>
-            </div>
-            <div
-              style={{
-                fontSize: 11,
-                opacity: 0.6,
-                marginTop: 8,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-              }}
-            >
-              {(() => {
-                const mins = Math.max(
-                  0,
-                  Math.round((now.getTime() - buoy.observedAt.getTime()) / 60000),
-                )
-                if (mins < 60) return `Observed ${mins} min ago`
-                const h = Math.floor(mins / 60)
-                const m = mins % 60
-                return `Observed ${h}h${m > 0 ? ` ${m}m` : ''} ago`
-              })()}
-            </div>
-          </div>
-        )}
-
-        {/* Forecast */}
-        <div className="card">
-          <div className="card-head">
-            <h2 className="card-title">Five-day outlook</h2>
-            <span className="card-sub">
-              {weatherLoading
-                ? 'Loading…'
-                : liveForecast
-                  ? <><span className="live-pip" />Live · NWS forecast</>
-                  : 'Sample data'}
-            </span>
-          </div>
-          <div className="forecast">
-            {forecastData.map((d, i) => (
-              <div key={d.dow} className={`day ${i === activeDay ? 'active' : ''}`} onClick={() => setActiveDay(i)}>
-                <div className="dow">{d.dow}</div>
-                <div className="ico"><WeatherIcon type={d.ico} /></div>
-                <div className="hi">{d.hi}°</div>
-                <div className="lo">{d.lo}°</div>
-                <div className="scorechip">{d.score}</div>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
-      </div>
+      </section>
 
-      {/* RIGHT COLUMN */}
-      <div className="col">
-
-        {/* Metrics — live water + UV, plus a link to the traffic/cams page.
-            "Beaches open" tile was removed: aggregate-only data is misleading
-            without per-beach status, which we don't have a real feed for. */}
-        <div className="metrics">
-          {[
-            {
-              Icon: Thermometer,
-              val: liveWaterTemp != null ? String(Math.round(liveWaterTemp)) : '72',
-              suf: '°',
-              lab: 'Water temp',
-              href: null as string | null,
-            },
-            {
-              Icon: Sun,
-              val: liveUV != null ? String(Math.round(liveUV)) : '8',
-              suf: '',
-              lab: liveUV != null ? `UV · ${classifyUV(liveUV)}` : 'UV index · high',
-              href: null,
-            },
-            {
-              Icon: Car,
-              val: '→',
-              suf: '',
-              lab: 'Traffic & cams',
-              href: '/getting-around',
-            },
-          ].map((m) => {
-            const inner = (
-              <>
-                <div className="metric-ico">
-                  <m.Icon size={18} strokeWidth={1.5} />
-                </div>
-                <div>
-                  <div className="metric-val">
-                    {m.val}
-                    <small>{m.suf && ' ' + m.suf}</small>
-                  </div>
-                  <div className="metric-lab">{m.lab}</div>
-                </div>
-              </>
-            )
-            if (m.href) {
-              return (
-                <Link
-                  to={m.href}
-                  key={m.lab}
-                  className="metric"
-                  style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
-                >
-                  {inner}
-                </Link>
-              )
-            }
+      {/* ── Beach scores ── */}
+      <section className="h-scores" aria-labelledby="scores-title">
+        <div className="h-scores-intro">
+          <div>
+            <div className="h-label h-label-dark">Today’s beach scores</div>
+            <h2 id="scores-title" className="h-scores-title">
+              {today ? scoreVerdict(today.score) : 'Scoring today’s beach…'}
+            </h2>
+            <p className="h-scores-lede">Scored three ways, because a washout on the sand can still be a surf day.</p>
+          </div>
+          <Link to="/lbi-conditions" className="h-link-light">How scores work →</Link>
+        </div>
+        <div className="h-score-grid">
+          {(scores ?? [{ name: 'Lounge' }, { name: 'Swim' }, { name: 'Surf' }]).map((c) => {
+            const s = 'score' in c && c.score != null ? { ...c, score: c.score } : null
             return (
-              <div className="metric" key={m.lab}>
-                {inner}
-              </div>
+              <article key={c.name} className="h-score">
+                <div className="h-label h-label-dark">{c.name}</div>
+                <div className="h-score-row">
+                  <span className="h-score-num">{s ? s.score : '—'}</span>
+                  {s && <span className="h-score-word" style={{ color: scoreTone(s.score) }}>{scoreShortLabel(s.score)}</span>}
+                </div>
+                <div
+                  className="h-meter"
+                  role="meter"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={s?.score ?? 0}
+                  aria-label={`${c.name} score`}
+                >
+                  {s && <div style={{ width: `${s.score}%`, background: scoreTone(s.score) }} />}
+                </div>
+                <div className="h-score-why">{'why' in c ? c.why : ' '}</div>
+              </article>
             )
           })}
         </div>
+      </section>
 
-        {/* Events — "Happening today" (hidden via SHOW_HAPPENING_TODAY) */}
-        {SHOW_HAPPENING_TODAY && (
-        <div className="card">
-          <div className="card-head">
-            <h2 className="card-title">Happening today</h2>
-            <a
-              href="https://welcometolbi.com/events/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="section-link"
-            >
-              Full calendar ↗
-            </a>
+      {/* ── Tides & water temps ── */}
+      <section id="tides" className="h-tides">
+        <div className="h-tides-head">
+          <div>
+            <h2 className="h-h2">Tides &amp; water temps</h2>
+            <p className="h-sub">
+              Four bay stations and the open ocean. Bay tides run hours behind the ocean and rise far
+              less — plan the boat ramp and the beach separately.
+            </p>
           </div>
-          <div className="events">
-            {todayEvents.map((e, i) => {
-              const hasTime = /\d/.test(e.time)
-              const hour = e.time.match(/^(\d+)/)?.[1] ?? '?'
-              const ap = e.time.toLowerCase().includes('pm') ? 'pm' : 'am'
-              const season = seasonStatus(e.seasonOpens, e.seasonCloses, now)
-              const inner = (
-                <div className="event" key={i}>
-                  <div className="event-time">
-                    {hasTime ? (
-                      <>
-                        <span className="h">{hour}</span>
-                        <span className="ap">{ap}</span>
-                      </>
-                    ) : (
-                      <span className="h"><Calendar size={18} strokeWidth={1.5} /></span>
-                    )}
-                  </div>
-                  <div>
-                    <div className="event-title">{e.title}</div>
-                    <div className="event-meta">{e.venue}{e.time ? ` · ${e.time}` : ''}</div>
-                    {season && (
-                      <div style={{ marginTop: 6 }}>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 600, color: SEASON_COLOR[season.kind].color, background: SEASON_COLOR[season.kind].bg, padding: '2px 8px', borderRadius: 3 }}>
-                          <Calendar size={11} strokeWidth={1.5} />{season.label}
-                        </span>
+          <div className="h-live"><span className="live-pip" />Live · NOAA · USGS · NDBC · NWS</div>
+        </div>
+
+        <div className="h-side-toggle" role="group" aria-label="Choose side of the island">
+          <button type="button" aria-pressed={side === 'ocean'} onClick={() => setSide('ocean')}>Ocean side</button>
+          <button type="button" aria-pressed={side === 'bay'} onClick={() => setSide('bay')}>Bay side</button>
+        </div>
+
+        <div className="h-tides-grid" data-side={side}>
+          <div className="h-col h-col-bay">
+            <div className="h-colhead"><span style={{ background: BAY }} />Barnegat Bay · west</div>
+            {BAY_STATIONS.map((s) => (
+              <TideStationCard
+                key={s.id}
+                id={s.id}
+                name={s.name}
+                sub={s.sub}
+                station={s.station}
+                color={BAY}
+                temp={'usgs' in s ? bayTemps?.[s.usgs] : null}
+                tempSrc={'tempSrc' in s ? s.tempSrc : undefined}
+              />
+            ))}
+            <p className="h-tiny h-src">Tides: NOAA predictions. Bay water temp only where USGS has a sensor — Barnegat Light and Little Egg Inlet.</p>
+          </div>
+
+          <div className="h-col h-col-map">
+            <div className="h-map"><IslandMap /></div>
+            <div className="h-duo">
+              <div className="h-card">
+                <div className="h-label">Island forecast · NWS</div>
+                <div className="h-forecast">
+                  {(forecast ?? []).slice(0, 4).map((d) => {
+                    const Icon = WEATHER_ICON[d.ico] ?? Cloud
+                    return (
+                      <div key={d.dow}>
+                        <div className="h-strong h-small">{d.dow}</div>
+                        <Icon size={24} strokeWidth={1.6} color={d.ico === 'Sun' ? '#A8701F' : d.ico === 'Rain' ? OCEAN : '#5A6570'} aria-label={d.shortForecast} />
+                        <div className="h-strong h-small">{d.hi}°</div>
+                        <div className="h-tiny">{d.lo}°</div>
                       </div>
-                    )}
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 7, textAlign: 'right' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
-                      {!e.free && (
-                        <span style={{ fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--slate-soft)', fontWeight: 700 }}>Tickets</span>
-                      )}
-                      <span className={`event-price ${e.free ? 'free' : ''}`}>{e.free ? 'Free' : e.price}</span>
-                    </div>
-                    {e.recurring && (
-                      <span style={{ fontSize: 11, color: 'var(--slate)', lineHeight: 1.4, maxWidth: 150 }}>
-                        {e.recurring}
-                      </span>
-                    )}
-                    {e.cta && (
-                      <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--teal-deep)', lineHeight: 1.4 }}>
-                        {e.cta}
-                      </span>
-                    )}
-                  </div>
+                    )
+                  })}
+                  {!forecast && <div className="h-muted">Loading the NWS forecast…</div>}
                 </div>
-              )
-              return e.web
-                ? <a key={i} href={e.web} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>{inner}</a>
-                : inner
-            })}
+              </div>
+              <div className="h-card">
+                <div className="h-label">Greenheads</div>
+                <div className="h-big">{bugLevel ?? '—'}</div>
+                <div className="h-body">{bugNote}</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="h-col h-col-ocean">
+            <div className="h-colhead"><span style={{ background: OCEAN }} />Atlantic Ocean · east</div>
+            <TideStationCard
+              id="O1"
+              name="Ocean tide"
+              sub="Same along the whole beachfront"
+              station={OCEAN_STATION}
+              color={OCEAN}
+              footnote="NOAA Atlantic City reference station"
+            />
+            <article className="h-card">
+              <div className="h-label">Ocean water temp</div>
+              <div className="h-pair">
+                <div>
+                  <div className="h-big">{surfTemp != null ? `${Math.round(surfTemp)}°` : '—'}</div>
+                  <div className="h-muted">Surf zone · O1</div>
+                </div>
+                <div>
+                  <div className="h-big">{buoy?.waterTempF != null ? `${Math.round(buoy.waterTempF)}°` : '—'}</div>
+                  <div className="h-muted">Offshore · O2</div>
+                </div>
+              </div>
+            </article>
+            <article className="h-card">
+              <div className="h-station">
+                <span className="h-pin" style={{ background: OCEAN }}>O2</span>
+                <div className="h-label">Waves</div>
+              </div>
+              <div className="h-waves">
+                <span className="h-big">{waveFt != null ? waveFt.toFixed(1) : '—'}</span>
+                {waveFt != null && <span className="h-unit">ft</span>}
+                {buoy && (
+                  <span className="h-body">
+                    {buoy.wavePeriodSec != null && `${Math.round(buoy.wavePeriodSec)} s`}
+                    {buoy.waveDir && ` · from ${buoy.waveDir}`}
+                  </span>
+                )}
+              </div>
+              <div className="h-tiny">NDBC Buoy 44091, offshore of Barnegat</div>
+            </article>
+            <article className="h-card">
+              <div className="h-card-top">
+                <div className="h-label">Rip current risk</div>
+                {rip && (
+                  <span className="h-pill" style={{ background: RIP_STYLE[rip.risk].bg, color: RIP_STYLE[rip.risk].fg }}>
+                    {rip.risk}
+                  </span>
+                )}
+              </div>
+              <div className="h-body">
+                {rip ? RIP_STYLE[rip.risk].note : 'The NWS surf zone forecast isn’t available right now.'}
+              </div>
+              <div className="h-tiny">NWS Mount Holly surf zone forecast</div>
+            </article>
           </div>
         </div>
-        )}
+      </section>
 
-      </div>
+      {/* ── Live cams ── */}
+      <section className="h-section">
+        <div className="h-section-head">
+          <div>
+            <h2 className="h-h2">Live cams</h2>
+            <p className="h-sub">Long Beach Township’s public cameras. They open the township’s live viewer.</p>
+          </div>
+          <Link to="/getting-around" className="h-link">Traffic &amp; getting around →</Link>
+        </div>
+        <div className="h-cams">
+          {cameras.map((c) => (
+            <a key={c.name} href={c.url} target="_blank" rel="noopener noreferrer" className="h-cam">
+              <span className="h-cam-top">
+                <span className="h-cam-icon"><Video size={14} strokeWidth={2} aria-hidden="true" /></span>
+                <span className="h-strong">{c.name}</span>
+              </span>
+              <span className="h-cam-foot"><span>{c.location}</span><span aria-hidden="true">↗</span></span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Towns ── */}
+      <section className="h-section">
+        <div className="h-section-head">
+          <div>
+            <h2 className="h-h2">Find your town</h2>
+            <p className="h-sub">Six municipalities, a dozen-plus villages — and exactly where each one starts.</p>
+          </div>
+          <Link to="/towns" className="h-link">All towns &amp; map →</Link>
+        </div>
+        <div className="h-towns">
+          {TOWNS.map((t) => (
+            <Link key={t.to} to={t.to} className="h-town">
+              <span className="h-town-name">{t.name}</span>
+              <span className="h-town-foot"><span>{t.meta}</span><span aria-hidden="true">→</span></span>
+            </Link>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

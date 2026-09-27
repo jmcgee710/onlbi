@@ -203,7 +203,7 @@ export default function AlertsPage() {
               NJ DEP tests ocean &amp; bay beaches weekly in season and posts any
               advisories or closures.
             </p>
-            <a href="https://www.njbeaches.org/" target="_blank" rel="noopener noreferrer"
+            <a href="https://njbeaches.org/" target="_blank" rel="noopener noreferrer"
                style={{ fontSize: 13, color: 'var(--teal-deep)', fontWeight: 600, textDecoration: 'none' }}>
               Check NJ beach status →
             </a>

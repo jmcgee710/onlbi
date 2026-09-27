@@ -172,7 +172,7 @@ export const beachBadgeInfo: TownBadgeInfo[] = [
     },
     purchaseOptions: ['in-person-booth', 'app-my-beach-mobile', 'on-beach-from-checker'],
     badgeScopeNote: 'Valid in Ship Bottom only',
-    sourceUrl: 'https://shipbottom.org/government/public-safety/beach-patrol/beach-badges/',
+    sourceUrl: 'https://shipbottom.org/government/public-safety/beach-patrol/',
     verifiedDate: '2026-05-29',
   },
 

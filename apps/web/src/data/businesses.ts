@@ -30,8 +30,8 @@ export const dining: Business[] = [
   // Restaurants & Seafood
   {
     id: 101, name: "Kubel's", cat: 'Dining', subcat: 'Seafood',
-    town: 'Barnegat Light', address: '1 Broadway, Barnegat Light, NJ 08006',
-    phone: '(609) 494-8844', web: 'https://www.kubels.com',
+    town: 'Barnegat Light', address: '28 W 7th St, Barnegat Light, NJ 08006',
+    phone: '(609) 494-8592', web: 'https://www.kubelsbarnegatlight.com',
     note: 'Cash only, BYOB, legendary crab cakes. An LBI tradition since 1927.',
   },
   {
@@ -43,13 +43,13 @@ export const dining: Business[] = [
   {
     id: 103, name: "Daddy O's Restaurant & Hotel", cat: 'Dining', subcat: 'Upscale',
     town: 'Brant Beach', address: '4401 Long Beach Blvd, Brant Beach, NJ 08008',
-    phone: '(609) 494-1300', web: 'https://www.daddyohotel.com',
+    phone: '(609) 494-1300', web: 'https://www.daddyolbi.com',
     note: 'Farm-to-table dining, amazing cocktails. Reservations highly recommended.',
   },
   {
     id: 104, name: 'The Chicken or the Egg (CHEGG)', cat: 'Dining', subcat: 'Breakfast',
     town: 'Beach Haven', address: '207 N Bay Ave, Beach Haven, NJ 08008',
-    phone: '(609) 492-3695', web: 'https://www.cheggrestaurant.com',
+    phone: '(609) 492-3695', web: 'https://letschegg.com',
     note: 'Best breakfast spot on the island. Get there early — waits are long in summer.',
   },
   {
@@ -61,7 +61,7 @@ export const dining: Business[] = [
   {
     id: 106, name: 'Harvey Cedars Shellfish Co.', cat: 'Dining', subcat: 'Raw Bar',
     town: 'Harvey Cedars', address: '7904 Long Beach Blvd, Harvey Cedars, NJ 08008',
-    phone: '(609) 494-7112', web: 'https://www.harveycedarsshellfish.com',
+    phone: '(609) 494-7112', web: 'https://www.harveycedarsshellfishco.com',
     note: 'Raw bar perfection. Picnic tables, no-frills, opens at 4 PM.',
   },
   {
@@ -1102,8 +1102,8 @@ export const entertainment: Business[] = [
   // Amusements
   {
     id: 401, name: 'Fantasy Island Amusement Park', cat: 'Entertainment', subcat: 'Amusement Park',
-    town: 'Beach Haven', address: '320 W 7th St, Beach Haven, NJ 08008',
-    phone: '(609) 492-4000', web: 'https://www.fantasyislandfun.com',
+    town: 'Beach Haven', address: '750 N Bay Ave, Beach Haven, NJ 08008',
+    phone: '(609) 492-4000', web: 'https://fantasyislandlbi.com',
     note: 'Classic LBI amusement park with rides, arcades, and mini golf. Family favorite.',
   },
   {
@@ -1372,7 +1372,7 @@ export const lodging: Business[] = [
   {
     id: 502, name: "Daddy O's Restaurant & Hotel", cat: 'Lodging', subcat: 'Boutique Hotel',
     town: 'Brant Beach', address: '4401 Long Beach Blvd, Brant Beach, NJ 08008',
-    phone: '(609) 494-1300', web: 'https://www.daddyohotel.com',
+    phone: '(609) 494-1300', web: 'https://www.daddyolbi.com',
     note: 'Stylish boutique hotel with acclaimed restaurant. Mid-island location.',
   },
   {

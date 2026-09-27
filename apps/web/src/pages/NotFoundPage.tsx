@@ -2,12 +2,18 @@ import { Link } from 'react-router-dom'
 
 export default function NotFoundPage() {
   return (
-    <main className="flex flex-col items-center justify-center flex-1 p-4 text-center">
-      <h1 className="text-4xl font-bold text-ocean-700">404</h1>
-      <p className="mt-2 text-gray-500">Page not found.</p>
-      <Link to="/" className="mt-4 text-ocean-600 underline">
-        Back to Today on LBI
-      </Link>
-    </main>
+    <div className="pg-wrap">
+      <section className="pg-hero" data-not-found="">
+        <div className="pg-eyebrow"><span className="rule" />404</div>
+        <h1>Page <em>not found.</em></h1>
+        <p className="pg-lede">That page isn’t on the island. Try the homepage or a town guide.</p>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Link to="/" className="lc-cta-btn">Back to today <span className="arw">→</span></Link>
+          <Link to="/towns" className="lc-cta-btn" style={{ background: 'var(--paper)', color: 'var(--ink)', border: '1px solid var(--line-strong)' }}>
+            All towns <span className="arw">→</span>
+          </Link>
+        </div>
+      </section>
+    </div>
   )
 }
