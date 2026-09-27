@@ -11,10 +11,11 @@ export const ISLAND_PATH =
 export const OCEAN_PATH =
   'M 330 0 L 520 0 L 520 900 L 214 900 C 240 780, 258 680, 276 560 C 298 420, 318 280, 334 170 C 344 100, 340 40, 330 0 Z'
 
-// Route 72 leaves Ship Bottom heading slightly north of west toward
-// Manahawkin — a straight causeway, drawn from the island's bay shore to the
-// map's west edge.
-export const CAUSEWAY = { x1: 274, y1: 420, x2: 0, y2: 398 }
+// Route 72 leaves Ship Bottom (about a third of the way down the borough, to
+// scale) heading slightly north of west toward Manahawkin — a straight
+// causeway to the map's west edge. It starts under the island, which both maps
+// draw on top, so the road meets the shore cleanly.
+export const CAUSEWAY = { x1: 296, y1: 352, x2: 0, y2: 328 }
 
 /** y on the causeway at a given x (for placing markers/labels on it). */
 export function causewayY(x: number): number {
@@ -41,6 +42,22 @@ const shoreSamples: Pt[] = WEST_SHORE.flatMap(([a, b, c, d]) =>
     ] as Pt
   }),
 ).sort((p, q) => p[1] - q[1])
+
+/**
+ * Map a to-scale position (0 = north tip, 1 = south tip of the island, ~18 mi)
+ * to a y in this viewBox. Both maps place towns with this so they agree.
+ */
+export function islandY(frac: number): number {
+  return 30 + frac * 840
+}
+
+/**
+ * The towns map's to-scale units (40 = north tip, 620 = south tip, ~32 per
+ * mile) → y in this viewBox.
+ */
+export function scaleY(v: number): number {
+  return islandY((v - 40) / 580)
+}
 
 /** x of the island's bay shore at height y. */
 export function westShoreX(y: number): number {

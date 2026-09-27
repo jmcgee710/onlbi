@@ -11,10 +11,12 @@ export type TownSection = {
   bullets?: string[]
 }
 
-// A named section/neighborhood within a municipality. Boundaries on LBI are
-// described by relative position (which sections it sits between) rather than
-// exact street numbers — precise street cutoffs are not publicly documented,
-// so we deliberately avoid inventing them.
+// A named section/neighborhood within a municipality. `position` gives both the
+// relative placement and, for Long Beach Township sections, the Boulevard block
+// range. Those block ranges come from src/data/boundaries.ts — reconstructed
+// from the LBT Beach Patrol street directory and the Township's own marker
+// posts. Claims that aren't settled are marked as such there rather than being
+// stated flatly here; see /lbi-town-boundaries for the sourcing.
 export type Neighborhood = {
   name: string
   position: string
@@ -103,9 +105,23 @@ export const townGuides: TownGuide[] = [
           "Beach Haven borough ends at Nelson Avenue on its south side. Everything below that — the long, narrow peninsula running down to Beach Haven Inlet and the Edwin B. Forsythe National Wildlife Refuge at the island's very tip — is Holgate, which is part of Long Beach Township, not Beach Haven borough. The refuge end is closed April 1 through August 31 for piping plover nesting. So when a map or listing says \"Beach Haven Inlet,\" it's pointing at the southern tip past Holgate, a short drive south of downtown Beach Haven.",
       },
       {
+        title: 'Where Beach Haven begins — 12th Street',
+        body:
+          "The borough's northern line is 12th Street, and it's the best-documented boundary on the island: the borough defines its own beaches as running from 12th Street to Nelson Avenue, the Long Beach Township badge directory ends at 13th Street, and the \"Welcome to Historic Beach Haven — Queen City, 1874\" sign stands at the corner of 12th. An easy way to hold onto it: Panzone's sits at 1106 N Bay Ave — 11th Street and the Boulevard, which is named Bay Avenue through the borough — one block inside Beach Haven. At Panzone's you're in Beach Haven. Two blocks north at 13th you're in Long Beach Township. The mail says Beach Haven either way.",
+      },
+      {
+        // /beach-haven is the island's highest-value town name and sits on page
+        // two. This section adds the civic detail the guide was missing — the
+        // things that make Beach Haven a borough rather than a stretch of sand —
+        // drawn from the same sourced data behind /lbi-town-services.
+        title: 'Beach Haven runs its own everything',
+        body:
+          "Beach Haven is the most self-contained municipality on Long Beach Island. It has its own police department rather than contracting the work out, and it is the only one of the six LBI towns that runs its own school district — the other five all send children to LBI Consolidated. It sells its own beach badge, which is not valid one block north in Long Beach Township, and it sets its own parking rules. The two things it shares with the rest of the island are the LBI Health Department, which covers all six towns, and the ZIP code: Beach Haven is 08008, the same code as almost every other address on LBI. Borough Hall is at 300 Engleside Avenue, open weekdays 9 AM to 4 PM.",
+      },
+      {
         title: 'Beach Haven vs. the "Beach Haven" sections',
         body:
-          "One quirk that trips up first-time visitors: Beach Haven borough is its own municipality, but several nearby sections — Beach Haven Terrace, Beach Haven Park, Beach Haven Crest, Beach Haven Gardens, and North Beach Haven — are actually part of Long Beach Township, not Beach Haven borough. They sit north of the borough along the central island. If your rental address is one of those, you'll buy Long Beach Township beach badges, not Beach Haven ones.",
+          "One quirk that trips up first-time visitors: Beach Haven borough is its own municipality, but several nearby sections — Beach Haven Terrace, Beach Haven Park, Beach Haven Crest, Beach Haven Gardens, and North Beach Haven — are actually part of Long Beach Township, not Beach Haven borough. They sit north of the borough along the central island, starting at 13th Street. If your rental address is one of those, you'll buy Long Beach Township beach badges, not Beach Haven ones.",
       },
     ],
     faqs: [
@@ -124,6 +140,14 @@ export const townGuides: TownGuide[] = [
       {
         q: 'Where is the Beach Haven public dock?',
         a: "The public docks sit on the bay side of town around the Schooner's Wharf and Bay Village area, near Centre Street and 9th Street. It's where the bay tour boats, parasail and jet-ski operators launch, and a popular spot for crabbing off the bulkheads and watching the sunset over Barnegat Bay.",
+      },
+      {
+        q: 'What ZIP code is Beach Haven, NJ?',
+        a: 'Beach Haven is 08008. That is the ZIP code for almost all of Long Beach Island — the sole exception is Barnegat Light at the north tip, which uses 08006. The ZIP does not tell you which town you are in: Beach Haven Terrace, Beach Haven Park and North Beach Haven all share 08008 but are Long Beach Township, not Beach Haven borough.',
+      },
+      {
+        q: 'Does Beach Haven have its own police and school district?',
+        a: 'Yes to both, and it is the only LBI town that can say so. Beach Haven has its own police department, and it runs its own school district while the other five towns share LBI Consolidated. It also sells its own beach badge, which is not valid in Long Beach Township.',
       },
       {
         q: 'What is there to do in Beach Haven at night?',
@@ -169,6 +193,11 @@ export const townGuides: TownGuide[] = [
           "Robert W. Nissen Park — bayside boat ramp, playground, boardwalk, summer concerts.",
           "Bayfront fishing & paddleboarding — quick access from the western side of the boulevard.",
         ],
+      },
+      {
+        title: 'Where Ship Bottom Begins and Ends',
+        body:
+          "Both of Ship Bottom's boundaries run down the middle of a street, which is unusual and catches people out. At the north end the line is the centerline of South 2nd Street — the north side is Surf City, the south side is Ship Bottom. That means all of South 3rd Street is Ship Bottom despite carrying a Surf City mailing address, which is why the borough describes its own beaches as starting at the southern end of 3rd Street. At the south end the same thing happens at 31st Street: Ship Bottom on the north side, Brant Beach in Long Beach Township on the south. Neighbors facing each other across either street live in different towns, pay different taxes, and need different beach badges.",
       },
       {
         title: 'Where to Eat in Ship Bottom',
@@ -217,6 +246,11 @@ export const townGuides: TownGuide[] = [
         ],
       },
       {
+        title: 'Division Avenue Is Not the Ship Bottom Line',
+        body:
+          "A persistent local myth says Surf City ends at Division Avenue. It doesn't. Division Avenue sits two blocks inside the borough, between North 1st and South 1st Street, and the name means what it says — it's where the borough's street numbering divides from North to South. The real boundary is two blocks further south, running down the centerline of South 2nd Street: only the north side of S 2nd is Surf City. Everything below that, including all of South 3rd Street, is Ship Bottom, even though the mail there still says Surf City. At the other end of town, North 25th is the last numbered street, though a named lane or two sits above it before the North Beach line near Sherwood Way.",
+      },
+      {
         title: 'Where to Eat in Surf City',
         body:
           "Scojo's is the casual local favorite for breakfast and lunch. Wally's is the family-owned diner-style spot serving breakfast, lunch, and dinner daily for 50+ years. Surf City Hotel is the longstanding bar-and-grill anchor of the boulevard with a Clam Bar and Sushi Bar. Joey's Pizza & Pasta and Surf City Pizza are the family pizza go-tos. Country Kettle Fudge's sister shop Country Kettle Chowda is in Beach Haven, but The Big Dipper has been serving Richman's hand-dipped ice cream since 1970. Panzone's Pizza is a Jersey Shore staple — same family since 1980.",
@@ -261,6 +295,11 @@ export const townGuides: TownGuide[] = [
           "Annual Harvey Cedars Arts Festival at Sunset Park — local artisans and food vendors.",
           "Harvey Cedars Ice Cream Parlour — one of the oldest businesses on LBI, established in the 1920s.",
         ],
+      },
+      {
+        title: 'Where Harvey Cedars Ends',
+        body:
+          "Harvey Cedars runs from around 86th Street in the north down through its county-named avenues — Middlesex, Atlantic, Hudson, Cape May, Cumberland, Bergen — to William, James and Troast at the south end. William Street is the last Harvey Cedars street; 124th Street, immediately south, is North Beach and therefore Long Beach Township. You can see the line from the car: two welcome signs stand at the same point on the Boulevard facing opposite directions, one for each town. The borough's south end runs through the 5200–5300 Boulevard blocks.",
       },
       {
         title: 'Where to Eat in Harvey Cedars',
@@ -323,6 +362,11 @@ export const townGuides: TownGuide[] = [
         body:
           "Just west of Barnegat Light, reached by a single two-lane road, is High Bar Harbor — a secluded bayside lagoon community. Despite sharing Barnegat Light's gateway, it's technically part of Long Beach Township, not the borough. Nearly every home sits on the bay or a canal, making it one of the island's most boater-friendly enclaves.",
       },
+      {
+        title: 'Where Barnegat Light Ends',
+        body:
+          "At the north end the borough simply runs out of island at Barnegat Inlet, inside Barnegat Lighthouse State Park. The south end is Holly Drive. Barnegat Light's numbered grid runs 1st Street down to 30th, and the \"Welcome to Barnegat Light — Incorporated 1904\" sign stands below it at about 177 Long Beach Boulevard. The next street south, Holly Drive, is tract 176 — the northernmost Loveladies entry in the Long Beach Township badge list. The Loveladies tract numbers are the Boulevard addresses, so the two systems that look unrelated are really one series: 176 is Township, 177 is the borough. South of that sign you need a township badge, and the ZIP changes from 08006 to 08008.",
+      },
     ],
     bestFor: "Travelers who want the quietest, most scenic corner of LBI. Fishermen. Sunrise people. Anyone willing to drive a little farther for fewer crowds.",
     related: [
@@ -364,6 +408,11 @@ export const townGuides: TownGuide[] = [
           "The southernmost point of LBI, ending at the Edwin B. Forsythe National Wildlife Refuge. Quieter than Beach Haven, with wide, less-crowded beaches and access to the protected refuge for birding and shell-hunting (closed April 1 – August 31 for piping plover nesting). Bowker's South Beach Deli & Grill is the local favorite for breakfast, bagels, and cheesesteaks. Great for families who want Beach Haven's amenities a short drive away without being in the middle of them.",
       },
       {
+        title: 'Where Long Beach Township Begins and Ends',
+        body:
+          "It begins and ends more than once. Long Beach Township is non-contiguous — five separate pieces wrapped around the five boroughs — so driving north to south you enter and leave it repeatedly: Loveladies, North Beach, the long middle run from Brant Beach down to North Beach Haven, and Holgate at the tip. Its lines, north to south: Holly Drive, where Loveladies tract 176 meets Barnegat Light. Somewhere between Sherwood Way and North 25th Street, where North Beach meets Surf City. The centerline of 31st Street against Ship Bottom — the north side is Ship Bottom, the south side is Brant Beach, so neighbors facing each other need different badges. 12th Street, where North Beach Haven ends and Beach Haven borough begins. And Nelson Avenue, where Holgate starts and runs south to the wildlife refuge. The full breakdown, and how firm each line is, is on the LBI town boundaries page.",
+      },
+      {
         title: 'Beach Badges & Parking',
         body:
           "Long Beach Township operates a single beach badge that covers all of its sections — from Holgate to Loveladies. This is one of the best deals on LBI because a single badge unlocks the most beach access of any town. Buy through the Township of Long Beach. Parking varies by section but is generally free street parking; arrive early in peak season.",
@@ -377,88 +426,88 @@ export const townGuides: TownGuide[] = [
     neighborhoods: [
       {
         name: 'High Bar Harbor',
-        position: 'Northwest bayside — reached by a single road off Barnegat Light',
+        position: 'Northwest bayside — named lagoon streets, reached by one road off Barnegat Light',
         blurb:
           "A secluded lagoon community on the bay at the island's north end, connected to the rest of LBI by one two-lane road. Built around a network of canals in the 1950s, nearly every home is on the water — a quiet, exclusive boater's enclave.",
       },
       {
         name: 'Loveladies',
         slug: 'loveladies',
-        position: 'North end — between Barnegat Light and Harvey Cedars',
+        position: 'North end — between Barnegat Light and Harvey Cedars, tracts 1–176',
         blurb:
           'The most upscale stretch of LBI: large, architect-designed homes on wide lots with beaches that are nearly empty on weekdays. Home to the LBI Foundation of the Arts & Sciences. Almost entirely residential by design.',
       },
       {
         name: 'North Beach',
         slug: 'north-beach',
-        position: 'North-central — between Harvey Cedars and Surf City',
+        position: 'North-central — Harvey Cedars to Surf City, Boulevard blocks 1006–1118',
         blurb:
           'A tiny, quiet residential strip with no commercial district at all. The appeal is exactly that — a calm beach week away from the boulevard noise.',
       },
       {
         name: 'Brant Beach',
         slug: 'brant-beach',
-        position: 'Central — just south of Ship Bottom',
+        position: 'Central — blocks 31–73, from 31st Street to Harrington Avenue',
         blurb:
-          "The largest section of Long Beach Township and a family-rental favorite. Wide beaches, easy parking, the Long Beach Boulevard bike path, and Bayview Park's bayside swimming, courts, dog park, and summer concerts.",
+          "The largest section of Long Beach Township and a family-rental favorite. Wide beaches, easy parking, the Long Beach Boulevard bike path, and Bayview Park's bayside swimming, courts, dog park, and summer concerts. It starts at 31st Street — a street split down the middle with Ship Bottom — and runs all the way to Harrington Avenue.",
       },
       {
         name: 'Beach Haven Crest',
-        position: 'Central — between Brant Beach and Brighton Beach',
+        position: 'Central — blocks 74–80, Mea Avenue to Surf Avenue',
         blurb:
-          'A compact section of roughly ten blocks. Quiet and residential, with an easy walk or bike to central-island shops and food.',
+          'A compact section of seven blocks — Mea, Lavenia, Culver, Hobart, Jeanette, Winifred and Surf. Quiet and residential, with an easy walk or bike to central-island shops and food.',
       },
       {
         name: 'Brighton Beach',
-        position: 'Central — between Beach Haven Crest and Peahala Park',
-        blurb: 'A small residential pocket on the central island — mostly single-family rentals and second homes.',
+        position: 'Central — blocks 81–86, Massachusetts Avenue to Pennsylvania Avenue',
+        blurb: 'A small residential pocket on the central island — six state-named blocks of single-family rentals and second homes.',
       },
       {
         name: 'Peahala Park',
-        position: 'Central — between Brighton Beach and Beach Haven Park',
-        blurb: 'A quiet mid-island section of family homes, a short hop from the boulevard.',
+        position: 'Central — blocks 87–95, Delaware Avenue to Seabreeze Drive',
+        blurb: 'A quiet mid-island section of family homes, a short hop from the boulevard. The Township marker post at Mermaid Lane prints its block number right on it: 88.',
       },
       {
         name: 'Beach Haven Park',
-        position: 'Central-south — between Peahala Park and Haven Beach',
-        blurb: 'A residential section of the township — part of Long Beach Township, not Beach Haven borough.',
+        position: 'Central-south — blocks 96–109, Herbert Avenue south',
+        blurb: 'A residential section of the township — part of Long Beach Township, not Beach Haven borough, despite the name.',
       },
       {
         name: 'Haven Beach',
-        position: 'Central-south — between Beach Haven Park and The Dunes',
-        blurb: 'A small, low-key residential section on the ocean side of the central island.',
+        position: 'Central-south — blocks 110–120, Virginia Avenue to Utah Avenue',
+        blurb: 'A low-key residential section of state-named blocks, posted at both ends by Township marker posts — one at Virginia Avenue, one facing The Dunes across MacEvoy Lane.',
       },
       {
         name: 'The Dunes',
-        position: 'Central-south — between Haven Beach and Beach Haven Terrace',
-        blurb: 'A short, quiet residential stretch named for its protected dune line.',
+        position: 'Central-south — blocks 121–127, MacEvoy Lane to Dune Lane',
+        blurb: 'A short, quiet residential stretch named for its protected dune line. It begins at MacEvoy Lane, where two Township marker posts stand on facing corners — Haven Beach ending, The Dunes beginning, both reading block 121.',
       },
       {
         name: 'Beach Haven Terrace',
-        position: 'South-central — between The Dunes and Beach Haven Gardens',
+        position: 'South-central — blocks 128–133, Ohio Avenue to Delaware Avenue',
         blurb:
-          'A walkable residential section with a handful of local shops and eateries along the boulevard. Long Beach Township, not Beach Haven borough.',
+          'A walkable residential section with a handful of local shops and eateries along the boulevard. Long Beach Township, not Beach Haven borough. Marker posts sit at both ends of it.',
       },
       {
         name: 'Beach Haven Gardens',
-        position: 'South-central — between Beach Haven Terrace and Spray Beach',
-        blurb: 'A residential section of family homes a few blocks from the ocean.',
+        position: 'South-central — 34th Street down to 27th Street',
+        blurb: "A residential section of family homes a few blocks from the ocean. It begins exactly where the island's street numbering flips: the block north of it is Delaware Avenue (133), and the next street south is 34th, counting back down from there.",
       },
       {
         name: 'Spray Beach',
-        position: 'South — between Beach Haven Gardens and North Beach Haven',
-        blurb: 'A quiet oceanside section long associated with the Spray Beach hotel and yacht club area.',
+        position: 'South — 26th Street down to 22nd Street',
+        blurb: 'A quiet oceanside section long associated with the Spray Beach hotel and yacht club area. Its Township marker post stands at 2613 Long Beach Boulevard.',
       },
       {
         name: 'North Beach Haven',
-        position: 'South — between Spray Beach and Beach Haven borough',
+        position: 'South — 21st Street down to 13th Street',
         blurb:
-          'The southernmost of the central-island township sections, bordering Beach Haven borough. Family homes within an easy walk of Beach Haven proper.',
+          "The southernmost of the central-island township sections, bordering Beach Haven borough at 12th Street. Family homes within an easy walk of Beach Haven proper. Note the range: it starts at 21st, not the 33rd most sites claim — the Township's own marker post at 2101 Long Beach Boulevard settles it.",
       },
       {
         name: 'Holgate, Beach Haven Heights & Beach Haven Inlet',
         slug: 'holgate',
-        position: 'South tip — the peninsula south of Beach Haven borough',
+        position: 'South tip — from Nelson Avenue to the refuge, named avenues only',
         blurb:
           "The township's southern peninsula runs from Beach Haven borough down to the Edwin B. Forsythe National Wildlife Refuge at the island's tip. Wide, uncrowded beaches; the refuge end is closed April 1 – Aug 31 for piping plover nesting.",
       },
@@ -473,9 +522,9 @@ export const townGuides: TownGuide[] = [
   // ─────────────────────────────────────────────────────────────────────────
   // LONG BEACH TOWNSHIP SECTION GUIDES — dedicated pages for the sections
   // people actually search for. Each carries partOf so badge/lifeguard/town
-  // data falls through to Long Beach Township. Positions stay relative —
-  // exact street boundaries are not publicly documented, so we never invent
-  // them.
+  // data falls through to Long Beach Township. Block ranges and boundary
+  // streets come from src/data/boundaries.ts and are surfaced in full on
+  // /lbi-town-boundaries, where each claim carries its source and confidence.
   // ─────────────────────────────────────────────────────────────────────────
 
   // ── HOLGATE ────────────────────────────────────────────────────────────────
@@ -547,9 +596,15 @@ export const townGuides: TownGuide[] = [
     shortName: 'Loveladies',
     h1: "Loveladies, NJ — LBI's Most Exclusive Stretch",
     eyebrow: 'Loveladies · Long Beach Twp. · North End',
-    metaTitle: "Loveladies NJ Guide — LBI's Most Exclusive Beach Community",
+    // SNIPPET TEST (see the traffic notes in the boundaries reference): the old
+    // pair sold atmosphere while the queries wanted facts — `loveladies nj zip
+    // code` alone ranked at position 8.8 with zero clicks. This version leads
+    // with the answerable ones and carries both "LBI" and "Long Beach Island",
+    // since abbreviated queries convert ~3x worse when the page never uses the
+    // literal string. Change the snippet and nothing else, then measure.
+    metaTitle: 'Loveladies NJ (LBI) — Where It Is, ZIP Code & Beach Badges',
     metaDescription:
-      'Loveladies on Long Beach Island — architect-designed homes, quiet wide-lot beaches, the LBI Foundation of the Arts & Sciences, and how the section got its name.',
+      "Loveladies is a section of Long Beach Township on the north end of Long Beach Island, between Barnegat Light and Harvey Cedars — ZIP 08008, LBT beach badges, quiet wide-lot beaches, and the LBI Foundation of the Arts & Sciences.",
     partOf: { slug: 'long-beach-township', name: 'Long Beach Township' },
     intro:
       "Loveladies is the most exclusive stretch of Long Beach Island — a section of Long Beach Township on the island's north end, between Barnegat Light and Harvey Cedars. It's known for large architect-designed homes on wide lots, beaches that stay quiet even in August, and an almost total absence of commercial development. That last part is by design, and it's exactly why people love it.",
@@ -558,6 +613,11 @@ export const townGuides: TownGuide[] = [
         title: 'Where Loveladies is',
         body:
           "Loveladies sits on the north end of LBI, south of Barnegat Light and — counterintuitively — north of Harvey Cedars. Many first-time visitors assume the townships run in neat blocks, but Long Beach Township is a patchwork: Loveladies is one of its northern pieces, wedged between two independent boroughs. It's about ten minutes from the Causeway, up Long Beach Boulevard.",
+      },
+      {
+        title: 'Loveladies has no street grid',
+        body:
+          "Unlike most of the island, Loveladies isn't laid out on numbered streets. It runs on tract numbers — roughly 1 to 176 — plus a set of private lanes, and the numbers fall as you drive south. Holly Drive sits at the top of the range at 176; the southernmost tract in the Township's badge list is 87th Street, which is about where Harvey Cedars begins. That southern line is our best reading rather than a documented fact: the badge list only names streets with beach access, so the true edge could sit a little south of 87th on a street that never needed to appear. The northern line is firmer. The tract numbers are also the Long Beach Boulevard addresses, and the \"Welcome to Barnegat Light\" sign stands at about 177 — one number above Holly Drive. Holly is the last Loveladies address; the borough starts immediately above it.",
       },
       {
         title: 'Beaches in Loveladies',
@@ -588,6 +648,10 @@ export const townGuides: TownGuide[] = [
       {
         q: 'Is Loveladies its own town?',
         a: 'No — Loveladies is a section of Long Beach Township, not an independent borough. It sits between Barnegat Light and Harvey Cedars on the north end of LBI, and Long Beach Township beach badges and rules apply.',
+      },
+      {
+        q: 'What is the ZIP code for Loveladies, NJ?',
+        a: 'Loveladies uses ZIP code 08008, the same as almost all of Long Beach Island. Only Barnegat Light has its own ZIP code, 08006. Mailing addresses in Loveladies are typically written as Long Beach Township or Loveladies, NJ 08008.',
       },
       {
         q: 'Are there restaurants or shops in Loveladies?',
@@ -621,6 +685,11 @@ export const townGuides: TownGuide[] = [
         title: 'Where North Beach is',
         body:
           "North Beach occupies a narrow run of the island between Harvey Cedars to the north and Surf City to the south. Like Loveladies and Holgate, it's a section of Long Beach Township rather than its own borough — one of the pieces of the township's patchwork woven between LBI's independent towns. Everything is a few minutes away: Surf City's shops and food to the south, Harvey Cedars' Sunset Park to the north.",
+      },
+      {
+        title: 'Where North Beach starts and stops',
+        body:
+          "The northern line is William Street: William is the last Harvey Cedars street, and 124th Street, immediately south of it, is the first North Beach street. Two welcome signs stand at that same point on the Boulevard facing opposite directions, one placed by each town. At the southern end, North Beach gives way to Surf City just below Sherwood Way, around 1004 on the Boulevard, where the Surf City welcome sign sits. North Beach has no street grid of its own — Boulevard addresses run a 1000-series from roughly 1006 at the south end to 1118 at the north, and what you see signed on the ground is a mix of numbered streets like 124th and 118th and named lanes such as Barbay, Roxie, Bay Shore, Windward and Sherwood.",
       },
       {
         title: 'Beaches in North Beach',
@@ -669,7 +738,7 @@ export const townGuides: TownGuide[] = [
       {
         title: 'Where Brant Beach is',
         body:
-          "Brant Beach begins just south of Ship Bottom and runs down the central island — the northern anchor of Long Beach Township's big central patchwork of sections. The township's municipal offices sit here on Long Beach Boulevard, which makes Brant Beach the township's de facto hub. It's a section of Long Beach Township, not an independent borough, so LBT badges and parking rules apply.",
+          "Brant Beach begins just south of Ship Bottom and runs down the central island — the northern anchor of Long Beach Township's big central patchwork of sections. The township's municipal offices sit here on Long Beach Boulevard, which makes Brant Beach the township's de facto hub. It's a section of Long Beach Township, not an independent borough, so LBT badges and parking rules apply. One note on the name: it is Brant Beach, one syllable, with no \"y\" and no \"d\". Bryant Beach and Brandt Beach are the two spellings people reach for first, and neither is a real place on Long Beach Island — if that's what you typed, this is the section you were looking for.",
       },
       {
         title: 'Beaches in Brant Beach',
@@ -685,6 +754,11 @@ export const townGuides: TownGuide[] = [
         title: 'Getting around Brant Beach',
         body:
           "The bike path along Long Beach Boulevard runs the length of Brant Beach and is one of the best ways to move around the central island — bike to Ship Bottom's shops and food in minutes, or cruise south through the township sections. The free LBI Shuttle also serves the boulevard in season.",
+      },
+      {
+        title: 'Brant Beach block by block',
+        body:
+          "Brant Beach covers Boulevard blocks 31 through 73 — from 31st Street down to Harrington Avenue — which makes it by far the largest Long Beach Township section. Two things surprise people. First, it starts at 31st, not 32nd; 32nd is simply the first guarded beach stand. And 31st Street is a split street, with Ship Bottom on the north side and Brant Beach on the south. Second, it runs well past 68th Street, all the way to Harrington, where a Township marker post at 7299 Long Beach Boulevard marks the seam with Beach Haven Crest. South of 52nd the numbered streets give way to named avenues, but the block numbers keep running underneath — Mears is 53, Farragut is 61, Meade is 68, Harrington is 73.",
       },
       {
         title: 'Where to Eat in Brant Beach',
@@ -704,6 +778,17 @@ export const townGuides: TownGuide[] = [
       {
         q: 'Does Brant Beach have a bay beach?',
         a: 'Yes — Bayview Park, around 68th Street on the bay side, has a guarded bayside swimming area with shallow, calm water, plus a playground, courts, a dog park, and free summer concerts.',
+      },
+      {
+        // "bryant beach" and "brandt beach" both rank here already on body-copy
+        // signal alone; naming them outright is what closes the gap between what
+        // was typed and what the page says back.
+        q: 'Is it Brant Beach, Bryant Beach, or Brandt Beach?',
+        a: 'Brant Beach. There is no Bryant Beach or Brandt Beach on Long Beach Island — both are common misspellings of Brant Beach, the largest section of Long Beach Township, on the central island just south of Ship Bottom.',
+      },
+      {
+        q: 'What ZIP code is Brant Beach, NJ?',
+        a: 'Brant Beach is 08008, the ZIP code shared by almost all of Long Beach Island. Because Brant Beach is a section of Long Beach Township rather than its own municipality, it carries the same ZIP as Loveladies, Spray Beach, Holgate and the rest of the Township.',
       },
     ],
     bestFor:

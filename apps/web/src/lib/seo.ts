@@ -23,6 +23,29 @@ const STATIC_SEO: Record<string, PageSeo> = {
       'The 6 LBI towns in order from north to south — Barnegat Light to Holgate — with a map of Long Beach Island, 2026 beach badge prices, and which town fits your trip.',
     ogImage: '/lbi-towns-map.png',
   },
+  '/lbi-map': {
+    // Leads with the literal phrase people type ("lbi map"), then the towns-map
+    // variants — the cluster this page exists to win.
+    title: 'LBI Map — Long Beach Island NJ Towns Map, North to South',
+    description:
+      'An LBI map of all 6 Long Beach Island towns north to south, Barnegat Light to Holgate — plus where the Route 72 Causeway lands and how the island is laid out.',
+    ogImage: '/lbi-towns-map.png',
+  },
+  '/lbi-town-services': {
+    // ZIP-code queries are the demonstrated demand on this page, so the ZIPs
+    // themselves lead the title instead of sitting third behind police/schools.
+    title: 'LBI ZIP Codes — 08008 & 08006 by Town, Plus Police & Schools',
+    description:
+      'ZIP code for every LBI town and section: Loveladies, Brant Beach and Holgate are 08008, Barnegat Light is 08006. Plus police and school districts by town.',
+  },
+  '/lbi-town-boundaries': {
+    // Page one, zero clicks. The old question-form title promised an answer but
+    // named none of the concrete things the page actually holds.
+    title: 'LBI Town Boundaries: Street-by-Street Town Lines & Block Numbers',
+    description:
+      'Which LBI town is your street in? Every town line street by street, the two split streets, and Boulevard block ranges for all 14 Long Beach Township villages.',
+    ogImage: '/lbi-towns-map.png',
+  },
   '/lbi-conditions': {
     title: 'LBI Ocean Temperature, Tides & Live Beach Conditions Today | On LBI',
     description:

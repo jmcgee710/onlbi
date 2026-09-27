@@ -18,6 +18,9 @@ import GettingAroundPage from './pages/GettingAroundPage'
 import AlertsPage from './pages/AlertsPage'
 import TownGuidePage from './pages/TownGuidePage'
 import TownsPage from './pages/TownsPage'
+import BoundariesPage from './pages/BoundariesPage'
+import ServicesPage from './pages/ServicesPage'
+import MapPage from './pages/MapPage'
 import ConditionsPage from './pages/ConditionsPage'
 import NotFoundPage from './pages/NotFoundPage'
 
@@ -33,6 +36,9 @@ const serverRoutes = buildRoutes({
   AlertsPage,
   TownGuidePage,
   TownsPage,
+  BoundariesPage,
+  ServicesPage,
+  MapPage,
   ConditionsPage,
   NotFoundPage,
 })

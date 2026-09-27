@@ -646,3 +646,4 @@ button { font-family: inherit; cursor: pointer; }
   .h-cam:hover, .h-town:hover { box-shadow: none; }
   .h-town-name { font-size: 19px; }
 }
+.h-links { display: flex; gap: 24px; flex-wrap: wrap; }

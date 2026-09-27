@@ -1,38 +1,42 @@
 // Stylized N–S map of LBI for the homepage tides section: bay tide stations
 // (B1–B4) west of the island, the two ocean readings (O1 Atlantic City pier,
 // O2 buoy 44091) pointing off-map, and the Long Beach Township cams.
-// Marker positions are approximate latitudes along the drawn island.
-import { ISLAND_PATH, OCEAN_PATH, Causeway, causewayY } from './lbiGeometry'
+// Positions use the same to-scale units as the /towns map (scaleY: 40 = north
+// tip, 620 = south tip), so the two maps agree.
+import { ISLAND_PATH, OCEAN_PATH, Causeway, causewayY, scaleY, westShoreX } from './lbiGeometry'
 
 const OCEAN = '#2A6F97'
 const BAY = '#4E7A5A'
 const INK = '#10263A'
 
 const bayPins = [
-  { id: 'B1', x: 198, y: 112 },
-  { id: 'B2', x: 180, y: 290 },
-  { id: 'B3', x: 200, y: Math.round(causewayY(200)) }, // on the causeway (Manahawkin Bay bridge)
-  { id: 'B4', x: 120, y: 728 },
+  { id: 'B1', x: 230, y: 52 }, // High Bar, off Barnegat Light
+  { id: 'B2', x: 175, y: 258 }, // North Beach, bayside
+  { id: 'B3', x: 150, y: Math.round(causewayY(150)) }, // on the causeway (Manahawkin Bay bridge)
+  { id: 'B4', x: 120, y: 772 }, // Beach Haven Coast Guard station
 ]
 const oceanPins = [
   { id: 'O2', x: 490, y: 100 },
   { id: 'O1', x: 490, y: 780 },
 ]
+// On the island: a little east of the bay shore.
+const camAt = (y: number) => ({ x: Math.round(westShoreX(y) + 12), y })
 const cams = [
-  { x: 287, y: 410 }, // 28th St, Ship Bottom
-  { x: 270, y: 500 }, // 38th St, Brant Beach
-  { x: 212, y: 845 }, // Holgate
+  camAt(Math.round(scaleY(281))), // 28th St, Ship Bottom
+  camAt(Math.round(scaleY(299))), // 38th St, Brant Beach
+  camAt(Math.round(scaleY(603))), // Holgate
 ]
-const places: Array<[string, number, number]> = [
-  ['Barnegat Light', 298, 74],
-  ['Loveladies', 292, 152],
-  ['Harvey Cedars', 280, 228],
-  ['North Beach', 272, 272],
-  ['Surf City', 266, 344],
-  ['Ship Bottom', 262, 390],
-  ['Brant Beach', 244, 522],
-  ['Beach Haven', 222, 694],
-  ['Holgate', 190, 818],
+// Town name baselines (to-scale), labels right-aligned just off the bay shore.
+const places: Array<[string, number]> = [
+  ['Barnegat Light', 80],
+  ['Loveladies', 138],
+  ['Harvey Cedars', 208],
+  ['North Beach', 258],
+  ['Surf City', 304],
+  ['Ship Bottom', 336], // above the causeway
+  ['Brant Beach', 436],
+  ['Beach Haven', 749],
+  ['Holgate', 828],
 ]
 
 export default function IslandMap() {
@@ -57,7 +61,7 @@ export default function IslandMap() {
         <text x="210" y="892" textAnchor="end">Little Egg Inlet</text>
       </g>
       <g fontFamily="Fraunces, Georgia, serif" fontSize="13" fill={INK} textAnchor="end">
-        {places.map(([name, x, y]) => <text key={name} x={x} y={y}>{name}</text>)}
+        {places.map(([name, y]) => <text key={name} x={Math.round(westShoreX(y - 5) - 14)} y={y}>{name}</text>)}
       </g>
       <g className="map-bay" fontFamily="Instrument Sans, sans-serif" fontSize="10" fontWeight="600" fill="#FFFFFF" textAnchor="middle">
         {bayPins.map((p) => (

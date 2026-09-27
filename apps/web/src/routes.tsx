@@ -32,6 +32,9 @@ export type PageModules = {
   AlertsPage: ComponentType
   TownGuidePage: ComponentType<{ slug: string }>
   TownsPage: ComponentType
+  BoundariesPage: ComponentType
+  ServicesPage: ComponentType
+  MapPage: ComponentType
   ConditionsPage: ComponentType
   NotFoundPage: ComponentType
 }
@@ -49,6 +52,9 @@ export function buildRoutes(P: PageModules): RouteObject[] {
         { path: 'beaches/:town', element: <P.BeachTownPage /> },
         { path: 'beaches/:town/:street', element: <P.BeachAccessPage /> },
         { path: 'towns', element: <P.TownsPage /> },
+        { path: 'lbi-town-boundaries', element: <P.BoundariesPage /> },
+        { path: 'lbi-town-services', element: <P.ServicesPage /> },
+        { path: 'lbi-map', element: <P.MapPage /> },
         { path: 'lbi-conditions', element: <P.ConditionsPage /> },
         { path: 'accessibility', element: <P.AccessibilityPage /> },
         { path: 'accessibility/beach-access', element: <P.AccessibilityPage /> },

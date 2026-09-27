@@ -451,7 +451,10 @@ export default function TodayPage() {
             <h2 className="h-h2">Find your town</h2>
             <p className="h-sub">Six municipalities, a dozen-plus villages — and exactly where each one starts.</p>
           </div>
-          <Link to="/towns" className="h-link">All towns &amp; map →</Link>
+          <div className="h-links">
+            <Link to="/lbi-town-boundaries" className="h-link">Town boundaries →</Link>
+            <Link to="/lbi-map" className="h-link">LBI map →</Link>
+          </div>
         </div>
         <div className="h-towns">
           {TOWNS.map((t) => (

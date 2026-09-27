@@ -7,6 +7,7 @@ import { getPageSeo } from '../lib/seo'
 // Main nav — shown in the desktop header and the mobile menu.
 const mainNav = [
   { to: '/towns',          label: 'Towns' },
+  { to: '/lbi-map',        label: 'Map' },
   { to: '/lbi-conditions', label: 'Conditions' },
   { to: '/beaches',        label: 'Beaches' },
   { to: '/eat',            label: 'Eat' },
@@ -18,12 +19,17 @@ const mainNav = [
 const mobileNav = [
   { to: '/', label: 'Today' },
   ...mainNav,
+  { to: '/lbi-town-boundaries', label: 'Town Boundaries' },
+  { to: '/lbi-town-services',   label: 'Town Services' },
   { to: '/accessibility', label: 'Accessibility' },
   { to: '/alerts',        label: 'Alerts' },
 ]
 
 const footerNav = [
   { to: '/towns',          label: 'Towns' },
+  { to: '/lbi-map',        label: 'LBI Map' },
+  { to: '/lbi-town-boundaries', label: 'Town Boundaries' },
+  { to: '/lbi-town-services',   label: 'Town Services' },
   { to: '/lbi-conditions', label: 'Conditions' },
   { to: '/beaches',        label: 'Beaches' },
   { to: '/accessibility',  label: 'Accessibility' },
