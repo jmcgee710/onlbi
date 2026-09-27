@@ -10,20 +10,21 @@ import sharp from 'sharp'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const toAbs = p => path.resolve(__dirname, '..', p)
 
-// CSS variables the SVG references — keep in sync with src/index.css.
+// CSS variables the SVG might reference — keep in sync with src/index.css.
+// (The current map uses literal colors, so this is a safety net.)
 const CSS_VARS = {
-  '--sand': '#F2EADB',
-  '--paper': '#FFFFFF',
-  '--teal-deep': '#486C6B',
-  '--ink': '#0F1F2E',
-  '--ink-soft': '#2A3F54',
-  '--slate': '#5F7388',
-  '--line': '#E3DCC9',
+  '--sand': '#EDE6D8',
+  '--paper': '#FFFDF9',
+  '--teal-deep': '#2A6F97',
+  '--ink': '#10263A',
+  '--ink-soft': '#3C4B58',
+  '--slate': '#5A6570',
+  '--line': '#E4DCCD',
   '--font-display': 'Georgia, serif',
 }
 
 const html = fs.readFileSync(toAbs('dist/towns/index.html'), 'utf-8')
-const match = html.match(/<svg viewBox="0 0 300 636"[\s\S]*?<\/svg>/)
+const match = html.match(/<svg class="towns-map"[\s\S]*?<\/svg>/)
 if (!match) {
   console.error('[towns-map] could not find the towns-map SVG in dist/towns/index.html — build first')
   process.exit(1)
@@ -33,15 +34,12 @@ let svg = match[0]
 for (const [name, value] of Object.entries(CSS_VARS)) {
   svg = svg.replaceAll(new RegExp(`var\\(${name}(?:,[^)]*)?\\)`, 'g'), value)
 }
-// Solid background so the PNG isn't transparent (og:image renders on any surface).
-svg = svg.replace(
-  /(<svg[^>]*>)/,
-  '$1<rect x="0" y="0" width="300" height="636" fill="#FBF7EF"/>'
-)
+// The map paints its own water background; give sharp explicit pixel dimensions.
+svg = svg.replace(/<svg class="towns-map"/, '<svg width="520" height="900" class="towns-map"')
 
-const scale = 3
+const scale = 2
 await sharp(Buffer.from(svg), { density: 72 * scale })
-  .resize(300 * scale, 636 * scale)
+  .resize(520 * scale, 900 * scale)
   .png()
   .toFile(toAbs('public/lbi-towns-map.png'))
 

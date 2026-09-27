@@ -2,6 +2,7 @@
 // (B1–B4) west of the island, the two ocean readings (O1 Atlantic City pier,
 // O2 buoy 44091) pointing off-map, and the Long Beach Township cams.
 // Marker positions are approximate latitudes along the drawn island.
+import { ISLAND_PATH, OCEAN_PATH, Causeway, causewayY } from './lbiGeometry'
 
 const OCEAN = '#2A6F97'
 const BAY = '#4E7A5A'
@@ -10,7 +11,7 @@ const INK = '#10263A'
 const bayPins = [
   { id: 'B1', x: 198, y: 112 },
   { id: 'B2', x: 180, y: 290 },
-  { id: 'B3', x: 200, y: 437 },
+  { id: 'B3', x: 200, y: Math.round(causewayY(200)) }, // on the causeway (Manahawkin Bay bridge)
   { id: 'B4', x: 120, y: 728 },
 ]
 const oceanPins = [
@@ -28,7 +29,7 @@ const places: Array<[string, number, number]> = [
   ['Harvey Cedars', 280, 228],
   ['North Beach', 272, 272],
   ['Surf City', 266, 344],
-  ['Ship Bottom', 258, 396],
+  ['Ship Bottom', 262, 390],
   ['Brant Beach', 244, 522],
   ['Beach Haven', 222, 694],
   ['Holgate', 190, 818],
@@ -43,10 +44,9 @@ export default function IslandMap() {
       aria-label="Map of Long Beach Island with bay tide stations to the west, ocean readings to the east, and live cams along the island"
     >
       <rect x="0" y="0" width="520" height="900" fill="#E3EBDF" />
-      <path d="M 330 0 L 520 0 L 520 900 L 214 900 C 240 780, 258 680, 276 560 C 298 420, 318 280, 334 170 C 344 100, 340 40, 330 0 Z" fill="#DCE8F0" />
-      <path d="M 272 425 L 0 470" stroke="#B9AD95" strokeWidth="5" strokeLinecap="round" />
-      <text x="40" y="492" fontSize="11" fill="#6B5B3E" fontFamily="Instrument Sans, sans-serif" fontWeight="600" letterSpacing="1">RT 72 CAUSEWAY</text>
-      <path d="M 322 30 C 340 60, 345 110, 336 170 C 322 280, 300 420, 278 560 C 260 680, 240 780, 210 870 L 192 866 C 218 776, 236 676, 252 556 C 272 416, 292 276, 304 166 C 310 110, 308 60, 322 30 Z" fill="#EFE3CC" stroke="#C9B48E" strokeWidth="1.5" />
+      <path d={OCEAN_PATH} fill="#DCE8F0" />
+      <Causeway />
+      <path d={ISLAND_PATH} fill="#EFE3CC" stroke="#C9B48E" strokeWidth="1.5" />
       <g fontFamily="Instrument Sans, sans-serif" fontSize="11" fontWeight="600" letterSpacing="2">
         <text x="440" y="40" fill={OCEAN} textAnchor="middle">ATLANTIC</text>
         <text x="440" y="55" fill={OCEAN} textAnchor="middle">OCEAN</text>

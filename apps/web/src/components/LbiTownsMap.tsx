@@ -1,18 +1,19 @@
 import { useNavigate } from 'react-router-dom'
+import { ISLAND_PATH, OCEAN_PATH, Causeway, westShoreX, VIEW_W, VIEW_H } from './lbiGeometry'
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LBI TOWNS MAP — a hand-built SVG of Long Beach Island as a tall barrier-island
-// strip, north (Barnegat Light) at the top to the south tip (Holgate) at the
-// bottom. Each band is a clickable region linking to a municipality guide.
+// LBI TOWNS MAP — the same island drawing as the homepage map, with each town
+// as a clickable stretch of the island, north (Barnegat Light) to the south
+// tip (Holgate). Labels sit on the bay side, just off the shore.
 //
 // Long Beach Township is NOT one contiguous town — its sections are interleaved
 // between the boroughs (Loveladies sits NORTH of Harvey Cedars; North Beach sits
 // between Harvey Cedars and Surf City; the big central patchwork sits between
 // Ship Bottom and Beach Haven; Holgate is the south tip; and High Bar Harbor is
-// a bayside enclave off Barnegat Light). Every LBT band is shaded teal and links
-// to /long-beach-township so the patchwork reads honestly.
+// a bayside enclave off Barnegat Light). Every LBT stretch is striped so the
+// patchwork reads honestly. Boundaries are relative, not surveyed street lines.
 //
-// Each band is a real SVG <a href> (crawlable + works without JS), with an
+// Each town is a real SVG <a href> (crawlable + works without JS), with an
 // onClick that hands navigation to React Router for client-side routing.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -23,28 +24,30 @@ type Band = {
   y0: number
   y1: number
   lbt?: boolean
+  nameY?: number // label baseline override (default: band middle)
+  subY?: number
 }
 
-// North → south, geographically ordered. LBT sections are interleaved with the
-// boroughs rather than grouped, because that is how the island actually runs.
+// North → south, geographically ordered.
 const BANDS: Band[] = [
-  { slug: 'barnegat-light', name: 'Barnegat Light', sub: 'North tip · Old Barney', y0: 24, y1: 86 },
-  { slug: 'loveladies', name: 'Loveladies', sub: 'Long Beach Twp.', y0: 86, y1: 128, lbt: true },
-  { slug: 'harvey-cedars', name: 'Harvey Cedars', sub: 'Quiet · sunsets', y0: 128, y1: 186 },
-  { slug: 'north-beach', name: 'North Beach', sub: 'Long Beach Twp.', y0: 186, y1: 214, lbt: true },
-  { slug: 'surf-city', name: 'Surf City', sub: 'Central hub', y0: 214, y1: 272 },
-  { slug: 'ship-bottom', name: 'Ship Bottom', sub: 'Gateway · Causeway', y0: 272, y1: 320 },
-  { slug: 'brant-beach', name: 'Brant Beach', sub: 'Long Beach Twp.', y0: 320, y1: 376, lbt: true },
-  { slug: 'long-beach-township', name: 'Long Beach Twp.', sub: 'central sections', y0: 376, y1: 452, lbt: true },
-  { slug: 'beach-haven', name: 'Beach Haven', sub: 'Walkable · lively', y0: 452, y1: 528 },
+  { slug: 'barnegat-light', name: 'Barnegat Light', sub: 'North tip · Old Barney', y0: 20, y1: 125, nameY: 98 },
+  { slug: 'loveladies', name: 'Loveladies', sub: 'Long Beach Twp.', y0: 125, y1: 198, lbt: true },
+  { slug: 'harvey-cedars', name: 'Harvey Cedars', sub: 'Quiet · sunsets', y0: 198, y1: 268 },
+  { slug: 'north-beach', name: 'North Beach · LBT', y0: 268, y1: 300, lbt: true },
+  { slug: 'surf-city', name: 'Surf City', sub: 'Central hub', y0: 300, y1: 385 },
+  // Name above the causeway, sub below it.
+  { slug: 'ship-bottom', name: 'Ship Bottom', sub: 'Gateway · causeway', y0: 385, y1: 442, nameY: 396, subY: 440 },
+  { slug: 'brant-beach', name: 'Brant Beach', sub: 'Long Beach Twp.', y0: 442, y1: 535, lbt: true },
+  { slug: 'long-beach-township', name: 'Long Beach Twp.', sub: 'Central sections', y0: 535, y1: 633, lbt: true },
+  { slug: 'beach-haven', name: 'Beach Haven', sub: 'Walkable · lively', y0: 633, y1: 728 },
+  { slug: 'holgate', name: 'Holgate', sub: 'Long Beach Twp. · south tip', y0: 728, y1: 880, lbt: true, nameY: 792 },
 ]
 
-const X0 = 116
-const X1 = 184
-
-// Teal tint for Long Beach Township sections; boroughs alternate sand/paper.
-const LBT_FILL = 'var(--teal-deep)'
-const LBT_OPACITY = 0.16
+const INK = '#10263A'
+const OCEAN = '#2A6F97'
+const BAY = '#4E7A5A'
+const SAND = '#EFE3CC'
+const SAND_ALT = '#F6EEDD'
 
 export default function LbiTownsMap() {
   const navigate = useNavigate()
@@ -57,96 +60,98 @@ export default function LbiTownsMap() {
     navigate(`/${slug}`)
   }
 
+  let boroughIndex = 0
+
   return (
     <svg
-      viewBox="0 0 300 636"
+      className="towns-map"
+      viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
       role="img"
-      aria-label="Map of the towns of Long Beach Island, New Jersey, north to south: Barnegat Light (with High Bar Harbor), Loveladies, Harvey Cedars, North Beach, Surf City, Ship Bottom, the central Long Beach Township sections, Beach Haven, and Holgate at the south tip. Loveladies, North Beach, Holgate and High Bar Harbor are all part of Long Beach Township."
-      style={{ width: '100%', maxWidth: 300, height: 'auto', display: 'block', margin: '0 auto' }}
+      aria-label="Map of the towns of Long Beach Island, New Jersey, north to south: Barnegat Light (with High Bar Harbor), Loveladies, Harvey Cedars, North Beach, Surf City, Ship Bottom, Brant Beach, the central Long Beach Township sections, Beach Haven, and Holgate at the south tip. Loveladies, North Beach, Brant Beach, Holgate and High Bar Harbor are all part of Long Beach Township."
+      style={{ width: '100%', maxWidth: 560, height: 'auto', display: 'block', margin: '0 auto', borderRadius: 18 }}
       xmlns="http://www.w3.org/2000/svg"
     >
       <title>Map of Long Beach Island (LBI) towns, north to south</title>
-
+      <defs>
+        <clipPath id="tm-island"><path d={ISLAND_PATH} /></clipPath>
+        <pattern id="tm-lbt" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="8" height="8" fill={SAND} />
+          <line x1="0" y1="0" x2="0" y2="8" stroke={BAY} strokeWidth="3" strokeOpacity="0.35" />
+        </pattern>
+      </defs>
       <style>{`
-        .twn-seg rect, .twn-seg path { transition: fill-opacity 120ms ease, fill 120ms ease; }
-        .twn-seg:hover rect, .twn-seg:hover path { fill: var(--teal-deep); fill-opacity: 1; }
-        .twn-seg:hover text { fill: #fff; }
-        .twn-seg { cursor: pointer; }
-        .twn-lbl { font-family: var(--font-display, serif); font-size: 13px; fill: var(--ink, #123); }
-        .twn-sub { font-size: 8.5px; fill: var(--ink-soft, #567); }
-        .twn-geo { font-size: 9px; fill: var(--ink-soft, #789); letter-spacing: 0.14em; }
-        .twn-key { font-size: 9px; fill: var(--ink-soft, #567); }
+        .tm-seg { cursor: pointer; }
+        .tm-seg .tm-hl { fill: ${OCEAN}; fill-opacity: 0; transition: fill-opacity 120ms ease; }
+        .tm-seg:hover .tm-hl, .tm-seg:focus-visible .tm-hl { fill-opacity: 0.3; }
+        .tm-seg:hover .tm-name, .tm-seg:focus-visible .tm-name { fill: ${OCEAN}; }
+        .tm-name { font-family: Fraunces, Georgia, serif; font-size: 17px; fill: ${INK}; }
+        .tm-sub { font-family: 'Instrument Sans', system-ui, sans-serif; font-size: 11.5px; fill: #5A6570; }
+        .tm-geo { font-family: 'Instrument Sans', system-ui, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 2px; }
       `}</style>
 
-      {/* Ocean (east) & Bay (west) context labels */}
-      <text className="twn-geo" x={266} y={300} textAnchor="middle" transform="rotate(90 266 300)">
-        ATLANTIC OCEAN
-      </text>
-      <text className="twn-geo" x={16} y={175} textAnchor="middle" transform="rotate(-90 16 175)">
-        BARNEGAT BAY
-      </text>
+      {/* Water + causeway */}
+      <rect x="0" y="0" width={VIEW_W} height={VIEW_H} fill="#E3EBDF" />
+      <path d={OCEAN_PATH} fill="#DCE8F0" />
+      <Causeway />
+      <text className="tm-geo" x="440" y="40" fill={OCEAN} textAnchor="middle">ATLANTIC</text>
+      <text className="tm-geo" x="440" y="55" fill={OCEAN} textAnchor="middle">OCEAN</text>
+      <text className="tm-geo" x="40" y="40" fill={BAY}>BARNEGAT BAY</text>
+      <g fontFamily="'Instrument Sans', sans-serif" fontSize="10" fontStyle="italic" fill="#5A6570">
+        <text x="345" y="18">Barnegat Inlet</text>
+        <text x="236" y="894">Little Egg Inlet</text>
+      </g>
+
+      {/* Town stretches of the island */}
+      {BANDS.map((b) => {
+        const fill = b.lbt ? 'url(#tm-lbt)' : boroughIndex++ % 2 === 0 ? SAND : SAND_ALT
+        const mid = (b.y0 + b.y1) / 2
+        const nameY = b.nameY ?? (b.sub ? mid - 2 : mid + 5)
+        const subY = b.subY ?? nameY + 15
+        const labelX = westShoreX(nameY - 5) - 14
+        return (
+          <a
+            key={b.slug}
+            href={`/${b.slug}`}
+            className="tm-seg"
+            onClick={(e) => go(e, b.slug)}
+            aria-label={`${b.name.replace(' · LBT', '')}${b.lbt ? ' (Long Beach Township)' : ''} guide`}
+          >
+            <g clipPath="url(#tm-island)">
+              <rect x="150" y={b.y0} width="220" height={b.y1 - b.y0} fill={fill} />
+              <rect className="tm-hl" x="150" y={b.y0} width="220" height={b.y1 - b.y0} />
+              <line x1="150" y1={b.y0} x2="370" y2={b.y0} stroke="#C9B48E" strokeWidth="1" />
+            </g>
+            <text className="tm-name" x={labelX} y={nameY} textAnchor="end">{b.name}</text>
+            {b.sub && <text className="tm-sub" x={westShoreX(subY - 4) - 14} y={subY} textAnchor="end">{b.sub}</text>}
+          </a>
+        )
+      })}
+      <path d={ISLAND_PATH} fill="none" stroke="#C9B48E" strokeWidth="1.5" pointerEvents="none" />
 
       {/* High Bar Harbor — LBT bayside enclave reached by one road off Barnegat Light */}
       <a
         href="/long-beach-township"
-        className="twn-seg"
-        onClick={e => go(e, 'long-beach-township')}
+        className="tm-seg"
+        onClick={(e) => go(e, 'long-beach-township')}
         aria-label="High Bar Harbor, part of Long Beach Township"
       >
-        <rect x={40} y={34} width={62} height={30} rx={4} fill={LBT_FILL} fillOpacity={LBT_OPACITY} stroke="var(--line, #d8cfbe)" />
-        <text x={71} y={47} textAnchor="middle" className="twn-sub">High Bar</text>
-        <text x={71} y={57} textAnchor="middle" className="twn-sub">Harbor · LBT</text>
-      </a>
-      <line x1={102} y1={49} x2={X0} y2={52} stroke="var(--teal-deep, #2b7a78)" strokeWidth={2} strokeDasharray="3 3" />
-
-      {/* Mainland + Route 72 Causeway into Ship Bottom */}
-      <rect x={4} y={276} width={44} height={40} rx={5} fill="var(--sand, #efe7d8)" stroke="var(--line, #d8cfbe)" />
-      <text x={26} y={293} textAnchor="middle" className="twn-sub">Mainland</text>
-      <text x={26} y={305} textAnchor="middle" className="twn-sub">Rte 72</text>
-      <line x1={48} y1={296} x2={X0} y2={296} stroke="var(--teal-deep, #2b7a78)" strokeWidth={3} strokeDasharray="4 3" />
-
-      {/* Town bands */}
-      {BANDS.map((b, i) => {
-        const mid = (b.y0 + b.y1) / 2
-        const thin = b.y1 - b.y0 < 34
-        const fill = b.lbt ? LBT_FILL : i % 2 === 0 ? 'var(--sand, #efe7d8)' : 'var(--paper, #f7f2e8)'
-        const fillOpacity = b.lbt ? LBT_OPACITY : 1
-        return (
-          <a
-            key={`${b.slug}-${b.y0}`}
-            href={`/${b.slug}`}
-            className="twn-seg"
-            onClick={e => go(e, b.slug)}
-            aria-label={`${b.name}${b.lbt ? ' (Long Beach Township)' : ''} guide`}
-          >
-            <rect x={X0} y={b.y0} width={X1 - X0} height={b.y1 - b.y0} fill={fill} fillOpacity={fillOpacity} stroke="var(--line, #d8cfbe)" />
-            {thin ? (
-              <text x={150} y={mid + 3} textAnchor="middle" className="twn-lbl" style={{ fontSize: 11 }}>{b.name}</text>
-            ) : (
-              <>
-                <text x={150} y={mid - 2} textAnchor="middle" className="twn-lbl">{b.name}</text>
-                {b.sub && <text x={150} y={mid + 12} textAnchor="middle" className="twn-sub">{b.sub}</text>}
-              </>
-            )}
-          </a>
-        )
-      })}
-
-      {/* Holgate south tip — part of Long Beach Township, tapered to a point */}
-      <a
-        href="/holgate"
-        className="twn-seg"
-        onClick={e => go(e, 'holgate')}
-        aria-label="Holgate, part of Long Beach Township"
-      >
-        <path d={`M${X0} 528 L${X1} 528 L155 600 L145 600 Z`} fill={LBT_FILL} fillOpacity={LBT_OPACITY} stroke="var(--line, #d8cfbe)" />
-        <text x={150} y={552} textAnchor="middle" className="twn-sub">Holgate · LBT</text>
+        <line x1="296" y1="58" x2="309" y2="58" stroke="#B9AD95" strokeWidth="3" />
+        <ellipse cx="284" cy="58" rx="13" ry="9" fill="url(#tm-lbt)" stroke="#C9B48E" />
+        <ellipse className="tm-hl" cx="284" cy="58" rx="13" ry="9" />
+        <text className="tm-sub" x="264" y="54" textAnchor="end" style={{ fontWeight: 600, fill: INK }}>High Bar Harbor</text>
+        <text className="tm-sub" x="264" y="68" textAnchor="end">Long Beach Twp.</text>
       </a>
 
-      {/* Legend — the shaded sections are all one municipality.
-          Keep the label short: text past x≈290 clips at the viewBox edge. */}
-      <rect x={62} y={616} width={14} height={10} fill={LBT_FILL} fillOpacity={LBT_OPACITY} stroke="var(--line, #d8cfbe)" />
-      <text x={81} y={625} className="twn-key">Shaded = Long Beach Township sections</text>
+      {/* Legend */}
+      <g fontFamily="'Instrument Sans', sans-serif" fontSize="11" fill={INK}>
+        <rect x="340" y="806" width="168" height="82" rx="10" fill="#FFFDF9" stroke="#D9CFBC" />
+        <rect x="354" y="820" width="16" height="12" rx="2" fill={SAND} stroke="#C9B48E" />
+        <text x="378" y="830">Borough</text>
+        <rect x="354" y="840" width="16" height="12" rx="2" fill="url(#tm-lbt)" stroke="#C9B48E" />
+        <text x="378" y="850">Long Beach Township</text>
+        <line x1="354" y1="868" x2="370" y2="868" stroke="#B9AD95" strokeWidth="6" />
+        <text x="378" y="872">Rt 72 causeway</text>
+      </g>
     </svg>
   )
 }

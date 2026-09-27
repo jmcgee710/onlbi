@@ -116,7 +116,7 @@ export default function TownsPage() {
             <h2 className="lc-name" style={{ fontSize: 24, marginBottom: 6 }}>Map of LBI Towns</h2>
             <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginBottom: 16 }}>
               Long Beach Island runs 18 miles north to south. Tap a town to open its guide —
-              Barnegat Light sits at the north tip, Holgate at the south. The shaded bands are all
+              Barnegat Light sits at the north tip, Holgate at the south. The striped stretches are all
               Long Beach Township: it isn&apos;t one continuous town but a patchwork of sections
               woven between the boroughs — Loveladies actually sits north of Harvey Cedars, and High
               Bar Harbor is a bayside enclave off Barnegat Light.
